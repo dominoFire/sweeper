@@ -14,6 +14,7 @@ ssh.connect(hostname='whitestarvm.cloudapp.net',
             #key_filename='mycert.pem',
             look_for_keys=False)
 
+
 # Aqui esperamos
 stdin, stdout, stderr = ssh.exec_command('ls -al')
 

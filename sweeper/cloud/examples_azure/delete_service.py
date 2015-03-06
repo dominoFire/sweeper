@@ -1,4 +1,4 @@
-from azure_subscription import sms
+from sweeper.cloud.examples_azure.azure_subscription import sms
 
 print 'Delete hosted service'
 # Delete hosted service

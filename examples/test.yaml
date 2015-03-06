@@ -1,0 +1,15 @@
+workflow:
+  - name: check_files
+    command: ls -alp
+
+  - name: create_filelist
+    command: ls -alp > sal.txt
+    depends: [check_files]
+
+  - name: create_sysinfo
+    command: lsb_release -a > info.txt
+    depends: [check_files]
+
+  - name: final_results
+    command: ls -alp
+    depends: [create_filelist, create_sysinfo]

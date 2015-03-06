@@ -1,6 +1,4 @@
-from azure import *
-from azure.servicemanagement import *
-from azure_subscription import sms
+from sweeper.cloud.examples_azure.azure_subscription import sms
 
 # Create a hosted service
 print 'Create hosted service'

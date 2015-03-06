@@ -1,0 +1,31 @@
+workflow:
+  - name: check_files
+    command: ls -alp
+
+  - name: create_filelist
+    command: ls -alp > sal.txt
+    depends: [check_files]
+
+  - name: show_process
+    command: ps -eal > process.txt
+    depends: [create_filelist]
+
+  - name: show_hardware
+    command: lspci > harware.txt
+    depends: [create_filelist]
+
+  - name: create_sysinfo
+    command: lsb_release -a > info.txt
+    depends: [check_files]
+
+  - name: manage_cats
+    command: echo 'cats' > cats.txt
+    depends: [create_sysinfo]
+
+  - name: manage_dogs
+    command: echo 'dogs' > dog.txt
+    depends: [create_sysinfo]
+
+  - name: final_results
+    command: ls -alp
+    depends: [manage_cats, manage_dogs, show_hardware, show_process]

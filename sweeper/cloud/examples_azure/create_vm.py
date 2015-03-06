@@ -5,12 +5,13 @@ http://azure.microsoft.com/en-us/documentation/articles/cloud-services-python-ho
 TODO: wait for service created
 """
 
+import time
 
 import azure
 from azure import *
 from azure.servicemanagement import *
-from azure_subscription import sms
-import time
+
+from sweeper.cloud.examples_azure.azure_subscription import sms
 
 
 azure.http.httpclient.DEBUG_REQUESTS = True
