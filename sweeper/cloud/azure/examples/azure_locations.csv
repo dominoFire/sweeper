@@ -1,0 +1,14 @@
+available_services,compute_capabilities,display_name,name
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352ad0>,North Europe,North Europe
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352b50>,West Europe,West Europe
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352bd0>,East US 2,East US 2
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352c50>,Central US,Central US
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352150>,South Central US,South Central US
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352cd0>,West US,West US
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352d50>,North Central US,North Central US
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352dd0>,East US,East US
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352e50>,Southeast Asia,Southeast Asia
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352ed0>,East Asia,East Asia
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f6381352f50>,Japan West,Japan West
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f638135c8d0>,Japan East,Japan East
+"[Compute, Storage, PersistentVMRole, HighMemory]",<azure.servicemanagement.ComputeCapabilities object at 0x7f638135ca10>,Brazil South,Brazil South

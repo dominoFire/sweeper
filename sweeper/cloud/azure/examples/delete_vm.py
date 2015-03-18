@@ -1,4 +1,4 @@
-from sweeper.cloud.examples_azure.azure_subscription import sms
+from sweeper.cloud.azure.subscription import sms
 
 vm_name = 'sweepervm'
 

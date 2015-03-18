@@ -7,6 +7,8 @@ class Task:
         self.command = cmd
         self.parents = []
         self.successors = []
+        self.complexity_factor = 1
+        self.param_grid = None
 
     def add_parent(self, task):
         self.parents.append(task)
@@ -46,13 +48,15 @@ def read_workflow(filename):
     :param filename: Path to YAML file
     :return: a Workflow object
     """
-    wf_spec = yaml.load(open(filename, 'r'))
+    with open(filename, 'r') as fin:
+        wf_spec = yaml.load(fin)
     task_list = []
     dep_list = []
 
     for task_desc in wf_spec['workflow']:
-        t = Task(task_desc['name'],
-                 task_desc['command'])
+        t = Task(task_desc['name'], task_desc['command'])
+        if 'param_grid' in task_desc:
+            t.param_grid = task_desc['param_grid']
         task_list.append(t)
 
     for task_desc in wf_spec['workflow']:
@@ -69,5 +73,3 @@ def read_workflow(filename):
     wf = Workflow(task_list, dep_list)
 
     return wf
-
-

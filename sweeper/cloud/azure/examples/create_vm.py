@@ -11,14 +11,14 @@ import azure
 from azure import *
 from azure.servicemanagement import *
 
-from sweeper.cloud.examples_azure.azure_subscription import sms
+from sweeper.cloud.azure.subscription import sms, cer_fullpath
 
 
 azure.http.httpclient.DEBUG_REQUESTS = True
 azure.http.httpclient.DEBUG_RESPONSES = True
 
 # just letters and numbers in the name
-vm_name = 'whitestarvm'
+vm_name = 'mastershoe'
 vm_location = 'West US'
 # TODO: Automate key & fingerprint generation
 vm_key_fingerprint = '976272116B6DE9398D1032C85B69CD6E6638F691' #mycert.pem
@@ -38,11 +38,11 @@ time.sleep(10)
 
 print 'Add certificate'
 encoded_cer = ''
-with open('mycert.cer', 'rb') as cer_file:
+with open(cer_fullpath, 'rb') as cer_file:
     encoded_cer = base64.b64encode(cer_file.read())
-print '------------------- Decoed String -------------------'
+print '------------------- Decoded String -------------------'
 print(base64.b64decode(encoded_cer))
-print '------------------- Decoed String -------------------'
+print '------------------- Decoded String -------------------'
 # Always put 'pfx' as certificate type
 # No password for '.cer' cetificates
 # See http://stackoverflow.com/questions/18117578/azure-add-certificate-to-cloudservice
@@ -60,7 +60,7 @@ for r in cert_result:
 print 'Creating LinuxConfigSet'
 # Linux VM configuration, you can use WindowsConfigurationSet
 # for a Windows VM instead
-linux_config = LinuxConfigurationSet('sweepervm', 'azureuser', 'Balataraybestos4', True)
+linux_config = LinuxConfigurationSet(vm_name, 'azureuser', 'Balataraybestos4', True)
 #The paths will be the location in which the service key will be put in
 key_pair = KeyPair(vm_key_fingerprint, '/home/azureuser/id_rsa')
 public_key = PublicKey(vm_key_fingerprint, '/home/azureuser/.ssh/authorized_keys')
@@ -83,7 +83,7 @@ media_link = 'https://sweepervhd.blob.core.windows.net/vmblob/{0}.vhd'.format(vm
 os_hd = OSVirtualHardDisk(image_name, media_link)
 
 
-def network_config(subnet_name=None):
+def create_network_config(subnet_name=None):
     network = ConfigurationSet()
     network.configuration_set_type = 'NetworkConfiguration'
     network.input_endpoints.input_endpoints.append(
@@ -94,7 +94,7 @@ def network_config(subnet_name=None):
 
 
 print 'Creating Network Configuration (Endpoints)'
-net_cfg = network_config()
+net_cfg = create_network_config()
 
 print 'Creating VM'
 req_vm = sms.create_virtual_machine_deployment(service_name=vm_name,
@@ -113,9 +113,7 @@ print req_vm
 
 time.sleep(10)
 
-
 # now, how to access the vm
-
 
 #print 'Deleting VM (deployment)'
 #sms.delete_deployment(service_name=vm_name, deployment_name=vm_name)

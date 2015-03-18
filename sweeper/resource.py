@@ -9,8 +9,10 @@ class Resource:
         self.defaultUser = user
         self.defaultPassword = passwd
         self.ssh = SSHClient()
+        self.speed_factor = 1
 
     def connect_ssh(self):
+        # For some reason, I can't connect using a SSH certificate
         self.ssh.connect(hostname=self.hostname,
                          username=self.defaultUser,
                          password=self.defaultPassword,
@@ -23,6 +25,19 @@ class Resource:
 
     def __del__(self):
         self.ssh.close()
+
+
+class ResourceConfig:
+    def __init__(self, name, cores, ram_memory):
+        self.config_name = name
+        self.cores = cores
+        self.ram_memory = ram_memory
+
+    def __str__(self):
+        return '{0}({1},{2})'.format(self.config_name, self.cores, self.ram_memory)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 def generate_random_password():

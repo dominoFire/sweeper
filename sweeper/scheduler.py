@@ -1,5 +1,7 @@
 __author__ = '@dominofire'
 
+from sweeper.cloud.azure import manager as mgr_azure
+
 
 def estimate_resources(workflow):
     """
@@ -56,3 +58,19 @@ def estimate_resources(workflow):
     return max_v
 
 
+def run_workflow(workflow):
+    # Creamos recursos
+    resrc_num = estimate_resources(workflow)
+
+    # Creamos planificacion
+
+
+    # Creamos recursos
+    resource_list = []
+    for i in range(1, resrc_num + 1):
+        resource_list.append(mgr_azure.create_resource('r{0}'.format(i)))
+
+    # Mandamos a ejecutar
+
+
+    return None
