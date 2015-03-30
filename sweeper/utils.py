@@ -22,3 +22,8 @@ def join_path(base, name, ext):
     Crea una ruta valida desde los parametros base/name.ext
     """
     return os.path.join(base, name + ext)
+
+
+def wait_for(predicate_func, **kwargs):
+    while not predicate_func(kwargs):
+        pass

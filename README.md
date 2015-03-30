@@ -20,6 +20,9 @@ By [@dominofire](http://twitter.com/dominofire)
  - [ ] Resolve all automation issues
  - [ ] Make a performance benchmark based in FLOPS
     * FLOPS will be our complexity factor, more flops, more speedy computer
+    * SPEC CPU2006  benchmark is not free,
+    * PerfKitBenchmarker by google,
+    * It gives lots of info regarding trhoughput
  - [ ] Make a input-sensitive profiling of tasks
     * First, find out how to estimate in python scripts
  - [ ] Read paper on CSE

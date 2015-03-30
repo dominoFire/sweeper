@@ -25,3 +25,16 @@ if __name__ == '__main__':
     result = sms.list_locations()
     process_sms_list(result.locations, 'azure_locations.csv')
     print ('Azure Locations saved in azure_locations.csv')
+
+    result = sms.list_hosted_services()
+    process_sms_list(result.hosted_services, 'azure_hosted_services.csv')
+    print ('Azure Hosted services saved in azure_hosted_services.csv')
+
+    for hs in result.hosted_services:
+        subr = sms.list_service_certificates(hs.service_name)
+        process_sms_list(subr.certificates, 'azure_service_certificates-{0}.csv'.format(hs.service_name))
+        print ('Azure Service certificates for {0} saved in azure_service_certificates-{0}.csv'.format(hs.service_name))
+
+        if hs.deployments:
+            process_sms_list(hs.deployments, 'azure_service_deployments-{0}.csv'.format(hs.service_name))
+            print ('Azure Service deployments for {0} saved in azure_service_deployments-{0}.csv'.format(hs.service_name))
