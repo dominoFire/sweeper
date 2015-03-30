@@ -178,6 +178,8 @@ def delete_resource(res_name):
             wait_for_request_suceeded(req.request_id)
             logging.info('Deleting deployment {0}:{1} complete'.format(svc.service_name, d.name))
 
+    #TODO: Find out how to delete all deployments
+
     logging.info('Deleting default deployment {0}'.format(res_name))
     req = sms.delete_deployment(res_name, res_name)
     wait_for_request_suceeded(req.request_id)

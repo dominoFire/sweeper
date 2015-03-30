@@ -1,4 +1,6 @@
 *.pyc
 .idea/
 *.iml
+*.csv
+*.log
 
