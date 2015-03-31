@@ -45,7 +45,7 @@ def wait_for_service_certificate(service_name, cert_fingerprint):
                 break
 
 
-def wait_for_request_suceeded(request_id):
+def wait_for_request_succeeded(request_id):
     wait = True
     while wait:
         st = sms.get_operation_status(request_id=request_id)
@@ -175,14 +175,14 @@ def delete_resource(res_name):
         for d in svc.deployments:
             logging.info('Deleting deployment {0}:{1}'.format(svc.service_name, d.name))
             req = sms.delete_deployment(svc.service_name, d.name)
-            wait_for_request_suceeded(req.request_id)
+            wait_for_request_succeeded(req.request_id)
             logging.info('Deleting deployment {0}:{1} complete'.format(svc.service_name, d.name))
 
     #TODO: Find out how to delete all deployments
 
     logging.info('Deleting default deployment {0}'.format(res_name))
     req = sms.delete_deployment(res_name, res_name)
-    wait_for_request_suceeded(req.request_id)
+    wait_for_request_succeeded(req.request_id)
     logging.info('Deleting default deployment {0} complete'.format(res_name))
 
     logging.info('Deleting cloud service {0}'.format(res_name))
