@@ -2,13 +2,25 @@ import yaml
 
 
 class Task:
+    """
+    Represents a task in the workflow
+    """
     def __init__(self, name, cmd):
         self.name = name
+        """ A name for the task that is unique among workflow scope """
         self.command = cmd
+        """ A valid bash command to be executed """
+        # Used in workflow management
         self.parents = []
+        """ A list of Tasks that immediatly precedes this task in the Workflow """
+        # Used in workflow management
         self.successors = []
+        """ A list of Tasks that immediatly precedes this task in the Workflow """
         self.complexity_factor = 1
+        """ A measurement that represents how difficult is this Task. A high value on the complexity factor
+        means that it will take more time and resources to completely execute this task"""
         self.param_grid = None
+        """ The list of parameters that are been to be probed in this task. NOT FUNCTIONAL YET"""
 
     def add_parent(self, task):
         self.parents.append(task)
@@ -23,8 +35,10 @@ class Task:
 class Workflow:
     def __init__(self, tasks_list, dependencies_list):
         self.tasks = tasks_list
+        """List of tasks in the workflow"""
         self._validate_tasks()
         self.dependencies = dependencies_list
+        """List of 2D tuples that indicates that (a, b) mean Task a precedes Task b """
         #TODO: validate dependency no-cycle check
         #TODO: validate dependency with tasks
         for dep in self.dependencies:
@@ -33,6 +47,9 @@ class Workflow:
             dep[1].add_parent(dep[0])
 
     def _validate_tasks(self):
+        """
+        Check if there are duplicated names in task names
+        """
         names_set = set()
         for t in self.tasks:
             if t.name in names_set:

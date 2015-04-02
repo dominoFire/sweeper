@@ -1,6 +1,46 @@
-__author__ = '@dominofire'
+class ResourceSchedule:
+    """
+    An auxilary object for creating an managing expected schedules
+    Note that scheduling is at core level
+    """
+    def __init__(self, core_name, host_name, config):
+        self.core_name = core_name
+        self.host_hame = host_name
+        self.config = config
+        self.ready_time = 0
+        self.speed_factor = 1
 
-from sweeper.cloud.azure import manager as mgr_azure
+    def __repr__(self):
+        return '{0}@{1}-{2}'.format(self.core_name, self.host_hame, self.config)
+
+
+class ScheduleMapping:
+    """
+    Represents a mapping between a task and a Resource schedule, including
+    scheduling info (start time and duration)
+    """
+    def __init__(self, res_sched, task, start, duration):
+        self.resource_schedule = res_sched
+        self.task = task
+        self.start_time = start
+        self.duration = duration
+
+    def __repr__(self):
+        return '{0} => {1}, s={2}({3})'.format(self.task, self.resource_schedule, self.start_time, self.duration)
+
+
+def prepare_resrc_config(res_config_list):
+    """
+    Transform a config list to be used in a scheduling algorithm
+    :param res_config_list: a list of ResourceConfig
+    :return: a List of ResourceSchedule
+    """
+    res_list = []
+    for idx, cfg in enumerate(res_config_list):
+        core_list = [ResourceSchedule('Core{0}'.format(i), 'r{0}'.format(idx), cfg) for i in range(1, cfg.cores+1)]
+        res_list = res_list + core_list
+
+    return res_list
 
 
 def estimate_resources(workflow):
@@ -56,21 +96,3 @@ def estimate_resources(workflow):
         max_v = max(v, max_v)
 
     return max_v
-
-
-def run_workflow(workflow):
-    # Creamos recursos
-    resrc_num = estimate_resources(workflow)
-
-    # Creamos planificacion
-
-
-    # Creamos recursos
-    resource_list = []
-    for i in range(1, resrc_num + 1):
-        resource_list.append(mgr_azure.create_resource('r{0}'.format(i)))
-
-    # Mandamos a ejecutar
-
-
-    return None

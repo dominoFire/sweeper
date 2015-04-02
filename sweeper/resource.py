@@ -4,8 +4,13 @@ import random
 import paramiko
 import logging
 
+
 class Resource:
-    def __init__(self, name, hostname, user, passwd, keep_ssh_alive=True):
+    """
+    Represents a full, stateful Virtual Machine object that can execute commands
+    """
+    def __init__(self, res_config, name, hostname, user, passwd, keep_ssh_alive=True):
+        self.res_config = res_config
         self.name = name
         self.hostname = hostname
         self.defaultUser = user
@@ -74,10 +79,17 @@ class Resource:
 
 
 class ResourceConfig:
+    """
+    Represents a possible Virtual Machine configuration. It doesn't take into account
+    region issues
+    """
     def __init__(self, name, cores, ram_memory):
         self.config_name = name
+        """ VM configuration name """
         self.cores = cores
+        """ Number of cores in the VM configuration """
         self.ram_memory = ram_memory
+        """ Amount of RAM memory in MegaBytes in the VM configuration """
 
     def __str__(self):
         return '{0}({1},{2})'.format(self.config_name, self.cores, self.ram_memory)
@@ -87,6 +99,10 @@ class ResourceConfig:
 
 
 def generate_random_password():
+    """
+    Generates a random password for using in VM user authentication
+    :return:
+    """
     # Secure cryptographic random
     rnd = random.SystemRandom()
     len_k = rnd.randint(8, 15)

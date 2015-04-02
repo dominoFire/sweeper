@@ -1,5 +1,6 @@
 import unittest
 import logging
+from sweeper.scheduler.common import estimate_resources
 from sweeper.workflow import *
 import sweeper.cloud.azure.manager as az_mgr
 import sweeper.scheduler as sch
@@ -24,11 +25,11 @@ class WorkflowTest(unittest.TestCase):
 class ResourceEstimatorTest(unittest.TestCase):
     def test(self):
         w = read_workflow('../examples/test.yaml')
-        r = sch.estimate_resources(w)
+        r = estimate_resources(w)
         self.assertEqual(r, 2)
         print 'Resources', r
         w = read_workflow('../examples/multilayer.yaml')
-        r = sch.estimate_resources(w)
+        r = estimate_resources(w)
         print 'Resources', r
         self.assertEqual(r, 4)
 

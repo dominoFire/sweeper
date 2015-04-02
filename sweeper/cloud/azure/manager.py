@@ -63,8 +63,14 @@ def wait_for_deployment_running(service_name, deploy_name):
             break
 
 
-def create_resource(name):
-    res = Resource(name, '{0}.cloudapp.net'.format(name), 'azureuser', generate_random_password())
+def create_resource(name, config_object):
+    """
+    Creates a virtual machine
+    :param name:
+    :param config_object:
+    :return: a Resource object that represents the virtual machine
+    """
+    res = Resource(config_object, name, '{0}.cloudapp.net'.format(name), 'azureuser', generate_random_password())
 
     # Service Certificate
     # TODO: parametrize this
@@ -106,7 +112,6 @@ def create_resource(name):
     wait_for_service_certificate(res.name, vm_key_fingerprint)
     logging.info('Adding service certificate for {0} complete'.format(res.name))
 
-
     # Virtual machine creation
     logging.info('Creating VM deployment {0}'.format(res.name))
     vm_result = sms.create_virtual_machine_deployment(service_name=res.name,
@@ -116,7 +121,7 @@ def create_resource(name):
                                                       role_name=res.name,
                                                       system_config=linux_config,
                                                       os_virtual_hard_disk=os_hd,
-                                                      role_size='Small',
+                                                      role_size=config_object.config_name,
                                                       network_config=net_cfg)
     #wait_for_deployment(res.name, res.name)
     wait_for_deployment_running(res.name, res.name)

@@ -19,7 +19,7 @@ workflow:
       - mode: ['linear', 'quadratic']
 
   - name: show_hardware
-    command: lspci > harware.txt
+    command: lspci > hardware.txt
     depends: [do_gridsearch]
 
   - name: create_sysinfo

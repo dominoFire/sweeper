@@ -25,5 +25,29 @@ def join_path(base, name, ext):
 
 
 def wait_for(predicate_func, **kwargs):
-    while not predicate_func(kwargs):
-        pass
+    """
+    Maintains the current execution thread until the predicate_func(**kwargs) evaluates to True
+    :param predicate_func: a Function to evaluate
+    :param kwargs: Parameters passed to predicate_func
+    :return: None
+    """
+    if len(kwargs) == 0:
+        while not predicate_func():
+            pass
+    else:
+        while not predicate_func(**kwargs):
+            pass
+
+
+def contains_list(sublst, lst):
+    """
+    Check if the elements in sublst are all present in lst:
+    :param sublst: a list
+    :param lst: a list
+    :return: True if the elements in sublst are all present in lst, False otherwise
+    """
+    for se in sublst:
+        if not se in lst:
+            return False
+
+    return True
