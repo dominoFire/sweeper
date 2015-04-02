@@ -1,6 +1,7 @@
 from sweeper.cloud.azure import manager as mgr_azure
 from sweeper.scheduler import myopic
 from sweeper.scheduler.common import estimate_resources, prepare_resrc_config
+import sweeper.utils as utils
 
 
 def run_workflow(workflow):
@@ -12,9 +13,10 @@ def run_workflow(workflow):
 
     for c in configs:
         res_list = prepare_resrc_config(c)
-        sl = myopic.create_schedule_plan(workflow, res_list)
+        sml = myopic.create_schedule_plan(workflow, res_list)
+        utils.plot_gantt_chart(sml)
 
-        print sl
+        print sml
     # Creamos recursos
 
 
