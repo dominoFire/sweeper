@@ -11,7 +11,7 @@ class ResourceSchedule:
         self.speed_factor = 1
 
     def __repr__(self):
-        return '{0}@{1}-{2}'.format(self.core_name, self.host_hame, self.config)
+        return '{0}@{1}[{2}]'.format(self.host_hame, self.core_name, self.config.config_name)
 
 
 class ScheduleMapping:
@@ -25,8 +25,43 @@ class ScheduleMapping:
         self.start_time = start
         self.duration = duration
 
+    @property
+    def end_time(self):
+        return self.start_time + self.duration
+
     def __repr__(self):
         return '{0} => {1}, s={2}({3})'.format(self.task, self.resource_schedule, self.start_time, self.duration)
+
+
+class SchedulePlan:
+    """
+    Represents a SchedulePlan with all the information needed to execute in
+    cloud Virtual Machines
+    """
+    def __init__(self, sched_algo, sched_mapping_list, workflow, resource_config_list, resource_names):
+        self.scheduling_algorithm = sched_algo
+        self.schedule_mapping_list = sched_mapping_list
+        self.workflow = workflow
+        self.resource_configurations = resource_config_list
+        self.resource_names = resource_names
+
+    @property
+    def execution_cost(self):
+        """
+        Total expected cost in dollars for executing this workflow in the cloud resources
+        :return: float
+        """
+        return 0.0
+
+    @property
+    def makespan(self):
+        """
+        Total expected execution time of the workflow in this shecule plan
+        :return: float
+        """
+        start = reduce(min, [x.start_time for x in self.schedule_mapping_list])
+        end = reduce(max, [x.end_time for x in self.schedule_mapping_list])
+        return end - start
 
 
 def prepare_resrc_config(res_config_list):
@@ -35,12 +70,13 @@ def prepare_resrc_config(res_config_list):
     :param res_config_list: a list of ResourceConfig
     :return: a List of ResourceSchedule
     """
-    res_list = []
+    resrc_schedule_list = []
+    resource_names = ['r{0}'.format(idx) for idx, _ in enumerate(res_config_list)]
     for idx, cfg in enumerate(res_config_list):
-        core_list = [ResourceSchedule('Core{0}'.format(i), 'r{0}'.format(idx), cfg) for i in range(1, cfg.cores+1)]
-        res_list = res_list + core_list
+        core_list = [ResourceSchedule('Core{0}'.format(i), resource_names[idx], cfg) for i in range(1, cfg.cores+1)]
+        resrc_schedule_list = resrc_schedule_list + core_list
 
-    return res_list
+    return resrc_schedule_list, resource_names
 
 
 def estimate_resources(workflow):
@@ -50,11 +86,11 @@ def estimate_resources(workflow):
     assumes that each task run in a single resource
 
     :param workflow: A Workflow instance
-    :return: An integer with the recomended number
+    :return: An integer with the recommended number
     of resources needed to run the workflow
 
     NOTE: you can always run a workflow with just 1 resources
-    and a infinte number of resources
+    and a infinite number of resources
 
     Based on the paper of Saifullah et al.
     http://openscholarship.wustl.edu/cgi/viewcontent.cgi?article=1057&context=cse_research

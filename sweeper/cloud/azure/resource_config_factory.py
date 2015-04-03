@@ -9,6 +9,6 @@ def get_config(config_name):
     row = configs[configs.name == config_name]
 
     if row and row.shape[0] == 1:
-        return ResourceConfig(row['name'], row['cores'], row['memory_in_mb'])
+        return ResourceConfig(row['name'], row['cores'], row['memory_in_mb'], 'Azure')
 
     return None

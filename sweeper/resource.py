@@ -83,13 +83,15 @@ class ResourceConfig:
     Represents a possible Virtual Machine configuration. It doesn't take into account
     region issues
     """
-    def __init__(self, name, cores, ram_memory):
+    def __init__(self, name, cores, ram_memory, provider):
         self.config_name = name
         """ VM configuration name """
         self.cores = cores
         """ Number of cores in the VM configuration """
         self.ram_memory = ram_memory
         """ Amount of RAM memory in MegaBytes in the VM configuration """
+        self.provider = provider
+        """ Name of the cloud provider (Azure, Amazon, Rackspace, ...) that supports this configuration """
 
     def __str__(self):
         return '{0}({1},{2})'.format(self.config_name, self.cores, self.ram_memory)

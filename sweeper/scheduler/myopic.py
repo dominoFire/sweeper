@@ -1,4 +1,4 @@
-from common import ScheduleMapping
+from common import ScheduleMapping, prepare_resrc_config, SchedulePlan
 import sweeper.utils as utils
 from operator import attrgetter
 
@@ -21,13 +21,14 @@ def parents_ready_time(parents_list, sched_list):
     return max_time
 
 
-def create_schedule_plan(workflow, resrc_schedule_list):
+def create_schedule_plan(workflow, resrc_config_list):
     """
     Create a schedule plan using the Myopic scheduling algorithm
     :param workflow: A workflow Object
-    :param resrc_schedule_list: a List of Resource Schedule objects
-    :return: a List with the execution plan
+    :param resrc_config_list: a List of Resource Config objects
+    :return: a SchedulePlan object
     """
+    resrc_schedule_list, resrc_names = prepare_resrc_config(resrc_config_list)
     # all task to be processed
     all_tasks = list(workflow.tasks)
     sched_list = []
@@ -46,4 +47,4 @@ def create_schedule_plan(workflow, resrc_schedule_list):
             all_tasks.remove(t)
             resources = sorted(resrc_schedule_list, key=attrgetter('ready_time'))
 
-    return sched_list
+    return SchedulePlan('myopic', sched_list, workflow, resrc_config_list, resrc_names)

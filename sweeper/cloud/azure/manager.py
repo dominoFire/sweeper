@@ -151,7 +151,7 @@ def create_network_config(subnet_name=None):
 def possible_configs(num):
     result = sms.list_role_sizes()
     result = result.role_sizes
-    configs = [ResourceConfig(o.name, o.cores, o.memory_in_mb) for o in result]
+    configs = [ResourceConfig(o.name, o.cores, o.memory_in_mb, 'Azure') for o in result]
 
     combinations = []
 
