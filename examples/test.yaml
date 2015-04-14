@@ -13,6 +13,3 @@ workflow:
   - name: final_results
     command: ls -alp
     depends: [create_filelist, create_sysinfo]
-
-
-# Maju0688

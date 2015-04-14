@@ -5,10 +5,15 @@ class ResourceSchedule:
     """
     def __init__(self, core_name, host_name, config):
         self.core_name = core_name
+        """ Name that identifies the core inside this machine """
         self.host_hame = host_name
+        """ A valid host name that identifies the machion """
         self.config = config
+        """ A ResourceConfig instance """
         self.ready_time = 0
-        self.speed_factor = 1
+        """ Indicates the time the machine is ready for executing tasks """
+        self.speed_factor = config.speed_factor
+        """ SPECfp 2006 score """
 
     def __repr__(self):
         return '{0}@{1}[{2}]'.format(self.host_hame, self.core_name, self.config.config_name)
@@ -40,9 +45,14 @@ class SchedulePlan:
     """
     def __init__(self, sched_algo, sched_mapping_list, workflow, resource_config_list, resource_names):
         self.scheduling_algorithm = sched_algo
+        """ Name of the scheduling algorithm that produces this schedule plan """
         self.schedule_mapping_list = sched_mapping_list
+        """ List of ScheduleMapping that contains mappings between Task instances
+            and ResourceSchedule instances, with timing info (start_time, duration) """
         self.workflow = workflow
+        """ Workflow instance that belongs this schedule plan """
         self.resource_configurations = resource_config_list
+
         self.resource_names = resource_names
 
     @property
@@ -51,7 +61,13 @@ class SchedulePlan:
         Total expected cost in dollars for executing this workflow in the cloud resources
         :return: float
         """
-        return 0.0
+        #TODO: Compute execution cost
+        total_cost = 0
+        for res_cfg in self.resource_configurations:
+            mapped_tasks = filter(lambda x: x.resource_schedule.config == res_cfg, self.schedule_mapping_list)
+            makespan_res = SchedulePlan._makespan(mapped_tasks)
+            total_cost += makespan_res * res_cfg.cost_hour_usd
+        return total_cost
 
     @property
     def makespan(self):
@@ -59,10 +75,16 @@ class SchedulePlan:
         Total expected execution time of the workflow in this shecule plan
         :return: float
         """
-        start = reduce(min, [x.start_time for x in self.schedule_mapping_list])
-        end = reduce(max, [x.end_time for x in self.schedule_mapping_list])
-        return end - start
+        return SchedulePlan._makespan(self.schedule_mapping_list)
 
+    @staticmethod
+    def _makespan(sched_mapping_list):
+        """
+        Computes makespan from a ScheduleMapping list
+        """
+        start = reduce(min, [x.start_time for x in sched_mapping_list])
+        end = reduce(max, [x.end_time for x in sched_mapping_list])
+        return end - start
 
 def prepare_resrc_config(res_config_list):
     """

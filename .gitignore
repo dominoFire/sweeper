@@ -4,3 +4,9 @@
 *.csv
 *.log
 
+.Rproj.user
+*.RData
+*.Rdata
+.Rhistory
+*.dat
+

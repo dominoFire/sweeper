@@ -26,6 +26,11 @@ if __name__ == '__main__':
     process_sms_list(result.locations, './data/azure_locations.csv')
     print ('Azure Locations saved in azure_locations.csv')
 
+    result = sms.list_storage_accounts()
+    process_sms_list(result.storage_services, './data/azure_storage_accounts.csv')
+    print ('Azure Storage accounts saved in azure_storage_accounts.csv')
+
+    # Put this result always next to for loop!
     result = sms.list_hosted_services()
     process_sms_list(result.hosted_services, './data/azure_hosted_services.csv')
     print ('Azure Hosted services saved in azure_hosted_services.csv')

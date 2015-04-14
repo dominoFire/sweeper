@@ -9,6 +9,7 @@ class Resource:
     """
     Represents a full, stateful Virtual Machine object that can execute commands
     """
+
     def __init__(self, res_config, name, hostname, user, passwd, keep_ssh_alive=True):
         self.res_config = res_config
         self.name = name
@@ -53,7 +54,7 @@ class Resource:
                 self.connect_ssh()
             if self.__scp is None:
                 self.__scp = SCPClient(self.__ssh.get_transport())
-        except:
+        except Exception:
             self.__scp = None
 
     def execute_command(self, cmd):
@@ -83,7 +84,8 @@ class ResourceConfig:
     Represents a possible Virtual Machine configuration. It doesn't take into account
     region issues
     """
-    def __init__(self, name, cores, ram_memory, provider):
+
+    def __init__(self, name, cores, ram_memory, provider, speed_factor, cost_hour_usd):
         self.config_name = name
         """ VM configuration name """
         self.cores = cores
@@ -91,7 +93,12 @@ class ResourceConfig:
         self.ram_memory = ram_memory
         """ Amount of RAM memory in MegaBytes in the VM configuration """
         self.provider = provider
-        """ Name of the cloud provider (Azure, Amazon, Rackspace, ...) that supports this configuration """
+        """ Name of the cloud provider (Azure, AWS, Rackspace, ...) that supports this configuration """
+        self.speed_factor = speed_factor
+        """ The SPECfp score of this configuration """
+        self.cost_hour_usd = cost_hour_usd
+        """ The cost of running this virtual machine during an hour, in US Dollars.
+            Note that hour fractions shouldn't be charged by the cloud provider """
 
     def __str__(self):
         return '{0}({1},{2})'.format(self.config_name, self.cores, self.ram_memory)
@@ -112,7 +119,7 @@ def generate_random_password():
 
     for i in range(len_k):
         num = rnd.randint(1, 3)
-        if num == 1:    # generate number
+        if num == 1:  # generate number
             x = rnd.randint(ord('0'), ord('9'))
         elif num == 2:  # generate lowercase
             x = rnd.randint(ord('a'), ord('z'))
@@ -123,3 +130,46 @@ def generate_random_password():
     keyword = ''.join(keyword)
 
     return keyword
+
+
+def validate_password_requirements(passwd):
+    """
+    Check if :passwd approves the following password complexity requirements
+
+    - at least 8 characters
+    - 3 of the following conditions
+       - at least 1 lowercase char
+       - at least 1 uppercase char
+       - at least 1 number char
+       - at least 1 special (not alphanumeric) char
+
+    :return: True if complies with password complexity requirements
+    """
+    if not len(passwd) >= 8:
+        return False
+
+    req_lower = False
+    req_upper = False
+    req_digit = False
+    req_special_char = False
+    for ch in passwd:
+        if str.isupper(ch):
+            req_upper = True
+        elif str.islower(ch):
+            req_lower = True
+        elif str.isdigit(ch):
+            req_digit = True
+        # See
+        #http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-docker-with-xplat-cli/
+        elif ch in '!@#$%^&+=':
+            req_special_char = True
+
+    return int(req_upper) + int(req_lower) + int(req_digit) + int(req_special_char) >= 3
+
+
+def generate_valid_ramdom_password():
+    p = generate_random_password()
+    while not validate_password_requirements(p):
+        p = generate_random_password()
+
+    return p

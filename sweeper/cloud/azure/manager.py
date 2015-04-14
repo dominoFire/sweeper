@@ -1,23 +1,23 @@
-__author__ = 'fer'
+from azure.storage import BlobService
 
 import base64
 import logging
 from azure.servicemanagement import *
+from azure.storage.fileshareservice import FileShareService
 
-from sweeper.resource import Resource, ResourceConfig
-from sweeper.resource import generate_random_password
+from sweeper.resource import Resource, ResourceConfig, generate_valid_ramdom_password
 from sweeper.cloud.azure.subscription import sms
 from sweeper.cloud.azure.subscription import cer_fullpath
+import sweeper.utils as utils
+import sweeper.cloud.azure.resource_config_factory as config_factory
+
+
+def filter_any_hosted_service(svc_name):
+    return utils.filter_any(lambda x: x.service_name == svc_name, sms.list_hosted_services().hosted_services)
 
 
 def wait_for_hosted_service(service_name):
-    wait = True
-    while wait:
-        hs = sms.list_hosted_services()
-        for s in hs.hosted_services:
-            if s.service_name == service_name:
-                wait = False
-                break
+    utils.wait_for(filter_any_hosted_service, svc_name=service_name)
 
 
 def wait_for_deployment(service_name, deploy_name):
@@ -46,12 +46,16 @@ def wait_for_service_certificate(service_name, cert_fingerprint):
 
 
 def wait_for_request_succeeded(request_id):
-    wait = True
-    while wait:
+    def status_succeeded():
         st = sms.get_operation_status(request_id=request_id)
         if st.status == 'Succeeded':
-            wait = False
-            break
+            return True
+        elif st.status == 'Failed':
+            print st.http_status_code, st.error.code, st.error.message
+            raise ValueError('Request status failed: {0}'.format(st.error.message))
+        return False
+
+    utils.wait_for(status_succeeded)
 
 
 def wait_for_deployment_running(service_name, deploy_name):
@@ -63,6 +67,18 @@ def wait_for_deployment_running(service_name, deploy_name):
             break
 
 
+def filter_any_storage_account(stor_account):
+    return utils.filter_any(lambda x: x.service_name == stor_account, sms.list_storage_accounts().storage_services)
+
+
+def wait_for_storage_account(storage_name):
+    utils.wait_for(filter_any_storage_account, stor_account=storage_name)
+
+
+def get_media_link(storage_account_name, container_name, file_name):
+    return 'https://{0}.blob.core.windows.net/{1}/{2}'.format(storage_account_name, container_name, file_name)
+
+
 def create_resource(name, config_object):
     """
     Creates a virtual machine
@@ -70,10 +86,10 @@ def create_resource(name, config_object):
     :param config_object:
     :return: a Resource object that represents the virtual machine
     """
-    res = Resource(config_object, name, '{0}.cloudapp.net'.format(name), 'azureuser', generate_random_password())
+    res = Resource(config_object, name, '{0}.cloudapp.net'.format(name), 'azureuser', generate_valid_ramdom_password())
 
     # Service Certificate
-    # TODO: parametrize this
+    # TODO: parametrize .cer management
     cert_encoded = encode_certificate(cer_fullpath)
 
     # Key to password-less login
@@ -85,11 +101,35 @@ def create_resource(name, config_object):
     linux_config.ssh.key_pairs.key_pairs.append(key_pair)
     linux_config.disable_ssh_password_authentication = False
 
-    # Virtual Hard Disk
-    # TODO: Automate configuration of storage account
+    # OS Image
+    # TODO: Automate configuration of image
     image_name = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
-    media_link = 'https://sweepervhd.blob.core.windows.net/vmblob/{0}.vhd'.format(res.name)
-    os_hd = OSVirtualHardDisk(image_name, media_link)
+
+    # Storage account
+    logging.info('Creating Storage account {0}'.format(res.name))
+    storage_account_result = sms.create_storage_account(service_name=res.name,
+                                                        description='Storage account for VM {}'.format(res.name),
+                                                        label=res.name,
+                                                        geo_replication_enabled=None,
+                                                        account_type='Standard_LRS',
+                                                        location='West US')
+    wait_for_request_succeeded(storage_account_result.request_id)
+    wait_for_storage_account(res.name)
+    logging.info('Creating Storage account {0} complete'.format(res.name))
+
+    # Container for VHD images
+    container_name = 'vhd'
+    logging.info('Creating Container {0} in Storage account {1}'.format(container_name, res.name))
+    storage_keys = sms.get_storage_account_keys(service_name=res.name)
+    blob_svc = BlobService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
+    file_svc = FileShareService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
+    blob_svc.create_container(container_name)
+    file_svc.create_file_share('fileshare')
+    logging.info('Creating Container {0} in Storage account {1} complete'.format(container_name, res.name))
+
+    vhd_link = get_media_link(res.name, container_name, '{0}.vhd'.format(res.name))
+    logging.info('VHD link: {0}'.format(vhd_link))
+    os_hd = OSVirtualHardDisk(image_name, vhd_link)
 
     # Network configuration (SSH endpoints)
     net_cfg = create_network_config()
@@ -124,6 +164,7 @@ def create_resource(name, config_object):
                                                       role_size=config_object.config_name,
                                                       network_config=net_cfg)
     #wait_for_deployment(res.name, res.name)
+    wait_for_request_succeeded(vm_result.request_id)
     wait_for_deployment_running(res.name, res.name)
     logging.info('Creating VM deployment {0} complete'.format(res.name))
 
@@ -149,9 +190,7 @@ def create_network_config(subnet_name=None):
 
 
 def possible_configs(num):
-    result = sms.list_role_sizes()
-    result = result.role_sizes
-    configs = [ResourceConfig(o.name, o.cores, o.memory_in_mb, 'Azure') for o in result]
+    configs = config_factory.list_configs()
 
     combinations = []
 
@@ -173,9 +212,17 @@ def possible_configs(num):
 
 
 def delete_resource(res_name):
+    # Check if servie exists
     svc = sms.get_hosted_service_properties(res_name)
     if not svc:
         raise ValueError('Service {0} not found'.format(res_name))
+    # Turn off Virtual Machine
+    shutdown_result = sms.shutdown_role(service_name=res_name,
+                                        deployment_name=res_name,
+                                        role_name=res_name,
+                                        post_shutdown_action='StoppedDeallocated')
+    wait_for_request_succeeded(shutdown_result.request_id)
+    # Delete additional deployments
     if svc.deployments:
         for d in svc.deployments:
             logging.info('Deleting deployment {0}:{1}'.format(svc.service_name, d.name))
@@ -184,12 +231,36 @@ def delete_resource(res_name):
             logging.info('Deleting deployment {0}:{1} complete'.format(svc.service_name, d.name))
 
     #TODO: Find out how to delete all deployments
+    def get_deployment():
+        try:
+            return sms.get_deployment_by_name(res_name, res_name)
+        except Exception, e:
+            return None
 
-    logging.info('Deleting default deployment {0}'.format(res_name))
-    req = sms.delete_deployment(res_name, res_name)
-    wait_for_request_succeeded(req.request_id)
-    logging.info('Deleting default deployment {0} complete'.format(res_name))
+    if get_deployment():
+        logging.info('Deleting default deployment {0}'.format(res_name))
+        req = sms.delete_deployment(res_name, res_name)
+        wait_for_request_succeeded(req.request_id)
+        logging.info('Deleting default deployment {0} complete'.format(res_name))
+
+    def get_role():
+        try:
+            return sms.get_role(service_name=res_name, deployment_name=res_name, role_name=res_name)
+        except Exception, e:
+            return None
+
+    # Delete Virtual machine role after deployments!
+    if get_role():
+        delete_result = sms.delete_role(service_name=res_name,
+                                        deployment_name=res_name,
+                                        role_name=res_name)
+        wait_for_request_succeeded(delete_result.request_id)
 
     logging.info('Deleting cloud service {0}'.format(res_name))
-    sms.delete_hosted_service(svc.service_name)
+    sms.delete_hosted_service(res_name)
+    utils.wait_for(lambda x: not filter_any_hosted_service(x), x=res_name)
     logging.info('Deleting cloud service {0} complete'.format(res_name))
+
+    #logging.info('Deleting Storage account {0}'.format(res_name))
+    #sms.delete_storage_account(res_name)
+    #logging.info('Deleting Storage account {0} complete'.format(res_name))

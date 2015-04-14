@@ -6,6 +6,7 @@ import sweeper.cloud.azure.manager as az_mgr
 import sweeper.scheduler as sch
 from pprint import PrettyPrinter
 import time
+import sweeper.utils as utils
 
 
 pp = PrettyPrinter(indent=1)
@@ -24,14 +25,17 @@ class WorkflowTest(unittest.TestCase):
 
 class ResourceEstimatorTest(unittest.TestCase):
     def test(self):
-        w = read_workflow('../examples/test.yaml')
+        w = read_workflow('examples/test.yaml')
         r = estimate_resources(w)
         self.assertEqual(r, 2)
         print 'Resources', r
-        w = read_workflow('../examples/multilayer.yaml')
+        w = read_workflow('examples/multilayer.yaml')
         r = estimate_resources(w)
         print 'Resources', r
         self.assertEqual(r, 4)
+        w = read_workflow('examples/weird.yaml')
+        r = estimate_resources(w)
+        print 'Resources', r
 
 
 class PlannerTest(unittest.TestCase):
@@ -46,13 +50,13 @@ class PlannerTest(unittest.TestCase):
 
 class CreteVMTest(unittest.TestCase):
     def test(self):
-        res_name = 'mexicantaco'
+        res_name = 'basketmarket'
         try:
-            res = az_mgr.create_resource(res_name)
+            import sweeper.cloud.azure.resource_config_factory as cfg_factory
+            res = az_mgr.create_resource(res_name, cfg_factory.get_config('Small'))
             logging.info(res.__dict__)
-            while not res.connect_ssh():
-                pass
-            _, stdout, _ = res.execute_command('cat /proc/cpuinfo')
+            utils.wait_for(res.connect_ssh)
+            _, stdout, _ = res.execute_command('sleep 60')
             for line in stdout:
                 print (line)
             logging.info('Waiting some time for shutting down')
@@ -68,6 +72,7 @@ class DeleteVMTest(unittest.TestCase):
     def test(self):
         res_name = 'daftgrunge'
         az_mgr.delete_resource(res_name)
+
 
 if __name__ == '__main__':
     unittest.main()
