@@ -16,7 +16,7 @@ logging.getLogger().addHandler(logging.StreamHandler())
 
 class WorkflowTest(unittest.TestCase):
     def test(self):
-        w = read_workflow('../examples/test.yaml')
+        w = read_workflow('examples/test.yaml')
         pp = PrettyPrinter(indent=1)
         pp.pprint(w.__dict__)
         self.assertEqual(len(w.tasks), 4)
@@ -28,14 +28,14 @@ class ResourceEstimatorTest(unittest.TestCase):
         w = read_workflow('examples/test.yaml')
         r = estimate_resources(w)
         self.assertEqual(r, 2)
-        print 'Resources', r
+        print('Resources', r)
         w = read_workflow('examples/multilayer.yaml')
         r = estimate_resources(w)
-        print 'Resources', r
+        print('Resources', r)
         self.assertEqual(r, 4)
         w = read_workflow('examples/weird.yaml')
         r = estimate_resources(w)
-        print 'Resources', r
+        print('Resources', r)
 
 
 class PlannerTest(unittest.TestCase):
@@ -50,22 +50,25 @@ class PlannerTest(unittest.TestCase):
 
 class CreteVMTest(unittest.TestCase):
     def test(self):
-        res_name = 'basketmarket'
+        res_name = 'graphicmodel'
+        #import azure
+        #azure.http.httpclient.DEBUG_REQUESTS = True
+        #azure.http.httpclient.DEBUG_RESPONSES = True
         try:
             import sweeper.cloud.azure.resource_config_factory as cfg_factory
-            res = az_mgr.create_resource(res_name, cfg_factory.get_config('Small'))
+            res = az_mgr.create_resource(res_name, cfg_factory.get_config('Standard_D1'))
             logging.info(res.__dict__)
             utils.wait_for(res.connect_ssh)
             _, stdout, _ = res.execute_command('sleep 60')
             for line in stdout:
-                print (line)
+                print(line)
             logging.info('Waiting some time for shutting down')
             time.sleep(40)
-        except Exception, ex:
-            print 'Error in test'
-            print ex
-        finally:
             az_mgr.delete_resource(res_name)
+        except Exception as ex:
+            print('Error in test')
+            print(ex)
+            raise ex
 
 
 class DeleteVMTest(unittest.TestCase):

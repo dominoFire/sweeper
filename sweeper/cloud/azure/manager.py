@@ -7,7 +7,7 @@ from azure.storage.fileshareservice import FileShareService
 
 from sweeper.resource import Resource, ResourceConfig, generate_valid_ramdom_password
 from sweeper.cloud.azure.subscription import sms
-from sweeper.cloud.azure.subscription import cer_fullpath
+from sweeper.cloud.azure.subscription import pfx_fullpath, cer_fullpath
 import sweeper.utils as utils
 import sweeper.cloud.azure.resource_config_factory as config_factory
 
@@ -51,7 +51,7 @@ def wait_for_request_succeeded(request_id):
         if st.status == 'Succeeded':
             return True
         elif st.status == 'Failed':
-            print st.http_status_code, st.error.code, st.error.message
+            print(st.http_status_code, st.error.code, st.error.message)
             raise ValueError('Request status failed: {0}'.format(st.error.message))
         return False
 
@@ -93,7 +93,7 @@ def create_resource(name, config_object):
     cert_encoded = encode_certificate(cer_fullpath)
 
     # Key to password-less login
-    vm_key_fingerprint = '976272116B6DE9398D1032C85B69CD6E6638F691' #mycert.pem
+    vm_key_fingerprint = '5F76C84B074BD87717C01EF3B12D4856E56DE882'  # mycert.pem
     linux_config = LinuxConfigurationSet(res.name, res.defaultUser, res.defaultPassword, True)
     key_pair = KeyPair(vm_key_fingerprint, '/home/{0}/id_rsa'.format(res.defaultUser))
     public_key = PublicKey(vm_key_fingerprint, '/home/{0}/.ssh/authorized_keys'.format(res.defaultUser))
@@ -146,7 +146,7 @@ def create_resource(name, config_object):
     # Add certificate to service
     logging.info('Adding service certificate for {0}'.format(res.name))
     sms.add_service_certificate(service_name=res.name,
-                                data=cert_encoded,
+                                data=cert_encoded.decode('utf-8'),
                                 certificate_format='pfx',
                                 password='')
     wait_for_service_certificate(res.name, vm_key_fingerprint)
@@ -234,7 +234,7 @@ def delete_resource(res_name):
     def get_deployment():
         try:
             return sms.get_deployment_by_name(res_name, res_name)
-        except Exception, e:
+        except Exception as e:
             return None
 
     if get_deployment():
@@ -246,7 +246,7 @@ def delete_resource(res_name):
     def get_role():
         try:
             return sms.get_role(service_name=res_name, deployment_name=res_name, role_name=res_name)
-        except Exception, e:
+        except Exception as e:
             return None
 
     # Delete Virtual machine role after deployments!

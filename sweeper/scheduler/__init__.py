@@ -6,20 +6,25 @@ from sweeper.scheduler.common import estimate_resources, prepare_resrc_config
 import threading
 import sweeper.utils as utils
 import time
-import Queue
+import queue
 
 
 def run_workflow(workflow):
     # Creamos recursos
+    """
+
+    :type workflow: sweeper.workflow.Workflow
+    :return:
+    """
     resrc_num = estimate_resources(workflow)
 
     # Creamos planificacion
     configs = mgr_azure.possible_configs(resrc_num)
 
-    print 'Makepan, Cost'
+    print('Makepan, Cost')
     for c in configs:
         sp = myopic.create_schedule_plan(workflow, c)
-        print sp.makespan, sp.execution_cost
+        print(sp.makespan, sp.execution_cost)
 
     # Optimizer
 
@@ -66,19 +71,20 @@ class TaskContainer(threading.Thread):
             out.close()
             err.close()
             self.status = 0
-        except SSHException, ex:
+        except SSHException as ex:
             self.status = 1
-            print ex.message
+            print(ex.message)
             pass
         finally:
             self.queue_complete.put((self.task, self.vm, self.status))
+            self.queue_complete.task_complete()
 
 
 def manage_execution(schedule_plan, vm_list):
     """
 
-    :param schedule_plan: sweeper.scheduler.common.ScheduleMapping
-    :param vm_list: sweeper.resource.Resource
+    :param schedule_plan: list of sweeper.scheduler.common.ScheduleMapping
+    :param vm_list: list of sweeper.resource.Resource
     :return: None
     """
     # map schedulemapping list elements to vm's
@@ -90,7 +96,7 @@ def manage_execution(schedule_plan, vm_list):
     # queue based system
     queue_ready = vm_mappings
     query_running = []
-    queue_completed = Queue.Queue(maxsize=len(vm_mappings))
+    queue_completed = queue.Queue(maxsize=len(vm_mappings))
     start_time = None
     started = False
     while queue_ready:
@@ -108,3 +114,4 @@ def manage_execution(schedule_plan, vm_list):
                     start_time = time.time()
 
     stop_time = time.time()
+    print('Duration: ', stop_time - start_time)

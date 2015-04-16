@@ -34,7 +34,7 @@ class Resource:
                                # key_filename='mycert.pem',
                                look_for_keys=False)
             self.is_ssh_connected = True
-        except Exception, e:
+        except Exception as e:
             logging.warning('Cant connect SSH: {0}'.format(e))
             self.__ssh = None
             self.is_ssh_connected = False
@@ -54,7 +54,7 @@ class Resource:
                 self.connect_ssh()
             if self.__scp is None:
                 self.__scp = SCPClient(self.__ssh.get_transport())
-        except Exception:
+        except Exception as ex:
             self.__scp = None
 
     def execute_command(self, cmd):

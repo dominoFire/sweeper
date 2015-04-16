@@ -59,7 +59,7 @@ def contains_list(sublist, lst):
 
 
 def filter_any(predicate_func, apply_list):
-    return len(filter(predicate_func, apply_list)) > 0
+    return len(list(filter(predicate_func, apply_list))) > 0
 
 
 def get_gantt_chart_data(schedule_mapping_list):
@@ -71,13 +71,18 @@ def get_gantt_chart_data(schedule_mapping_list):
         'priorities': [1] * len(schedule_mapping_list)
     }
     unique_labels = sorted(list(set(dict_sched['labels'])))
-    dict_sched['labels_id'] = map(lambda elem: unique_labels.index(elem)+1, dict_sched['labels'])
+    dict_sched['labels_id'] = list(map(lambda elem: unique_labels.index(elem)+1, dict_sched['labels']))
     dict_sched['y_coord'] = [len(unique_labels)-x+1 for x in dict_sched['labels_id']]
 
     return dict_sched
 
 
 def save_gantt_chart_data(schedule_mapping_list, filename=None):
+    """
+
+    :param schedule_mapping_list:
+    :param filename:
+    """
     dict_sched = get_gantt_chart_data(schedule_mapping_list)
     df_sched = pd.DataFrame(dict_sched)
     df_sched.to_csv(filename, index=None, encoding='utf-8')

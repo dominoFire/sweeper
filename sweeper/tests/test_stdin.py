@@ -5,6 +5,6 @@ if __name__ == '__main__':
     fin = open('/dev/null')
 
     for line in fin:
-        print line
+        print(line)
 
     fin.close()

@@ -22,7 +22,7 @@ def get_config(config_name):
                             float(row['price_hour_usd'].iat[0]))
         return rc
 
-    raise ValueError('Role not found: {0}'.format(config_name))
+    raise ValueError('Sweeper: Role not found: {0}'.format(config_name))
 
 
 def list_configs():

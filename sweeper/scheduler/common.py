@@ -1,3 +1,5 @@
+from functools import reduce
+
 class ResourceSchedule:
     """
     An auxilary object for creating an managing expected schedules
@@ -64,7 +66,7 @@ class SchedulePlan:
         #TODO: Compute execution cost
         total_cost = 0
         for res_cfg in self.resource_configurations:
-            mapped_tasks = filter(lambda x: x.resource_schedule.config == res_cfg, self.schedule_mapping_list)
+            mapped_tasks = list(filter(lambda x: x.resource_schedule.config == res_cfg, self.schedule_mapping_list))
             makespan_res = SchedulePlan._makespan(mapped_tasks)
             total_cost += makespan_res * res_cfg.cost_hour_usd
         return total_cost
@@ -82,8 +84,8 @@ class SchedulePlan:
         """
         Computes makespan from a ScheduleMapping list
         """
-        start = reduce(min, [x.start_time for x in sched_mapping_list])
-        end = reduce(max, [x.end_time for x in sched_mapping_list])
+        start = reduce(min, [x.start_time for x in sched_mapping_list], 0.)
+        end = reduce(max, [x.end_time for x in sched_mapping_list], 0.)
         return end - start
 
 def prepare_resrc_config(res_config_list):
@@ -150,7 +152,7 @@ def estimate_resources(workflow):
             inv_seg[segment[k]] += 1
 
     max_v = 0
-    for k, v in inv_seg.iteritems():
-        max_v = max(v, max_v)
+    for k in inv_seg:
+        max_v = max(inv_seg[k], max_v)
 
     return max_v

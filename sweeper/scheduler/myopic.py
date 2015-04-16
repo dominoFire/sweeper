@@ -1,4 +1,4 @@
-from common import ScheduleMapping, prepare_resrc_config, SchedulePlan
+from sweeper.scheduler.common import ScheduleMapping, prepare_resrc_config, SchedulePlan
 import sweeper.utils as utils
 from operator import attrgetter
 

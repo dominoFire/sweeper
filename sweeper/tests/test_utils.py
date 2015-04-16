@@ -13,11 +13,11 @@ class UtilsTest(unittest.TestCase):
         sweeper.utils.wait_for(count)
 
         def count(time):
-            print 'time={0}'.format(time)
+            print('time={0}'.format(time))
             for i in range(time):
                 pass
             return True
-        sweeper.utils.wait_for(count, time=9000000)
+        sweeper.utils.wait_for(count, time=900000)
 
 
 if __name__ == '__main__':
