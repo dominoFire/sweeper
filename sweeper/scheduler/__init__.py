@@ -84,12 +84,8 @@ class TaskContainer(threading.Thread):
     def run(self):
         try:
             self.status = 0  # running
-            logging.debug('Connecting to resource {}'.format(self.vm.name))
-            utils.wait_for(self.vm.connect_ssh)
-            logging.debug('Connecting to resource {} complete'.format(self.vm.name))
-
             logging.debug('Executing Task {}'.format(self.task))
-            p_stdin, p_stdout, p_stderr = self.vm.execute_command(self.task.command)
+            p_stdin, p_stdout, p_stderr, client = self.vm.execute_command(self.task.command)
             logging.debug('Executing Task {} complete'.format(self.task))
 
             out = open('{}_stdout.txt'.format(self.task.name), 'w')
@@ -109,7 +105,7 @@ class TaskContainer(threading.Thread):
             err.close()
 
             logging.debug('Disconnecting to resource {}'.format(self.vm.name))
-            self.vm.disconnect_ssh()
+            client.close()
             logging.debug('Disconnecting to resource {} complete'.format(self.vm.name))
 
             logging.debug('Task {} executed successfully on resource {}'.format(self.task, self.vm.name))

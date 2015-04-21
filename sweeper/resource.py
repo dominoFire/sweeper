@@ -7,7 +7,7 @@ import logging
 
 class Resource:
     """
-    Represents a full, stateful Virtual Machine object that can execute commands
+    Represents a Virtual Machine object that can execute commands
     """
 
     def __init__(self, res_config, name, hostname, user, passwd, keep_ssh_alive=True):
@@ -16,68 +16,59 @@ class Resource:
         self.hostname = hostname
         self.defaultUser = user
         self.defaultPassword = passwd
-        self.__ssh = None
-        self.__scp = None
-        self.is_ssh_connected = True
-        self.keep_ssh_alive = keep_ssh_alive
         self.speed_factor = 1
 
-    def connect_ssh(self):
+    def create_ssh_client(self):
+        """
+        Creates a paramiko SShClient object
+        :return:
+        """
         # For some reason, I can't connect using a SSH certificate
-        try:
-            if self.__ssh is None:
-                self.__ssh = SSHClient()
-                self.__ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            self.__ssh.connect(hostname=self.hostname,
+        client = SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        not_connected = True
+        logging.debug('Creating SSHClient')
+        while not_connected:
+            try:
+                client.connect(hostname=self.hostname,
                                username=self.defaultUser,
                                password=self.defaultPassword,
                                # key_filename='mycert.pem',
                                look_for_keys=False)
-            self.is_ssh_connected = True
-        except Exception as e:
-            logging.warning('Cant connect SSH: {0}'.format(e))
-            self.__ssh = None
-            self.is_ssh_connected = False
-        finally:
-            return self.is_ssh_connected
+                not_connected = False
+                logging.debug('Created SSHClient')
+            except Exception as ssh_ex:
+                logging.debug('Cant connect SSH: {0}'.format(ssh_ex))
 
-    def disconnect_ssh(self):
-        self.__ssh.close()
-        self.__ssh = None
-        self.is_ssh_connected = False
-
-    def connect_scp(self):
-        try:
-            if not self.is_ssh_connected:
-                self.connect_ssh()
-            if self.__scp is None:
-                self.__scp = SCPClient(self.__ssh.get_transport())
-        except Exception as ex:
-            self.__scp = None
+        return client
 
     def execute_command(self, cmd):
-        self.connect_ssh()
-        stdin, stdout, stderr = self.__ssh.exec_command(cmd)
-        if not self.keep_ssh_alive:
-            self.disconnect_ssh()
-
-        return stdin, stdout, stderr
+        """
+        Creates a paramiko SSHClient and invokes execution of a terminal command.
+        :param cmd str Command to execute in the VM resource
+        :returns a tuple of the form (stdin, stdout, stderr, client)
+        """
+        ssh = self.create_ssh_client()
+        stdin, stdout, stderr = ssh.exec_command(cmd)
+        return stdin, stdout, stderr, ssh
 
     def put_file(self, local_filepath, remote_filepath):
-        self.connect_scp()
-        self.__scp.put(local_filepath, remote_filepath)
-        if not self.keep_ssh_alive:
-            self.disconnect_ssh()
+        """
+        Upload a file from the host machine to the VM resource
+        """
+        ssh = self.create_ssh_client()
+        scp = SCPClient(ssh.get_transport())
+        scp.put(local_filepath, remote_filepath)
+        ssh.close()
 
     def get_file(self, remote_filepath, curr_filepath='.'):
-        self.connect_scp()
-        self.__scp.get(remote_filepath, local_path=curr_filepath)
-        if not self.keep_ssh_alive:
-            self.disconnect_ssh()
-
-    def __del__(self):
-        if self.__ssh:
-            self.__ssh.close()
+        """
+        Download a file from the VM resource to the host machine
+        """
+        ssh = self.create_ssh_client()
+        scp = SCPClient(ssh.get_transport())
+        scp.get(remote_filepath, local_path=curr_filepath)
+        ssh.close()
 
 
 class ResourceConfig:

@@ -125,7 +125,7 @@ def create_resource(name, config_object):
     file_svc = FileShareService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
     blob_svc.create_container(container_name)
     file_svc.create_file_share('fileshare')
-    logging.info('Creating Container {0} in Storage account {1} complete'.format(container_name, res.name))
+    logging.info('Creating Container \'{0}\' in Storage account {1} complete'.format(container_name, res.name))
 
     vhd_link = get_media_link(res.name, container_name, '{0}.vhd'.format(res.name))
     logging.info('VHD link: {0}'.format(vhd_link))

@@ -97,7 +97,7 @@ def prepare_resrc_config(res_config_list):
     :return: a List of ResourceSchedule
     """
     resrc_schedule_list = []
-    resource_names = ['sweeper{0}i{1}'.format(idx, str(uuid.uuid4())[1:8]) for idx, _ in enumerate(res_config_list)]
+    resource_names = ['sweeper{0}i{1}'.format(idx, str(uuid.uuid4())[0:8]) for idx, _ in enumerate(res_config_list)]
     for idx, cfg in enumerate(res_config_list):
         core_list = [ResourceSchedule('Core{0}'.format(i), resource_names[idx], cfg) for i in range(1, cfg.cores+1)]
         resrc_schedule_list = resrc_schedule_list + core_list

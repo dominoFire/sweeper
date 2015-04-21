@@ -7,7 +7,7 @@ import sweeper.scheduler as sch
 from pprint import PrettyPrinter
 import time
 import sweeper.utils as utils
-
+import uuid
 
 pp = PrettyPrinter(indent=1)
 logging.basicConfig(filename='test_workflow.log', level=logging.DEBUG)
@@ -50,24 +50,24 @@ class PlannerTest(unittest.TestCase):
 
 class CreteVMTest(unittest.TestCase):
     def test(self):
-        res_name = 'graphicmodel'
+        res_name = 'sweepertest{}'.format(str(uuid.uuid4())[:8])
         #import azure
         #azure.http.httpclient.DEBUG_REQUESTS = True
         #azure.http.httpclient.DEBUG_RESPONSES = True
         try:
             import sweeper.cloud.azure.resource_config_factory as cfg_factory
             res = az_mgr.create_resource(res_name, cfg_factory.get_config('Standard_D1'))
+            ssh = res.create_ssh_client()
             logging.info(res.__dict__)
-            utils.wait_for(res.connect_ssh)
-            _, stdout, _ = res.execute_command('sleep 60')
+            _, stdout, _ = ssh.exec_command('ps aux')
             for line in stdout:
-                print(line)
+                logging.debug(line)
             logging.info('Waiting some time for shutting down')
             time.sleep(40)
+            ssh.close()
             az_mgr.delete_resource(res_name)
         except Exception as ex:
-            print('Error in test')
-            print(ex)
+            logging.error('TEST exeption:, {0}'.format(ex))
             raise ex
 
 
