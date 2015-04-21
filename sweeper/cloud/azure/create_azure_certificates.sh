@@ -16,7 +16,7 @@ fer.aguilar.reyes@gmail.com
 EOF
 # creates certificate file (public key) in DER
 #openssl x509 -inform pem -in mycert.pem -outform der -out mycert.cer
-openssl x509 -inform pem -in private_key.pem -outform der -out mycert.cer
+openssl x509 -inform pem -in mycert.pem -outform der -out mycert.cer
 
 # https://www.lisenet.com/2014/convert-p7b-to-pfx-with-openssl/
 #openssl req -new -x509 -days 365 -sha256 -nodes -out cert.cer -keyout cert.key

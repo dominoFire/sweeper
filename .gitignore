@@ -1,12 +1,19 @@
+# Python stuff and Pycharm user files
 *.pyc
 .idea/
 *.iml
 *.csv
 *.log
 
+# R stuff
 .Rproj.user
 *.RData
 *.Rdata
 .Rhistory
 *.dat
 
+# keyfiles
+*.cer
+*.pem
+*.crt
+*.pfx

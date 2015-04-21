@@ -29,6 +29,17 @@ def test2():
     q.join()
 
 
+def test3():
+    q = queue.Queue(maxsize=10)
+
+    for i in range(10):
+        print('Putting', i)
+        q.put(i)
+
+    for t in q:
+        print(t)
+
 if __name__ == '__main__':
     test1()
     test2()
+    test3()

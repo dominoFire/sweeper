@@ -2,6 +2,9 @@ library(rvest)
 library(dplyr)
 library(ggplot2)
 
+# returns string w/o leading or trailing whitespace
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+
 pretty.colnames <- function(x) {
   xt = tolower(x)
   xt = gsub(' +', '_', xt)

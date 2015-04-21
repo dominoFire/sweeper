@@ -93,7 +93,7 @@ def create_resource(name, config_object):
     cert_encoded = encode_certificate(cer_fullpath)
 
     # Key to password-less login
-    vm_key_fingerprint = '5F76C84B074BD87717C01EF3B12D4856E56DE882'  # mycert.pem
+    vm_key_fingerprint = '97C186F85ED3A86959AECD0845C5A2BFBFB9B6E5'  # mycert.pem
     linux_config = LinuxConfigurationSet(res.name, res.defaultUser, res.defaultPassword, True)
     key_pair = KeyPair(vm_key_fingerprint, '/home/{0}/id_rsa'.format(res.defaultUser))
     public_key = PublicKey(vm_key_fingerprint, '/home/{0}/.ssh/authorized_keys'.format(res.defaultUser))
@@ -112,14 +112,14 @@ def create_resource(name, config_object):
                                                         label=res.name,
                                                         geo_replication_enabled=None,
                                                         account_type='Standard_LRS',
-                                                        location='West US')
+                                                        location='West US')   # TODO: remove location hardcoded
     wait_for_request_succeeded(storage_account_result.request_id)
     wait_for_storage_account(res.name)
     logging.info('Creating Storage account {0} complete'.format(res.name))
 
     # Container for VHD images
     container_name = 'vhd'
-    logging.info('Creating Container {0} in Storage account {1}'.format(container_name, res.name))
+    logging.info('Creating Container \'{0}\' in Storage account {1}'.format(container_name, res.name))
     storage_keys = sms.get_storage_account_keys(service_name=res.name)
     blob_svc = BlobService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
     file_svc = FileShareService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)

@@ -31,6 +31,14 @@ class Task:
     def __str__(self):
         return 'Task:{0}'.format(self.name)
 
+    def __eq__(self, other):
+        if not isinstance(other, Task):
+            return False
+        return self.name == other.name
+
+    def __hash__(self):
+        return self.name.__hash__()
+
 
 class Workflow:
     def __init__(self, tasks_list, dependencies_list):

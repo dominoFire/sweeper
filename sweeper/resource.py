@@ -42,11 +42,9 @@ class Resource:
             return self.is_ssh_connected
 
     def disconnect_ssh(self):
-        if not self.keep_ssh_alive:
-            self.__ssh.close()
-            self.__ssh = None
-            self.is_ssh_connected = False
-        pass
+        self.__ssh.close()
+        self.__ssh = None
+        self.is_ssh_connected = False
 
     def connect_scp(self):
         try:
@@ -60,19 +58,22 @@ class Resource:
     def execute_command(self, cmd):
         self.connect_ssh()
         stdin, stdout, stderr = self.__ssh.exec_command(cmd)
-        self.disconnect_ssh()
+        if not self.keep_ssh_alive:
+            self.disconnect_ssh()
 
         return stdin, stdout, stderr
 
     def put_file(self, local_filepath, remote_filepath):
         self.connect_scp()
         self.__scp.put(local_filepath, remote_filepath)
-        self.disconnect_ssh()
+        if not self.keep_ssh_alive:
+            self.disconnect_ssh()
 
     def get_file(self, remote_filepath, curr_filepath='.'):
         self.connect_scp()
         self.__scp.get(remote_filepath, local_path=curr_filepath)
-        self.disconnect_ssh()
+        if not self.keep_ssh_alive:
+            self.disconnect_ssh()
 
     def __del__(self):
         if self.__ssh:

@@ -1,4 +1,5 @@
 from functools import reduce
+import uuid
 
 class ResourceSchedule:
     """
@@ -8,7 +9,7 @@ class ResourceSchedule:
     def __init__(self, core_name, host_name, config):
         self.core_name = core_name
         """ Name that identifies the core inside this machine """
-        self.host_hame = host_name
+        self.host_name = host_name
         """ A valid host name that identifies the machion """
         self.config = config
         """ A ResourceConfig instance """
@@ -18,7 +19,7 @@ class ResourceSchedule:
         """ SPECfp 2006 score """
 
     def __repr__(self):
-        return '{0}@{1}[{2}]'.format(self.host_hame, self.core_name, self.config.config_name)
+        return '{0}@{1}[{2}]'.format(self.host_name, self.core_name, self.config.config_name)
 
 
 class ScheduleMapping:
@@ -88,6 +89,7 @@ class SchedulePlan:
         end = reduce(max, [x.end_time for x in sched_mapping_list], 0.)
         return end - start
 
+
 def prepare_resrc_config(res_config_list):
     """
     Transform a config list to be used in a scheduling algorithm
@@ -95,7 +97,7 @@ def prepare_resrc_config(res_config_list):
     :return: a List of ResourceSchedule
     """
     resrc_schedule_list = []
-    resource_names = ['r{0}'.format(idx) for idx, _ in enumerate(res_config_list)]
+    resource_names = ['sweeper{0}i{1}'.format(idx, str(uuid.uuid4())[1:8]) for idx, _ in enumerate(res_config_list)]
     for idx, cfg in enumerate(res_config_list):
         core_list = [ResourceSchedule('Core{0}'.format(i), resource_names[idx], cfg) for i in range(1, cfg.cores+1)]
         resrc_schedule_list = resrc_schedule_list + core_list
