@@ -1,12 +1,10 @@
 import unittest
 import logging
 from sweeper.scheduler.common import estimate_resources
-from sweeper.workflow import *
+from sweeper import Workflow
 import sweeper.cloud.azure.manager as az_mgr
-import sweeper.scheduler as sch
 from pprint import PrettyPrinter
 import time
-import sweeper.utils as utils
 import uuid
 
 pp = PrettyPrinter(indent=1)
@@ -16,7 +14,7 @@ logging.getLogger().addHandler(logging.StreamHandler())
 
 class WorkflowTest(unittest.TestCase):
     def test(self):
-        w = read_workflow('examples/test.yaml')
+        w = Workflow.read_workflow('examples/test.yaml')
         pp = PrettyPrinter(indent=1)
         pp.pprint(w.__dict__)
         self.assertEqual(len(w.tasks), 4)
@@ -25,15 +23,15 @@ class WorkflowTest(unittest.TestCase):
 
 class ResourceEstimatorTest(unittest.TestCase):
     def test(self):
-        w = read_workflow('examples/test.yaml')
+        w = Workflow.read_workflow('examples/test.yaml')
         r = estimate_resources(w)
         self.assertEqual(r, 2)
         print('Resources', r)
-        w = read_workflow('examples/multilayer.yaml')
+        w = Workflow.read_workflow('examples/multilayer.yaml')
         r = estimate_resources(w)
         print('Resources', r)
         self.assertEqual(r, 4)
-        w = read_workflow('examples/weird.yaml')
+        w = Workflow.read_workflow('examples/weird.yaml')
         r = estimate_resources(w)
         print('Resources', r)
 

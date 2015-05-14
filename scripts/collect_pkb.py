@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 
 # Script for collecting results from PerfKitBenchmarker
 import os
@@ -17,9 +17,9 @@ for root, dirs, files in os.walk("../perfkitbenchmarker", topdown=False):
                     #print r
                     results.append(r)
 
-print json.dumps(results)
+print(json.dumps(results))
 
-json.dump(results, file('pkb_results.json', 'w'))
+json.dump(results, open('pkb_results.json', 'w'))
 
 
 import pandas as pd

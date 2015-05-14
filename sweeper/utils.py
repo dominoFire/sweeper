@@ -1,9 +1,7 @@
-import math
+__author__ = '@dominofire'
+
 import os
 import pandas as pd
-import rpy2.robjects as robjects
-
-from rpy2.robjects.packages import importr
 
 
 def split_path(file_location):
@@ -88,33 +86,38 @@ def save_gantt_chart_data(schedule_mapping_list, filename=None):
     df_sched.to_csv(filename, index=None, encoding='utf-8')
 
 
-def plot_gantt_chart(schedule_mapping_list, filename=None, title='Scheduling plan'):
-    """
-    Plot a Gantt chart of the SchedulingMapping List
-    :param schedule_mapping_list: SchedulingMapping list of SchedulingMapping
-    :return: None, plot is
-    """
-    dict_sched = get_gantt_chart_data(schedule_mapping_list)
-    list_sched = robjects.ListVector(dict_sched)
-
-    i_ini = int(math.floor(reduce(min, dict_sched['starts'], 0)))
-    i_fin = int(math.ceil(reduce(max, dict_sched['ends'], 0)))
-    pseq = range(i_ini, i_fin)
-
-    plotrix = importr('plotrix')
-    grdevices = importr('grDevices')
-    graphics = importr('graphics')
-    if filename:
-        grdevices.pdf(filename, width=6.53, height=3.71)
-    plotrix.gantt_chart(x=list_sched,
-                        vgridpos=pseq,
-                        vgridlab=pseq,
-                        taskcolors=robjects.r.rainbow(len(schedule_mapping_list)),
-                        main=title)
-    graphics.text(x=dict_sched['starts'],
-                  y=dict_sched['y_coord'],
-                  labels=dict_sched['task_name'],
-                  cex=0.7,
-                  pos=4)
-    if filename:
-        grdevices.dev_off()
+# def plot_gantt_chart(schedule_mapping_list, filename=None, title='Scheduling plan'):
+#     """
+#     Plot a Gantt chart of the SchedulingMapping List
+#     :param schedule_mapping_list: SchedulingMapping list of SchedulingMapping
+#     :return: None, plot is
+#     """
+#     import math
+#     import rpy2.robjects as robjects
+#     from functools import reduce
+#     from rpy2.robjects.packages import importr
+#
+#     dict_sched = get_gantt_chart_data(schedule_mapping_list)
+#     list_sched = robjects.ListVector(dict_sched)
+#
+#     i_ini = int(math.floor(reduce(min, dict_sched['starts'], 0)))
+#     i_fin = int(math.ceil(reduce(max, dict_sched['ends'], 0)))
+#     pseq = range(i_ini, i_fin)
+#
+#     plotrix = importr('plotrix')
+#     grdevices = importr('grDevices')
+#     graphics = importr('graphics')
+#     if filename:
+#         grdevices.pdf(filename, width=6.53, height=3.71)
+#     plotrix.gantt_chart(x=list_sched,
+#                         vgridpos=pseq,
+#                         vgridlab=pseq,
+#                         taskcolors=robjects.r.rainbow(len(schedule_mapping_list)),
+#                         main=title)
+#     graphics.text(x=dict_sched['starts'],
+#                   y=dict_sched['y_coord'],
+#                   labels=dict_sched['task_name'],
+#                   cex=0.7,
+#                   pos=4)
+#     if filename:
+#         grdevices.dev_off()

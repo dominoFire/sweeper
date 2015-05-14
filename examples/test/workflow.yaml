@@ -5,6 +5,7 @@ workflow:
   - name: create_filelist
     command: ls -alp > sal.txt
     depends: [check_files]
+    download_files: [sal.txt]
 
   - name: create_sysinfo
     command: lsb_release -a > info.txt

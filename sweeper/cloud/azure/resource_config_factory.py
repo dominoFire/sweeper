@@ -9,7 +9,8 @@ def get_config(config_name):
     :param config_name:
     :return:
     """
-    configs = pd.read_csv('data/azure_role_pricing_bench.csv')
+    # TODO: remove hardcoded paths
+    configs = pd.read_csv('/home/fer/ITAM/mcc/sweeper/data/azure_role_pricing_bench.csv')
 
     row = configs[configs.name == config_name]
 
@@ -30,7 +31,7 @@ def list_configs():
     Get al available configurations
     :return:
     """
-    configs = pd.read_csv('data/azure_role_pricing_bench.csv')
+    configs = pd.read_csv('/home/fer/ITAM/mcc/sweeper/data/azure_role_pricing_bench.csv')
     rc_list = [ResourceConfig(str(row[1]['name']),
                               int(row[1]['cores']),
                               int(row[1]['memory_in_mb']),

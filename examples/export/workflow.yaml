@@ -1,0 +1,11 @@
+workflow:
+  - name: set_var
+    command: export MY_NAME=HarryPotter
+
+  - name: show_var
+    command: echo ${MY_NAME}
+    depends: [set_var]
+
+  - name: check_var
+    command: "if [ -z ${MY_NAME} ]; then echo 'MY_NAME is NOT set'; else echo 'MY_NAME is set'; fi"
+    depends: [show_var]

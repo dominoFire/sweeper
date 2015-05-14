@@ -1,7 +1,5 @@
 import unittest
-import sweeper
-from sweeper.scheduler import create_schedule_plan, run_workflow
-import sweeper.utils as utils
+from sweeper.scheduler.runner import execute_workflow
 import logging
 
 
@@ -10,10 +8,18 @@ logging.getLogger().addHandler(logging.StreamHandler())
 
 
 class OverallTest(unittest.TestCase):
-    def test_end2end(self):
-        wf = sweeper.workflow.read_workflow('examples/test.yaml')
-        sched_plan = run_workflow(wf)
-        utils.save_gantt_chart_data(sched_plan.schedule_mapping_list, filename='weird.csv')
+
+    def test_simple(self):
+        execute_workflow('examples/test.yaml', 'test.csv')
+
+    def test_complex(self):
+        execute_workflow('examples/multicore.yaml', 'multicore.csv')
+
+    def test_with_files(self):
+        execute_workflow('examples/workflow_with_files.yaml', 'workflow_with_files.csv')
+
+    def test_with_export(self):
+        execute_workflow('examples/export/workflow.yaml', 'export.csv')
 
 
 if __name__ == '__main__':

@@ -1,7 +1,0 @@
-pandas >= 0.14.1
-azure < 1.0
-scp >= 0.8.0
-paramiko >= 1.15.2
-PyYAML >= 3.11
-selenium
-rpy2

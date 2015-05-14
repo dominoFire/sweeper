@@ -1,6 +1,7 @@
 from functools import reduce
 import uuid
 
+
 class ResourceSchedule:
     """
     An auxilary object for creating an managing expected schedules
@@ -62,6 +63,7 @@ class SchedulePlan:
     def execution_cost(self):
         """
         Total expected cost in dollars for executing this workflow in the cloud resources
+        :rtype : float
         :return: float
         """
         #TODO: Compute execution cost

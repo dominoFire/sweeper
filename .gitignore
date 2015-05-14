@@ -17,3 +17,6 @@
 *.pem
 *.crt
 *.pfx
+
+
+*.egg-info

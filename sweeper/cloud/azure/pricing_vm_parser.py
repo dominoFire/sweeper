@@ -2,6 +2,7 @@ from selenium.webdriver import Firefox
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
 import pandas as pd
+from functools import reduce
 
 
 if __name__ == '__main__':
@@ -25,7 +26,7 @@ if __name__ == '__main__':
         div = soup.find('div', attrs={'class': 'wa-tabs-container'})
         div_active = div.find('div', attrs={'class': 'active'}, recursive=False)
         tables = div_active.find_all('table')
-        print ('{0} tables: {1}, divs: {2}'.format(current_region, len(tables), len(div_active)))
+        print('{0} tables: {1}, divs: {2}'.format(current_region, len(tables), len(div_active)))
         for i, table in enumerate(tables):
             active_pricetags = table.find_all('span', attrs={'class': 'wa-conditionalDisplay active'})
             prices_all = []
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     df_all_pricing = reduce(append_df, pricing_list)
     df_all_suse = reduce(append_df, suse_list)
 
-    df_all_pricing.to_csv('data/azure_pricing_vm_common.csv', index=None, encoding='utf-8')
-    df_all_suse.to_csv('data/azure_pricing_vm_suse.csv', index=None, encoding='utf-8')
+    df_all_pricing.to_csv('azure_pricing_vm_common.csv', index=None, encoding='utf-8')
+    df_all_suse.to_csv('azure_pricing_vm_suse.csv', index=None, encoding='utf-8')
 
     driver.close()

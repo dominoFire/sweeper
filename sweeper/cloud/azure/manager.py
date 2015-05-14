@@ -1,3 +1,4 @@
+import random
 from azure.storage import BlobService
 
 import base64
@@ -5,7 +6,7 @@ import logging
 from azure.servicemanagement import *
 from azure.storage.fileshareservice import FileShareService
 
-from sweeper.resource import Resource, ResourceConfig, generate_valid_ramdom_password
+from sweeper.resource import Resource, ResourceConfig
 from sweeper.cloud.azure.subscription import sms
 from sweeper.cloud.azure.subscription import pfx_fullpath, cer_fullpath
 import sweeper.utils as utils
@@ -106,26 +107,11 @@ def create_resource(name, config_object):
     image_name = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
 
     # Storage account
-    logging.info('Creating Storage account {0}'.format(res.name))
-    storage_account_result = sms.create_storage_account(service_name=res.name,
-                                                        description='Storage account for VM {}'.format(res.name),
-                                                        label=res.name,
-                                                        geo_replication_enabled=None,
-                                                        account_type='Standard_LRS',
-                                                        location='West US')   # TODO: remove location hardcoded
-    wait_for_request_succeeded(storage_account_result.request_id)
-    wait_for_storage_account(res.name)
-    logging.info('Creating Storage account {0} complete'.format(res.name))
+    storage_keys = create_storage_account(res.name)
 
-    # Container for VHD images
+    # Container for VHD image for VM
     container_name = 'vhd'
-    logging.info('Creating Container \'{0}\' in Storage account {1}'.format(container_name, res.name))
-    storage_keys = sms.get_storage_account_keys(service_name=res.name)
-    blob_svc = BlobService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
-    file_svc = FileShareService(account_name=res.name, account_key=storage_keys.storage_service_keys.primary)
-    blob_svc.create_container(container_name)
-    file_svc.create_file_share('fileshare')
-    logging.info('Creating Container \'{0}\' in Storage account {1} complete'.format(container_name, res.name))
+    create_container(res.name, 'vhd', storage_keys)
 
     vhd_link = get_media_link(res.name, container_name, '{0}.vhd'.format(res.name))
     logging.info('VHD link: {0}'.format(vhd_link))
@@ -163,7 +149,6 @@ def create_resource(name, config_object):
                                                       os_virtual_hard_disk=os_hd,
                                                       role_size=config_object.config_name,
                                                       network_config=net_cfg)
-    #wait_for_deployment(res.name, res.name)
     wait_for_request_succeeded(vm_result.request_id)
     wait_for_deployment_running(res.name, res.name)
     logging.info('Creating VM deployment {0} complete'.format(res.name))
@@ -264,3 +249,135 @@ def delete_resource(res_name):
     #logging.info('Deleting Storage account {0}'.format(res_name))
     #sms.delete_storage_account(res_name)
     #logging.info('Deleting Storage account {0} complete'.format(res_name))
+
+
+def create_distributed_file_system(storage_account, fileshare):
+    """
+    Creates a Azure Storage account and a file share that can work as a
+    Distributed Filesystem across Azure VM's
+    :param storage_account:
+    :param fileshare:
+    :return: Storage keys for further access
+    """
+    storage_keys = create_storage_account(storage_account)
+    create_fileshare(storage_account, fileshare, storage_keys)
+    return storage_keys
+
+
+def create_storage_account(name):
+    """
+    Creates a storage account in Microsoft Azure subscription and return its access keys
+    :param name:
+    :return:
+    """
+    logging.info('Creating Storage account {0}'.format(name))
+    storage_account_result = sms.create_storage_account(service_name=name,
+                                                        description='Sweeper managed storage account',
+                                                        label=name,
+                                                        geo_replication_enabled=None,
+                                                        account_type='Standard_LRS',
+                                                        location='West US')   # TODO: remove location hardcoded
+    wait_for_request_succeeded(storage_account_result.request_id)
+    wait_for_storage_account(name)
+    logging.info('Creating Storage account {0} complete'.format(name))
+
+    storage_keys = sms.get_storage_account_keys(service_name=name)
+
+    return storage_keys
+
+
+def create_fileshare(storage_account_name, fileshare_name, storage_keys):
+    """
+    Creates a file share in the specified Microsoft Azure Storage account
+    :param storage_account_name:
+    :param fileshare_name:
+    :param storage_keys:
+    :return:
+    """
+    logging.info('Creating Fileshare \'{0}\' in Storage account {1}'.format(fileshare_name, storage_account_name))
+    file_svc = FileShareService(account_name=storage_account_name, account_key=storage_keys.storage_service_keys.primary)
+    file_svc.create_file_share(fileshare_name)
+    logging.info('Creating Fileshare \'{0}\' in Storage account {1} complete'.format(fileshare_name, storage_account_name))
+
+
+def create_container(storage_account_name, container_name, storage_keys):
+    """
+    Creates a file share in the specified Microsoft Azure Storage account.
+    A container is like a folder within a storage account
+    :param storage_account_name:
+    :param container_name:
+    :param storage_keys:
+    :return:
+    """
+    logging.info('Creating Container \'{0}\' in Storage account {1}'.format(container_name, storage_account_name))
+    blob_svc = BlobService(account_name=storage_account_name, account_key=storage_keys.storage_service_keys.primary)
+    blob_svc.create_container(container_name)
+    logging.info('Creating Container \'{0}\' in Storage account {1} complete'.format(container_name, storage_account_name))
+
+
+def validate_password_requirements(passwd):
+    """
+    Check if :passwd approves the following password complexity requirements
+
+    - at least 8 characters
+    - 3 of the following conditions
+       - at least 1 lowercase char
+       - at least 1 uppercase char
+       - at least 1 number char
+       - at least 1 special (not alphanumeric) char
+
+    :return: True if complies with password complexity requirements
+    """
+    if not len(passwd) >= 8:
+        return False
+
+    req_lower = False
+    req_upper = False
+    req_digit = False
+    req_special_char = False
+    for ch in passwd:
+        if str.isupper(ch):
+            req_upper = True
+        elif str.islower(ch):
+            req_lower = True
+        elif str.isdigit(ch):
+            req_digit = True
+        # See
+        #http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-docker-with-xplat-cli/
+        elif ch in '!@#$%^&+=':
+            req_special_char = True
+
+    return int(req_upper) + int(req_lower) + int(req_digit) + int(req_special_char) >= 3
+
+
+def generate_valid_ramdom_password():
+    p = generate_random_password()
+    while not validate_password_requirements(p):
+        p = generate_random_password()
+
+    return p
+
+
+def generate_random_password():
+    """
+    Generates a random password for using in VM user authentication
+    :return:
+    """
+    # Secure cryptographic random
+    rnd = random.SystemRandom()
+    len_k = rnd.randint(8, 15)
+    keyword = []
+
+    for i in range(len_k):
+        num = rnd.randint(1, 3)
+        if num == 1:  # generate number
+            x = rnd.randint(ord('0'), ord('9'))
+        elif num == 2:  # generate lowercase
+            x = rnd.randint(ord('a'), ord('z'))
+        elif num == 3:  # generate uppercase
+            x = rnd.randint(ord('A'), ord('Z'))
+        keyword.append(chr(x))
+
+    keyword = ''.join(keyword)
+
+    return keyword

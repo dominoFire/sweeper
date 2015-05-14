@@ -1,0 +1,7 @@
+workflow:
+  - name: pwd
+    command: pwd
+
+  - name: show_file
+    command: cat functions.R
+    include_files: ['scripts/functions.R']
