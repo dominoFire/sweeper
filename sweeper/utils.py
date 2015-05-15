@@ -1,5 +1,6 @@
 __author__ = '@dominofire'
 
+import itertools
 import os
 import pandas as pd
 
@@ -85,6 +86,47 @@ def save_gantt_chart_data(schedule_mapping_list, filename=None):
     df_sched = pd.DataFrame(dict_sched)
     df_sched.to_csv(filename, index=None, encoding='utf-8')
 
+
+def cartesian_product(a, b, name_a, name_b):
+    assert isinstance(a, list) and isinstance(b, list)
+
+    li = []
+    for x in a:
+        for y in b:
+            if not isinstance(x, dict) and not isinstance(y, dict):
+                di = {name_a: x, name_b: y}
+            elif isinstance(x, dict):
+                di = dict(x)
+                di[name_b] = y
+            elif isinstance(y, dict):
+                di = dict(y)
+                di[name_a] = x
+            li.append(di)
+    return li
+
+
+def expand_list(**kwargs):
+    if len(kwargs) == 0:
+        return []
+
+    if len(kwargs) == 1:
+        k = kwargs.keys()[0]
+        return [{k: v for v in kwargs[k]}]
+
+    keys = list(kwargs.keys())
+    li = cartesian_product(kwargs[keys[0]], kwargs[keys[1]], keys[0], keys[1])
+    for k in keys[2:]:
+        li = cartesian_product(li, kwargs[k], '', k)
+
+    return li
+
+
+def expand_grid(param_dict):
+    """
+    Given a dictionary of list values, return a list with tuples of the cartesian product of
+    every element of the matrix.
+    """
+    return list(itertools.product(*param_dict.values()))
 
 # def plot_gantt_chart(schedule_mapping_list, filename=None, title='Scheduling plan'):
 #     """

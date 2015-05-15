@@ -14,11 +14,14 @@ logging.getLogger().addHandler(logging.StreamHandler())
 
 class WorkflowTest(unittest.TestCase):
     def test(self):
-        w = Workflow.read_workflow('examples/test.yaml')
-        pp = PrettyPrinter(indent=1)
+        w = Workflow.read_workflow('examples/test/workflow.yaml')
         pp.pprint(w.__dict__)
         self.assertEqual(len(w.tasks), 4)
         self.assertEqual(len(w.dependencies), 4)
+
+    def test_grid(self):
+        w = Workflow.read_workflow('examples/gridsearch/workflow.yaml')
+        pp.pprint(w.__dict__)
 
 
 class ResourceEstimatorTest(unittest.TestCase):
