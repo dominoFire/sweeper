@@ -1,0 +1,12 @@
+workflow:
+  - name: task1
+    command: ls
+    depends: [task3]
+
+  - name: task2
+    command: pwd
+    depends: [task1]
+
+  - name: task3
+    command: cat /proc/cpuinfo
+    depends: [task2]

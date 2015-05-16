@@ -23,17 +23,24 @@ class Workflow:
         self.dependencies = dependencies_list
         """List of 2D tuples that indicates that (a, b) mean Task a precedes Task b """
 
-        self._validate_empty()
-        self._validate_task_names()
+        if not self._validate_empty():
+            raise ValueError('Workflow must have at least one task')
+        if not self._validate_task_names():
+            raise ValueError('Workflow tasks must not have tasks with the same names')
 
         for dep in self.dependencies:
             # print dep[0]
             dep[0].add_successor(dep[1])
             dep[1].add_parent(dep[0])
 
-        self._validate_cycle()
+        if not self._validate_cycle():
+            raise ValueError('Workflow tasks must not have cyclic dependencies')
 
     def _validate_empty(self):
+        """
+        Checks if the workflow has tasks
+        :return: True if the workflow has at least one task
+        """
         if len(self.tasks) == 0:
             raise ValueError('Workflow with no tasks')
 
@@ -42,6 +49,7 @@ class Workflow:
     def _validate_task_names(self):
         """
         Check if there are duplicated names in task names
+        :return: True if the workflow has not task with duplicated names
         """
         names_set = set()
         for t in self.tasks:
@@ -53,13 +61,34 @@ class Workflow:
         return True
 
     def _validate_cycle(self):
+        """
+        Checks if the workflow has cyclic dependencies
+        :return: True if the workflow has not cyclic dependencies
+        """
         visited = set()
 
-        raise ValueError('TODO!!!!!!!!!!')
+        def visit(task_node):
+            """
+            Visits the node and its successors recursively in order to find a dependency
+            """
+            visited.add(task_node)
+            for succ_task in task_node.successors:
+                if succ_task in visited:
+                    return False
+                else:
+                    visit(succ_task)
+            visited.remove(task_node)
 
-        for t in self.tasks:
-            visited.add(t)
-        print(visited)
+            return True
+
+        # we have to check for every task
+        for task in self.tasks:
+            if not task in visited:
+                valid = visit(task)
+                if not valid:
+                    return False
+
+        return True
 
 
     @staticmethod
@@ -95,7 +124,7 @@ class Workflow:
         with open(filename, 'r') as fin:
             wf_spec = yaml.load(fin)
         task_list = []
-        depependencies_list = []
+        dependencies_list = []
 
         # Parsing
         for task_desc in wf_spec['workflow']:
@@ -140,8 +169,8 @@ class Workflow:
                 elif len(t_list) > 1:
                     raise ValueError('Task dependency with multiple task matches: {}'.format(dn))
                 td = t_list[0]
-                depependencies_list.append((td, t))
+                dependencies_list.append((td, t))
 
-        wf = Workflow(task_list, depependencies_list)
+        wf = Workflow(task_list, dependencies_list)
 
         return wf
