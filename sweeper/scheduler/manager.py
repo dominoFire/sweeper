@@ -17,10 +17,14 @@ def create_schedule_plan(workflow):
     :type workflow: workflow.Workflow
     :return:
     """
+    logging.debug('Estimating required number of resources')
     resrc_num = estimate_resources(workflow)
+    logging.debug('Resources optimally required: {}'.format(resrc_num))
 
     # Creamos planificacion
+    logging.debug('Asking to cloud provider')
     configs = mgr_azure.possible_configs(resrc_num)
+    logging.debug('Cloud provider offer: {} configurations'.format(len(configs)))
 
     logging.info('Makepan, Cost')
     min_cost = sys.float_info.max
@@ -73,12 +77,13 @@ def run_workflow(workflow):
     logging.debug('Mounting Command below')
     logging.debug(command)
     for vm in vm_resources:
+        logging.info('Mounting DFS in VM {}'.format(vm.name))
         stdin, stdout, stderr, ssh = vm.execute_command(command)
         for line in stdout:
             logging.info('MOUNTING_STDOUT:{}'.format(line))
         for line in stderr:
             logging.info('MOUNTING_STDERR:{}'.format(line))
-    ssh.close()
+        ssh.close()
     logging.info('Mounting Distributed FileSystem {} complete'.format(fileshare_name))
 
     # TODO: Upload files

@@ -64,8 +64,7 @@ def profile():
 
 @cli.command()
 def init():
-    descriptor_path = validate_yaml()
-
     configure_log()
+    descriptor_path = validate_yaml()
 
     click.echo('Coming soon...')

@@ -12,7 +12,6 @@ class Workflow:
     """
     Represents a workflow composed by Tasks and its order dependencies.
     """
-
     def __init__(self, tasks_list, dependencies_list):
         """
         Main constructor
@@ -32,6 +31,29 @@ class Workflow:
             # print dep[0]
             dep[0].add_successor(dep[1])
             dep[1].add_parent(dep[0])
+
+        if not self._validate_cycle():
+            raise ValueError('Workflow tasks must not have cyclic dependencies')
+
+        tasks_expanded = []
+        for t in self.tasks:
+            if len(t.param_grid) > 0:
+                logging.info('Expanding {}'.format(t))
+                logging.info('ParamGrid: {}'.format(t.param_grid))
+                expanded = self.expand_nodes(t)
+                if expanded > 0:
+                    tasks_expanded.append(t)
+                else:
+                    logging.warning(
+                        'Task {} with param_grid that doesn\'t expand nodes. '.format(t.name) +
+                        'The task will not be deleted')
+        logging.debug('Expanded tasks: {}'.format(tasks_expanded))
+
+        for t in tasks_expanded:
+            self.remove_task(t)
+
+        if not self._validate_task_names():
+            raise ValueError('Workflow tasks must not have tasks with the same names')
 
         if not self._validate_cycle():
             raise ValueError('Workflow tasks must not have cyclic dependencies')
@@ -81,7 +103,7 @@ class Workflow:
 
             return True
 
-        # we have to check for every task
+        # we have to check cyclic dependencies in every workflow task
         for task in self.tasks:
             if not task in visited:
                 valid = visit(task)
@@ -90,18 +112,23 @@ class Workflow:
 
         return True
 
-
-    @staticmethod
-    def expand_nodes():
+    def expand_nodes(self, t):
+        """
+        Given a task node t with non-empty param_grid, creates tasks nodes that represent
+        parameter sweep combinations.
+        NOTE: this method causes side effects
+        :type t: task.Task
+        :return: The number of expanded nodes
+        """
         # Variable extraction
         pattern_var = r'@([_a-zA-Z]+)'
         grid_vars = re.findall(pattern_var, t.command)
         # variable description checking
         for grid_var in grid_vars:
-            if not grid_var in task_desc['param_grid'].keys():
+            if not grid_var in t.param_grid.keys():
                 raise ValueError('Variable {} not found in params_grid'.format(grid_var))
         # expand grid
-        params_grid = task_desc['param_grid']
+        params_grid = t.param_grid
         p_grid = {k: params_grid[k] for k in grid_vars}
         args_list = utils.expand_list(**p_grid)
         # command substitution
@@ -111,8 +138,39 @@ class Workflow:
             task_copy.command = command_template.format(**args)
             task_copy.name = '{}_{}'.format(task_copy.name, i)
             task_copy.grid_params = args
+            task_copy.param_grid = {}  # We use this as a flag to expand nodes
             logging.debug(task_copy.command)
-            task_list.append(task_copy)
+
+            for succ in task_copy.successors:
+                succ.parents.append(task_copy)
+                succ.dependency_names.append(task_copy.name)
+                self.dependencies.append((task_copy, succ))  # Side effect.
+            for pred in task_copy.parents:
+                pred.successors.append(task_copy)
+                self.dependencies.append((pred, task_copy))  # Side effect.
+
+            self.tasks.append(task_copy)
+
+        return len(args_list)
+
+    def remove_task(self, t):
+        """
+        Remove the task and its dependencies from the workflow
+        :param t:
+        :return:
+        """
+        for succ in t.successors:
+            succ.parents.remove(t)
+            succ.dependency_names.remove(t.name)
+        for par in t.parents:
+            par.successors.remove(t)
+
+        # As seen on TV
+        # http://stackoverflow.com/questions/1207406/remove-items-from-a-list-while-iterating-in-python
+        self.dependencies = [d for d in self.dependencies if not(d[0] == t or d[1] == t)]
+
+        self.tasks.remove(t)
+
 
     @staticmethod
     def read_workflow(filename, inject_profiling=False):
@@ -172,5 +230,7 @@ class Workflow:
                 dependencies_list.append((td, t))
 
         wf = Workflow(task_list, dependencies_list)
+
+        logging.info('Workflow with {} tasks and {} dependencies'.format(len(wf.tasks), len(wf.dependencies)))
 
         return wf

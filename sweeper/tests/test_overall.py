@@ -21,6 +21,9 @@ class OverallTest(unittest.TestCase):
     def test_with_export(self):
         execute_workflow('examples/export/workflow.yaml', 'export.csv')
 
+    def test_gridsearch(self):
+        execute_workflow('examples/gridsearch/workflow.yaml', 'gridsearch.csv')
+
 
 if __name__ == '__main__':
     unittest.main()

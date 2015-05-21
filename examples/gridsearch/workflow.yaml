@@ -10,6 +10,8 @@ workflow:
       beta: [50, 100, 150]
       mode: [linear, quadratic]
 
+  # It doesn't make sense to put params in a task that it will not use
+  # the params in the command to execute
   - name: show_process
     command: ps -eal > process.txt
     depends: [do_gridsearch]

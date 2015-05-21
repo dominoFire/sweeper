@@ -46,19 +46,21 @@ class TaskContainer(threading.Thread):
             p_stdin, p_stdout, p_stderr, client = self.vm.execute_command(self.task.command, working_dir='/opt/fileshare')
             logging.debug('Executing Task {} complete'.format(self.task))
 
-            out = open('{}.stdout'.format(self.task.name), 'w')
-            err = open('{}.stderr'.format(self.task.name), 'w')
+            out = open('{}.stdout'.format(self.task.name), 'wb')
+            err = open('{}.stderr'.format(self.task.name), 'wb')
+
             block_size = 4096
-            buffer_out = p_stdout.read(block_size)
-            buffer_err = p_stderr.read(block_size)
+            buffer_out = bytearray(p_stdout.read(block_size))
+            buffer_err = bytearray(p_stderr.read(block_size))
             #non blocking
             while len(buffer_out) > 0 or len(buffer_err) > 0:
                 if len(buffer_out) > 0:
-                    out.write(buffer_out.decode('utf-8'))  # TODO: it would be nicer if we use resource's encoding
-                    buffer_out = p_stdout.read(block_size)
+                    # TIP: Don't assume encoding
+                    out.write(buffer_out)  # TODO: it would be nicer if we use resource's encoding
+                    buffer_out = bytearray(p_stdout.read(block_size))
                 if len(buffer_err) > 0:
-                    err.write(buffer_err.decode('utf-8'))  # TODO: it would be nicer if we use resource's encoding
-                    buffer_err = p_stderr.read(block_size)
+                    err.write(buffer_err)  # TODO: it would be nicer if we use resource's encoding
+                    buffer_err = bytearray(p_stderr.read(block_size))
             out.close()
             err.close()
 

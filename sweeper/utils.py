@@ -110,8 +110,8 @@ def expand_list(**kwargs):
         return []
 
     if len(kwargs) == 1:
-        k = kwargs.keys()[0]
-        return [{k: v for v in kwargs[k]}]
+        k = list(kwargs.keys())[0]
+        return [{k: v} for v in kwargs[k]]
 
     keys = list(kwargs.keys())
     li = cartesian_product(kwargs[keys[0]], kwargs[keys[1]], keys[0], keys[1])

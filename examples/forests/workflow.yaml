@@ -1,0 +1,66 @@
+workflow:
+  - name: change_locale
+    command: |
+        echo "LC_ALL=en_US.UTF-8" | sudo tee -a /etc/environment;
+        echo "LANG=en_US.UTF-8" | sudo tee -a /etc/environment;
+        sudo update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8;
+
+  - name: install_deps
+    command: |
+        set -o xtrace;
+        # scikit-learn
+        export DEBIAN_FRONTEND=noninteractive;
+        sudo apt-get update;
+        sudo apt-get install unzip -y;
+        sudo apt-get install build-essential gfortran gcc g++ \
+                        python3-dev python3-pip python3-setuptools \
+                        python3-numpy python3-scipy python3-matplotlib \
+                        libatlas-dev libatlas-base-dev libatlas3gf-base -y;
+        sudo update-alternatives --set libblas.so.3 /usr/lib/atlas-base/atlas/libblas.so.3;
+        sudo update-alternatives --set liblapack.so.3 /usr/lib/atlas-base/atlas/liblapack.so.3;
+        sudo pip3 install -U scikit-learn;
+        # doge package
+        sudo apt-get install git -y;
+        git clone https://github.com/dominoFire/doger.git;
+        cd doger;
+        sudo pip3 install .;
+        cd ..;
+    depends: [change_locale]
+
+  - name: data_acquisition
+    command: |
+        unzip train.csv.zip;
+        mv train.csv labeled.csv;
+    include_files: [train.csv.zip]
+    depends: [install_deps]
+
+  - name: data_split
+    command: |
+        doger split_traintest labeled.csv 0.70;
+        doger split_xy labeled_train.csv Cover_Type;
+        doger split_xy labeled_test.csv Cover_Type;
+    depends: [data_acquisition, install_deps]
+
+  - name: pickle_conversion
+    command: |
+        doger csv2pk labeled_train_predictors.csv labeled_train_response.csv;
+        doger csv2pk labeled_test_predictors.csv labeled_test_response.csv;
+    depends: [data_split]
+
+  - name: model_fit
+    command: |
+        doger gridsearch \
+            labeled_train_predictors.pk labeled_train_response.pk \
+            labeled_test_predictors.pk labeled_test_response.pk \
+            @config_file \
+            obj out;
+    depends: [pickle_conversion]
+    param_grid:
+        config_file: [gridsearch_xt_config.py, gridsearch_rf_config.py, gridsearch_gnb_config.py, gridsearch_bnb_config.py]
+    include_files: [gridsearch_xt_config.py, gridsearch_rf_config.py, gridsearch_gnb_config.py, gridsearch_bnb_config.py]
+
+  - name: merge_results
+    command: |
+        doger merge out;
+    depends: [model_fit]
+    download_files: [out/AllResults.csv]

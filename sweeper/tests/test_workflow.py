@@ -26,15 +26,19 @@ class WorkflowTest(unittest.TestCase):
 
 class ResourceEstimatorTest(unittest.TestCase):
     def test(self):
-        w = Workflow.read_workflow('examples/test.yaml')
+        w = Workflow.read_workflow('examples/test/workflow.yaml')
         r = estimate_resources(w)
         self.assertEqual(r, 2)
         print('Resources', r)
-        w = Workflow.read_workflow('examples/multilayer.yaml')
+        w = Workflow.read_workflow('examples/multilayer/workflow.yaml')
         r = estimate_resources(w)
         print('Resources', r)
         self.assertEqual(r, 4)
-        w = Workflow.read_workflow('examples/weird.yaml')
+        w = Workflow.read_workflow('examples/weird/workflow.yaml')
+        r = estimate_resources(w)
+        print('Resources', r)
+
+        w = Workflow.read_workflow('examples/gridsearch/workflow.yaml')
         r = estimate_resources(w)
         print('Resources', r)
 
@@ -42,10 +46,10 @@ class ResourceEstimatorTest(unittest.TestCase):
 class PlannerTest(unittest.TestCase):
     def test(self):
         configs = az_mgr.possible_configs(4)
-        print ('Possible Configs 4: {0}'.format(len(configs)))
+        print('Possible Configs 4: {0}'.format(len(configs)))
         #pp.pprint(configs)
         configs = az_mgr.possible_configs(20)
-        print ('Possible Configs 20: {0}'.format(len(configs)))
+        print('Possible Configs 20: {0}'.format(len(configs)))
         #pp.pprint(configs)
 
 
