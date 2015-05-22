@@ -7,8 +7,11 @@ import time
 import uuid
 from sweeper.scheduler.planners import myopic
 from sweeper.cloud.azure import manager as mgr_azure
+from sweeper.cloud.azure import resource_config_factory as cfg_factory
 from sweeper.scheduler.task_container import TaskContainer
-from sweeper.scheduler.common import estimate_resources
+from sweeper.scheduler.common import estimate_resources, get_task_segments
+
+import numpy as np
 
 
 def create_schedule_plan(workflow):
@@ -37,6 +40,72 @@ def create_schedule_plan(workflow):
         logging.info('{},{}'.format(sp.makespan, sp.execution_cost))
 
     return sched_plan
+
+
+def bin_packing(tasks, resource_configs):
+    mem_costs = np.zeros((len(tasks), len(resource_configs)))
+    visited = np.zeros((len(tasks), len(resource_configs)))
+    used = np.zeros(len(resource_configs))
+    MAX_VALUE = 100000000.
+    mem_costs.fill(MAX_VALUE)
+
+    print(len(resource_configs))
+
+    def take(t_i, rc_i):
+        if rc_i == len(resource_configs):
+            if np.any(used):
+                return 0.
+            else:
+                return MAX_VALUE
+        if t_i == len(tasks):
+            return 0.
+        if t_i > len(tasks):
+            return MAX_VALUE
+        if rc_i > len(resource_configs):
+            return MAX_VALUE
+
+        if visited[t_i, rc_i] != 0:
+            return mem_costs[t_i, rc_i]
+
+        for x in range(t_i, len(tasks)):
+            for y in range(rc_i, len(resource_configs)):
+                rc = resource_configs[y]
+                t_lim = min(len(tasks), x + rc.cores)
+                task_complexities = 0.
+                for cf in map(lambda v: v.complexity_factor, tasks[x:t_lim]):
+                    task_complexities += cf
+                taked_cost = task_complexities / rc.speed_factor * rc.cost_hour_usd * 1000
+                #print(taked_cost)
+                used[y] += 1
+                taked = take(x + t_lim,  y) + taked_cost
+                used[y] = 0
+                taked_not = take(x, y + 1)
+                mem_costs[x, y] = min(taked, taked_not)
+                visited[x, y] = 1
+
+        return mem_costs[t_i, rc_i]
+
+    res = take(0, 0)
+
+    print('Minimum cost: {}'.format(res))
+    print(mem_costs)
+
+    return None
+
+
+def create_schedule_plan_blind(workflow):
+    segment = get_task_segments(workflow)
+    inv_seg = dict()
+
+    for k in segment:
+        if not segment[k] in inv_seg:
+            inv_seg[segment[k]] = [k]
+        else:
+            inv_seg[segment[k]].append(k)
+
+    for seg_num in inv_seg:
+        print(inv_seg[seg_num])
+        bin_packing(inv_seg[seg_num], cfg_factory.list_configs())
 
 
 def run_workflow(workflow):

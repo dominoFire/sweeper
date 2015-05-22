@@ -107,21 +107,11 @@ def prepare_resrc_config(res_config_list):
     return resrc_schedule_list, resource_names
 
 
-def estimate_resources(workflow):
+def get_task_segments(workflow):
     """
-    Estimate the number of minimum and maximum number
-    of resources needed to run the workflow. It
-    assumes that each task run in a single resource
-
-    :param workflow: A Workflow instance
-    :return: An integer with the recommended number
-    of resources needed to run the workflow
-
-    NOTE: you can always run a workflow with just 1 resources
-    and a infinite number of resources
-
-    Based on the paper of Saifullah et al.
-    http://openscholarship.wustl.edu/cgi/viewcontent.cgi?article=1057&context=cse_research
+    Returns a dict that has the corresponding segment for each task
+    :param workflow:
+    :return:
     """
     visited = dict()
     segment = dict()
@@ -146,6 +136,27 @@ def estimate_resources(workflow):
 
     for t in workflow.tasks:
         get_segment(t)
+
+    return segment
+
+
+def estimate_resources(workflow):
+    """
+    Estimate the number of minimum and maximum number
+    of resources needed to run the workflow. It
+    assumes that each task run in a single resource
+
+    :param workflow: A Workflow instance
+    :return: An integer with the recommended number
+    of resources needed to run the workflow
+
+    NOTE: you can always run a workflow with just 1 resources
+    and a infinite number of resources
+
+    Based on the paper of Saifullah et al.
+    http://openscholarship.wustl.edu/cgi/viewcontent.cgi?article=1057&context=cse_research
+    """
+    segment = get_task_segments(workflow)
 
     inv_seg = dict()
 
