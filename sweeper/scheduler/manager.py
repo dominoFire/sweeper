@@ -49,47 +49,63 @@ def bin_packing(tasks, resource_configs):
     MAX_VALUE = 100000000.
     mem_costs.fill(MAX_VALUE)
 
-    print(len(resource_configs))
+    def all_scheduled():
+        sum_cores = 0
+        for i, n in enumerate(used):
+            if n != 0:
+                sum_cores += resource_configs[i].cores * n
+        if int(sum_cores) != len(tasks):
+            return MAX_VALUE
+        else:
+            # print('Possible solution', sum_cores)
+            # for i, n in enumerate(used):
+            #     if n != 0:
+            #         print(resource_configs[i], 'x', n, '(index {})'.format(i))
+            # print()
+            return 0.
 
     def take(t_i, rc_i):
-        if rc_i == len(resource_configs):
-            if np.any(used):
-                return 0.
-            else:
-                return MAX_VALUE
-        if t_i == len(tasks):
-            return 0.
-        if t_i > len(tasks):
-            return MAX_VALUE
-        if rc_i > len(resource_configs):
-            return MAX_VALUE
-
+        if rc_i == len(resource_configs) or t_i == len(tasks):
+            return all_scheduled()
         if visited[t_i, rc_i] != 0:
             return mem_costs[t_i, rc_i]
 
-        for x in range(t_i, len(tasks)):
-            for y in range(rc_i, len(resource_configs)):
-                rc = resource_configs[y]
-                t_lim = min(len(tasks), x + rc.cores)
-                task_complexities = 0.
-                for cf in map(lambda v: v.complexity_factor, tasks[x:t_lim]):
-                    task_complexities += cf
-                taked_cost = task_complexities / rc.speed_factor * rc.cost_hour_usd * 1000
-                #print(taked_cost)
-                used[y] += 1
-                taked = take(x + t_lim,  y) + taked_cost
-                used[y] = 0
-                taked_not = take(x, y + 1)
-                mem_costs[x, y] = min(taked, taked_not)
-                visited[x, y] = 1
+        for y in range(rc_i, len(resource_configs)):
+            rc = resource_configs[y]
+            t_lim = min(len(tasks), t_i + rc.cores)
+            task_complexities = 0.
+            for tt in tasks[t_i:t_lim]:
+                task_complexities += tt.complexity_factor
+            taked_cost = task_complexities / rc.speed_factor * rc.cost_hour_usd * 1000
+            used[y] += 1
+            taked = take(t_lim,  0) + taked_cost
+            used[y] -= 1
+            taked_not = take(t_i, y + 1)
+            mem_costs[t_i, y] = min(taked, taked_not)
+            if taked < taked_not:
+                visited[t_i, y] = 1   # Taked
+            else:
+                visited[t_i, y] = -1  # Not taked
 
         return mem_costs[t_i, rc_i]
 
+    def check_take(t_i, rc_i):
+        if t_i < len(tasks) and rc_i < len(resource_configs):
+            if visited[t_i, rc_i] == 1:
+                rc = resource_configs[rc_i]
+                t_lim = min(len(tasks), t_i + rc.cores)
+                check_take(t_lim, 0)
+                print(rc, 'at task index', t_i, 'cost', mem_costs[t_i, rc_i])
+            elif visited[t_i, rc_i] == -1:
+                check_take(t_i, rc_i + 1)
+
     res = take(0, 0)
-
     print('Minimum cost: {}'.format(res))
-    print(mem_costs)
-
+    #print(mem_costs)
+    #print('Visited')
+    #print(visited)
+    check_take(0, 0)
+    print()
     return None
 
 
