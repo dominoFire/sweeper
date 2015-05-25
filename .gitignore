@@ -24,3 +24,7 @@
 *.stdout
 *.stderr
 *.time
+
+*.pdf
+*.zip
+
