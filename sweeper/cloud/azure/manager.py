@@ -1,16 +1,19 @@
-import random
-from azure.storage import BlobService
+__author__ = '@dominofire'
 
 import base64
 import logging
-from azure.servicemanagement import *
-from azure.storage.fileshareservice import FileShareService
-
-from sweeper.resource import Resource, ResourceConfig
-from sweeper.cloud.azure.subscription import sms
-from sweeper.cloud.azure.subscription import pfx_fullpath, cer_fullpath
+import random
 import sweeper.utils as utils
 import sweeper.cloud.azure.resource_config_factory as config_factory
+import uuid
+
+from azure.storage import BlobService
+from azure.servicemanagement import *
+from azure.storage.fileshareservice import FileShareService
+from sweeper.cloud import resource_config_combinations
+from sweeper.cloud.azure.subscription import sms
+from sweeper.cloud.azure.subscription import pfx_fullpath, cer_fullpath
+from sweeper.resource import Resource, ResourceConfig
 
 
 def filter_any_hosted_service(svc_name):
@@ -176,24 +179,9 @@ def create_network_config(subnet_name=None):
 
 def possible_configs(num):
     configs = config_factory.list_configs()
+    combs = resource_config_combinations(num, configs)
 
-    combinations = []
-
-    #knackspack via cores
-    def compute_combinations(num_req, config_list, res_list, idx):
-        if num_req == 0:
-            combinations.append(list(config_list))
-        else:
-            for i in range(idx, len(res_list)):
-                cfg = res_list[i]
-                if num_req - cfg.cores >= 0:
-                    config_list.append(cfg)
-                    compute_combinations(num_req - cfg.cores, config_list, res_list, i)
-                    config_list.pop()
-
-    compute_combinations(num, [], configs, 0)
-
-    return combinations
+    return combs
 
 
 def delete_resource(res_name):
@@ -381,3 +369,35 @@ def generate_random_password():
     keyword = ''.join(keyword)
 
     return keyword
+
+
+def mount_distributed_file_system(name, vm_resources):
+    fileshare_storage_account = name
+    fileshare_name = 'sharedfs'
+    fileshare_keys = create_distributed_file_system(fileshare_storage_account, fileshare_name)
+
+    script_lines = [
+        "STORAGE_ACCOUNT_NAME='{}'".format(fileshare_storage_account),
+        "STORAGE_ACCOUNT_KEY='{}'".format(fileshare_keys.storage_service_keys.primary),
+        "FILESHARE_NAME='{}'".format(fileshare_name),
+        "FILESHARE_PATH=\"//${STORAGE_ACCOUNT_NAME}.file.core.windows.net/${FILESHARE_NAME}\"",
+        "sudo chown azureuser /opt",
+        "mkdir -p /opt/fileshare",
+        "sudo mount $FILESHARE_PATH /opt/fileshare -t cifs -o " +
+        "\"vers=2.1,dir_mode=0777,file_mode=0777,username=${STORAGE_ACCOUNT_NAME},password=${STORAGE_ACCOUNT_KEY}\""]
+
+    logging.info('Mounting Distributed FileSystem {}'.format(fileshare_name))
+    command = ';\n'.join(script_lines)
+    logging.debug('Mounting Command below')
+    logging.debug(command)
+    for vm in vm_resources:
+        logging.info('Mounting DFS in VM {}'.format(vm.name))
+        stdin, stdout, stderr, ssh = vm.execute_command(command)
+        for line in stdout:
+            logging.info('MOUNTING_STDOUT:{}'.format(line))
+        for line in stderr:
+            logging.info('MOUNTING_STDERR:{}'.format(line))
+        ssh.close()
+    logging.info('Mounting Distributed FileSystem {} complete'.format(fileshare_name))
+
+    return '/opt/fileshare'

@@ -1,11 +1,11 @@
 __author__ = '@dominofire'
 
 import logging
+import sweeper.utils as utils
 import sys
 import time
 import uuid
 
-import sweeper.utils as utils
 from sweeper.scheduler.planners import myopic
 from sweeper.cloud.azure import manager as mgr_azure
 from sweeper.scheduler.task_container import TaskContainer
@@ -42,67 +42,40 @@ def create_schedule_plan(workflow):
 
 def run_workflow(workflow):
     """
-
+    Executes the workflow
     :type workflow: sweeper.workflow.Workflow
     :return:
     """
-
+    # Scheduling optimization
     sp = create_schedule_plan(workflow)
-    # Optimizer
-    # TODO: just pick the last one
 
-    # Creamos recursos
+    # Resource creation
     vm_resources = []
     for idx, config in enumerate(sp.resource_configurations):
         vm = mgr_azure.create_resource(sp.resource_names[idx], config)
         vm_resources.append(vm)
 
-    # Fieshare
-    fileshare_storage_account = 'sweeperdfs{1}'.format(idx, str(uuid.uuid4())[0:8])
-    fileshare_name = 'sharedfs'
-    fileshare_keys = mgr_azure.create_distributed_file_system(fileshare_storage_account, fileshare_name)
+    # Distributed File System mounting
+    dfs_name = 'sweeperdfs{}'.format(str(uuid.uuid4())[0:8])
+    dfs_path = mgr_azure.mount_distributed_file_system(dfs_name, vm_resources)
 
-    # TODO: Refactor in a method
-    script_lines = [
-        "STORAGE_ACCOUNT_NAME='{}'".format(fileshare_storage_account),
-        "STORAGE_ACCOUNT_KEY='{}'".format(fileshare_keys.storage_service_keys.primary),
-        "FILESHARE_NAME='{}'".format(fileshare_name),
-        "FILESHARE_PATH=\"//${STORAGE_ACCOUNT_NAME}.file.core.windows.net/${FILESHARE_NAME}\"",
-        "sudo chown azureuser /opt",
-        "mkdir -p /opt/fileshare",
-        "sudo mount $FILESHARE_PATH /opt/fileshare -t cifs -o " +
-        "\"vers=2.1,dir_mode=0777,file_mode=0777,username=${STORAGE_ACCOUNT_NAME},password=${STORAGE_ACCOUNT_KEY}\""]
-
-    logging.info('Mounting Distributed FileSystem {}'.format(fileshare_name))
-    command = ';\n'.join(script_lines)
-    logging.debug('Mounting Command below')
-    logging.debug(command)
-    for vm in vm_resources:
-        logging.info('Mounting DFS in VM {}'.format(vm.name))
-        stdin, stdout, stderr, ssh = vm.execute_command(command)
-        for line in stdout:
-            logging.info('MOUNTING_STDOUT:{}'.format(line))
-        for line in stderr:
-            logging.info('MOUNTING_STDERR:{}'.format(line))
-        ssh.close()
-    logging.info('Mounting Distributed FileSystem {} complete'.format(fileshare_name))
-
-    # TODO: Upload files
+    # File uploading
     vm_first = vm_resources[0]
-    logging.info('Uploading files to Distributed FileSystem {} using VM {}'.format(fileshare_storage_account, vm_first.name))
+    logging.info('Uploading files to Distributed File System using VM {}'.format(vm_first.name))
     for task in workflow.tasks:
         for fp in task.include_files:
             folder, basename, ext = utils.split_path(fp)
             vm_first.put_file(fp, utils.join_path('/opt/fileshare', basename, ext))
-    logging.info('Uploading files to Distributed FileSystem {} using VM {} complete'.format(fileshare_storage_account, vm_first.name))
+    logging.info('Uploading files to Distributed FileSystem {} using VM {} complete'.format(dfs_name, vm_first.name))
 
-    # Mandamos a ejecutar
+    # Managing workflow execution
     manage_execution(sp, vm_resources)
 
-    # Destruimos recursos
+    # Resource deallocation
     for vm in vm_resources:
         mgr_azure.delete_resource(vm.name)
 
+    # Return optimized scheduling
     return sp
 
 

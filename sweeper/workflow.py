@@ -171,7 +171,6 @@ class Workflow:
 
         self.tasks.remove(t)
 
-
     @staticmethod
     def read_workflow(filename, inject_profiling=False):
         """

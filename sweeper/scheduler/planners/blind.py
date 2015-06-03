@@ -13,10 +13,12 @@ def bin_packing(tasks, resource_configs):
     mem_costs.fill(MAX_VALUE)
 
     def all_scheduled():
-        sum_cores = 0
+        sum_cores = 0.
+        sum_sfs = 0.
         for i, n in enumerate(used):
             if n != 0:
                 sum_cores += resource_configs[i].cores * n
+                sum_sfs += resource_configs[i].speed_factor * n
         if int(sum_cores) != len(tasks):
             return MAX_VALUE
         else:
@@ -25,7 +27,7 @@ def bin_packing(tasks, resource_configs):
             #     if n != 0:
             #         print(resource_configs[i], 'x', n, '(index {})'.format(i))
             # print()
-            return 0.
+            return 0. + 1./sum_sfs
 
     def take(t_i, rc_i):
         if rc_i == len(resource_configs) or t_i == len(tasks):
@@ -37,9 +39,11 @@ def bin_packing(tasks, resource_configs):
             rc = resource_configs[y]
             t_lim = min(len(tasks), t_i + rc.cores)
             task_complexities = 0.
+            taked_cost = 0.
             for tt in tasks[t_i:t_lim]:
-                task_complexities += tt.complexity_factor
-            taked_cost = task_complexities / rc.speed_factor * rc.cost_hour_usd * 1000
+                #task_complexities += tt.complexity_factor
+                taked_cost = max(taked_cost, tt.complexity_factor / rc.speed_factor * rc.cost_hour_usd * 1000)
+            #taked_cost = task_complexities / rc.speed_factor * rc.cost_hour_usd * 1000
             used[y] += 1
             taked = take(t_lim,  0) + taked_cost
             used[y] -= 1
@@ -60,7 +64,7 @@ def bin_packing(tasks, resource_configs):
                 rc = resource_configs[rc_i]
                 t_lim = min(len(tasks), t_i + rc.cores)
                 check_take(t_lim, 0)
-                resource_mappings.append((tasks[t_i], resource_configs[rc_i]))
+                resource_mappings.append((tasks[t_i:t_lim], resource_configs[rc_i]))
                 #print(rc, 'at task index', t_i, 'cost', mem_costs[t_i, rc_i])
             elif visited[t_i, rc_i] == -1:
                 check_take(t_i, rc_i + 1)
@@ -134,6 +138,3 @@ def create_schedule_plan_blind(workflow):
     path = critical_path(workflow)
     print('Critical path')
     print(path)
-
-
-
