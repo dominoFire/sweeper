@@ -6,6 +6,13 @@ from scheduler.common import get_task_segments
 
 
 def bin_packing(tasks, resource_configs):
+    """
+    Given a list of tasks that are locally independent, and a list of ResourceConfig objects,
+    finds the mapping between tasks a resource configs that minimizes cost
+    :type tasks: list
+    :type resource_configs: list
+    :return:
+    """
     mem_costs = np.zeros((len(tasks), len(resource_configs)))
     visited = np.zeros((len(tasks), len(resource_configs)))
     used = np.zeros(len(resource_configs))
@@ -13,6 +20,12 @@ def bin_packing(tasks, resource_configs):
     mem_costs.fill(MAX_VALUE)
 
     def all_scheduled():
+        """
+        Returns a 0 <= x <= 1 value if all task have been mapped
+        Otherwise, returns a very large number called MAX_VALUE
+        You can think of this function as an predicate to determine if all tasks have been mapped
+        with a quality degree of that mapping
+        """
         sum_cores = 0.
         sum_sfs = 0.
         for i, n in enumerate(used):
@@ -30,6 +43,9 @@ def bin_packing(tasks, resource_configs):
             return 0. + 1./sum_sfs
 
     def take(t_i, rc_i):
+        """
+        Memoized-DP stuff
+        """
         if rc_i == len(resource_configs) or t_i == len(tasks):
             return all_scheduled()
         if visited[t_i, rc_i] != 0:
@@ -59,6 +75,9 @@ def bin_packing(tasks, resource_configs):
     resource_mappings = []
 
     def check_take(t_i, rc_i):
+        """
+        Checks the 'visited' DP table for build the complete solution (mapping)
+        """
         if t_i < len(tasks) and rc_i < len(resource_configs):
             if visited[t_i, rc_i] == 1:
                 rc = resource_configs[rc_i]
@@ -81,6 +100,12 @@ def bin_packing(tasks, resource_configs):
 
 
 def critical_path(workflow):
+    """
+    Given an sweeper.workflow.Workflow object, calculates the longest sequence of
+    dependent tasks
+    :param workflow: as sweeper.workflow.Workflow object
+    :return: a list with tasks
+    """
     selected = {}
     visited = {}
 
@@ -118,6 +143,12 @@ def critical_path(workflow):
 
 
 def create_schedule_plan_blind(workflow):
+    """
+    Create a schedule plan using Sweeper's blind algorithm
+    (not functional yet)
+    :type workflow: workflow.Workflow A workflow object
+    :return: a SchedulePlan objet
+    """
     segment = get_task_segments(workflow)
     inv_seg = dict()
 
@@ -127,10 +158,12 @@ def create_schedule_plan_blind(workflow):
         else:
             inv_seg[segment[k]].append(k)
 
+    mappings_list = []
     for seg_num in inv_seg:
         print('Segment')
         print(inv_seg[seg_num])
         mappings = bin_packing(inv_seg[seg_num], cfg_factory.list_configs())
+        mappings_list.append(mappings)
         print('Mappings')
         print(mappings)
         print()

@@ -10,15 +10,15 @@ pp = PrettyPrinter(indent=1)
 
 class SchedulerTest(unittest.TestCase):
     def test(self):
-        wf = Workflow.read_workflow('examples/weird.yaml')
+        wf = Workflow.read_workflow('examples/weird/workflow.yaml')
         sched_plan = create_schedule_plan(wf)
         utils.save_gantt_chart_data(sched_plan.schedule_mapping_list, filename='weird.csv')
 
-        wf = Workflow.read_workflow('examples/multicore.yaml')
+        wf = Workflow.read_workflow('examples/multicore/workflow.yaml')
         sched_plan = create_schedule_plan(wf)
         utils.save_gantt_chart_data(sched_plan.schedule_mapping_list, filename='multicore.csv')
 
-        wf = Workflow.read_workflow('examples/multilayer.yaml')
+        wf = Workflow.read_workflow('examples/multilayer/workflow.yaml')
         sched_plan = create_schedule_plan(wf)
         utils.save_gantt_chart_data(sched_plan.schedule_mapping_list, filename='multilayer.csv')
 

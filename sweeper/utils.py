@@ -3,6 +3,8 @@ __author__ = '@dominofire'
 import itertools
 import os
 import pandas as pd
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 def split_path(file_location):
@@ -127,6 +129,32 @@ def expand_grid(param_dict):
     every element of the matrix.
     """
     return list(itertools.product(*param_dict.values()))
+
+
+def plot_workflow(workflow, file_name='workflow.png'):
+    g = nx.DiGraph()
+    g.add_nodes_from(workflow.tasks)
+    g.add_edges_from(workflow.dependencies)
+    graph_layout = nx.spring_layout(g)
+    edges = [e for e in g.edges()]
+    nx.draw(g, pos=graph_layout)
+    # Be careful with AttributeError: 'FontManager' object has no attribute 'ttf_lookup_cache'
+    # See http://askubuntu.com/questions/578129/plotting-with-matplotlib-in-python-3-pylab-tkinter-and-qt-fontmanager-errors
+    nx.draw_networkx_edges(g, pos=graph_layout, edgelist=edges, edge_color='r', arrows=True)
+    nx.draw_networkx_labels(g, pos=graph_layout)
+
+    plt.savefig(file_name)
+
+
+def export_gml(workflow, file_name='workflow.gml'):
+    g = nx.DiGraph()
+    for t in workflow.tasks:
+        g.add_node(t)
+    for d in workflow.dependencies:
+        g.add_edge(d[0], d[1])
+    print(g)
+    nx.write_gml(g, file_name)
+
 
 # def plot_gantt_chart(schedule_mapping_list, filename=None, title='Scheduling plan'):
 #     """

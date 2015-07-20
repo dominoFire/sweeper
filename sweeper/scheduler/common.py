@@ -109,7 +109,8 @@ def prepare_resrc_config(res_config_list):
 
 def get_task_segments(workflow):
     """
-    Returns a dict that has the corresponding segment for each task
+    Returns a dict that has the corresponding segment for each task.
+    Segments are zero-based numbered
     :param workflow:
     :return:
     """
