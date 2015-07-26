@@ -8,21 +8,29 @@ import paramiko
 
 class Resource:
     """
-    Represents a Virtual Machine object that can execute commands
+    Represents a Virtual Machine object that can execute commands. This class
+    is used to encapsulate all the complexities used
     """
 
     def __init__(self, res_config, name, hostname, user, passwd):
         self.res_config = res_config
+        """ ResourceConfig object that originates this resource """
         self.name = name
+        """ Name of the resource """
         self.hostname = hostname
+        """ Hostname used to connect to thw VM """
         self.defaultUser = user
+        """ Username to connect to the provider Virtual Machine """
         self.defaultPassword = passwd
+        """  TODO: Find a better way to store passwords """
         self.speed_factor = res_config.speed_factor
+        """ A score that ranks how fast is this provider Virtual Machine resource """
 
     def create_ssh_client(self):
         """
-        Creates a paramiko SShClient object with guaranteed connection
-        :return:
+        Creates a paramiko SSHClient object with guaranteed connection the cloud resource
+
+        :return: A :class:`paramiko.SSHClient` object
         """
         # For some reason, I can't connect using a SSH certificate
         client = SSHClient()
@@ -39,15 +47,17 @@ class Resource:
                 not_connected = False
                 logging.debug('Created SSHClient')
             except Exception as ssh_ex:
-                logging.debug('Cant connect SSH: {0}'.format(ssh_ex))
+                logging.debug('Can\'t connect SSH: {0}'.format(ssh_ex))
 
         return client
 
     def execute_command(self, cmd, working_dir='~'):
         """
         Creates a paramiko SSHClient and invokes execution of a terminal command.
-        :param cmd str Command to execute in the VM resource
-        :returns a tuple of the form (stdin, stdout, stderr, client)
+
+        :param str cmd: Command to execute in the VM resource
+        :param str working_dir: Working-directory used to execute the command
+        :return: a tuple of the form (stdin, stdout, stderr, client)
         """
         ssh = self.create_ssh_client()
         stdin, stdout, stderr = ssh.exec_command('cd {} && {}'.format(working_dir, cmd))
@@ -56,20 +66,29 @@ class Resource:
     def put_file(self, local_filepath, remote_filepath):
         """
         Upload a file from the host machine to the VM resource
+
+        :param str local_filepath: Filepath in the local machine of the file to upload to DFS
+        :param str remote_filepath: Destination filepath of the file in the DFS
+        :returns: ::None
         """
         ssh = self.create_ssh_client()
         scp = SCPClient(ssh.get_transport())
         scp.put(local_filepath, remote_filepath)
         ssh.close()
+        return None
 
     def get_file(self, remote_filepath, curr_filepath='.'):
         """
         Download a file from the VM resource to the host machine
+
+        :param str remote_filepath: Source filepath of the file in the DFS
+        :param str local_filepath: Destination Filepath in the local machine of the file
         """
         ssh = self.create_ssh_client()
         scp = SCPClient(ssh.get_transport())
         scp.get(remote_filepath, local_path=curr_filepath)
         ssh.close()
+        return None
 
 
 class ResourceConfig:

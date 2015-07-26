@@ -28,3 +28,7 @@
 *.pdf
 *.zip
 
+# documentation
+
+apidoc/build
+
