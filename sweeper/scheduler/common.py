@@ -1,17 +1,26 @@
 from functools import reduce
 import uuid
+import utils
 
 
 class ResourceSchedule:
     """
-    An auxilary object for creating an managing expected schedules
+    An auxiliary object for creating an managing expected schedules
     Note that scheduling is at core level
     """
+
     def __init__(self, core_name, host_name, config):
+        """
+        Base constructor
+        :type core_name: str
+        :type host_name: str
+        :type config: resource.ResourceConfig
+        :return:
+        """
         self.core_name = core_name
         """ Name that identifies the core inside this machine """
         self.host_name = host_name
-        """ A valid host name that identifies the machion """
+        """ A valid host name that identifies the machine """
         self.config = config
         """ A ResourceConfig instance """
         self.ready_time = 0
@@ -21,6 +30,8 @@ class ResourceSchedule:
 
     def __repr__(self):
         return '{0}@{1}[{2}]'.format(self.host_name, self.core_name, self.config.config_name)
+
+
 
 
 class ScheduleMapping:
@@ -44,8 +55,7 @@ class ScheduleMapping:
 
 class SchedulePlan:
     """
-    Represents a SchedulePlan with all the information needed to execute in
-    cloud Virtual Machines
+    Represents a SchedulePlan with all the information needed to execute in cloud Virtual Machines
     """
     def __init__(self, sched_algo, sched_mapping_list, workflow, resource_config_list, resource_names):
         self.scheduling_algorithm = sched_algo
@@ -56,8 +66,13 @@ class SchedulePlan:
         self.workflow = workflow
         """ Workflow instance that belongs this schedule plan """
         self.resource_configurations = resource_config_list
-
+        """ The list of sweeper.resource.ResourceConfig objects that represents the resources needed to run the workflow
+         mapped in this SchedulePlan object """
         self.resource_names = resource_names
+        """ A list of strings that has the names of the resources needed to run the workflow mapped in this SchedulePlan
+        object. Note that len(self.resource_configurations) == len(self.resource_names) must be true """
+
+        assert(len(self.resource_configurations) == len(self.resource_names))
 
     @property
     def execution_cost(self):
@@ -77,7 +92,7 @@ class SchedulePlan:
     @property
     def makespan(self):
         """
-        Total expected execution time of the workflow in this shecule plan
+        Total expected execution time of the workflow in this schedule plan
         :return: float
         """
         return SchedulePlan._makespan(self.schedule_mapping_list)
@@ -99,7 +114,8 @@ def prepare_resrc_config(res_config_list):
     :return: a List of ResourceSchedule
     """
     resrc_schedule_list = []
-    resource_names = ['sweeper{0}i{1}'.format(idx, str(uuid.uuid4())[0:8]) for idx, _ in enumerate(res_config_list)]
+
+    resource_names = utils.generate_resource_name(len(res_config_list))
     for idx, cfg in enumerate(res_config_list):
         core_list = [ResourceSchedule('Core{0}'.format(i), resource_names[idx], cfg) for i in range(1, cfg.cores+1)]
         resrc_schedule_list = resrc_schedule_list + core_list

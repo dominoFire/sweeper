@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
+import uuid
 
 
 def split_path(file_location):
@@ -191,3 +192,22 @@ def export_gml(workflow, file_name='workflow.gml'):
 #                   pos=4)
 #     if filename:
 #         grdevices.dev_off()
+
+
+def generate_resource_names(num):
+    """
+    Generate a list of randomly-generated resource names with the function generate_resource_name()
+    :param num: Number of names to be generated
+    :return: a list
+    """
+    assert num > 0
+    return [generate_resource_name(i) for i in range(num)]
+
+
+def generate_resource_name(id_num):
+    """
+    Generate a sweeper-prefixed string, followed by a UUID segment
+    :param int id_num: A
+    :return: a str with a sweeper prefixed name
+    """
+    return 'sweeper{0}i{1}'.format(id_num, str(uuid.uuid4())[0:8])

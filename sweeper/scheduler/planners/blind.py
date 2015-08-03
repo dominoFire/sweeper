@@ -1,17 +1,19 @@
 __author__ = '@dominofire'
 
 import numpy as np
-from cloud.azure import resource_config_factory as cfg_factory
-from scheduler.common import get_task_segments
+import utils
+
+from sweeper.cloud.azure import resource_config_factory as cfg_factory
+from sweeper.scheduler.common import get_task_segments, SchedulePlan, ResourceSchedule, ScheduleMapping
 
 
 def bin_packing(tasks, resource_configs):
     """
     Given a list of tasks that are locally independent, and a list of ResourceConfig objects,
     finds the mapping between tasks a resource configs that minimizes cost
-    :type tasks: list
+    :type tasks: list of sweeper.Task objects
     :type resource_configs: list
-    :return:
+    :return: A list of tuples in the form (Task, ResourceConfig)
     """
     mem_costs = np.zeros((len(tasks), len(resource_configs)))
     visited = np.zeros((len(tasks), len(resource_configs)))
@@ -159,15 +161,34 @@ def create_schedule_plan_blind(workflow):
             inv_seg[segment[k]].append(k)
 
     mappings_list = []
+    schedule_mappings = []
     for seg_num in inv_seg:
         print('Segment')
         print(inv_seg[seg_num])
         mappings = bin_packing(inv_seg[seg_num], cfg_factory.list_configs())
         mappings_list.append(mappings)
+        #TODO: Generalize this
+        hostnames = utils.generate_resource_names(len(mappings))
+        sm_maps = [ResourceSchedule("Core{0}".format(i+1), hostnames[i], m[1]) for i, m in enumerate(mappings)]
+        rs = []
+        for i, tup in enumerate(mappings):
+            for t in tup[0]:
+                rs.append(ScheduleMapping(sm_maps[i], t, -1, -1))
         print('Mappings')
         print(mappings)
+        print('ResourceSchedules')
+        print(sm_maps)
+        print('ScheduleMappings')
+        print(rs)
         print()
+
+    # Horizontal flattering
+    # The best we can do (now) is to form a set of all resources scheduled
+    # and assign a name for each new resource
+
 
     path = critical_path(workflow)
     print('Critical path')
     print(path)
+
+    # return SchedulePlan()

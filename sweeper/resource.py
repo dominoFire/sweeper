@@ -117,3 +117,8 @@ class ResourceConfig:
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, ResourceConfig):
+            return False
+        return self.config_name == other.config_name and self.provider == other.provider
