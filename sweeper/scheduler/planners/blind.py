@@ -3,6 +3,8 @@ __author__ = '@dominofire'
 import numpy as np
 import utils
 
+from collections import Counter
+from functools import reduce
 from sweeper.cloud.azure import resource_config_factory as cfg_factory
 from sweeper.scheduler.common import get_task_segments, SchedulePlan, ResourceSchedule, ScheduleMapping
 
@@ -151,44 +153,74 @@ def create_schedule_plan_blind(workflow):
     :type workflow: workflow.Workflow A workflow object
     :return: a SchedulePlan objet
     """
+    # Segment the tasks of the workflow
     segment = get_task_segments(workflow)
     inv_seg = dict()
-
+    # Reverse the info delivered in the step below
     for k in segment:
         if not segment[k] in inv_seg:
             inv_seg[segment[k]] = [k]
         else:
             inv_seg[segment[k]].append(k)
-
+    # Create an "optimal" scheduling for each segment
     mappings_list = []
-    schedule_mappings = []
     for seg_num in inv_seg:
-        print('Segment')
-        print(inv_seg[seg_num])
         mappings = bin_packing(inv_seg[seg_num], cfg_factory.list_configs())
         mappings_list.append(mappings)
-        #TODO: Generalize this
-        hostnames = utils.generate_resource_names(len(mappings))
-        sm_maps = [ResourceSchedule("Core{0}".format(i+1), hostnames[i], m[1]) for i, m in enumerate(mappings)]
-        rs = []
-        for i, tup in enumerate(mappings):
-            for t in tup[0]:
-                rs.append(ScheduleMapping(sm_maps[i], t, -1, -1))
+        for m in mappings:
+            res_name = utils.generate_resource_name(0)
+            res_config = m[1]
+        print('Segment')
+        print(inv_seg[seg_num])
         print('Mappings')
-        print(mappings)
-        print('ResourceSchedules')
-        print(sm_maps)
-        print('ScheduleMappings')
-        print(rs)
-        print()
+        print(mappings, '\n')
+    # Find out names
+    dict_res = dict()
+    for i, mappings in enumerate(mappings_list):
+        for tasks, res_cfg in mappings:
+            if not res_cfg in dict_res:
+                dict_res[res_cfg] = [i]
+            else:
+                dict_res[res_cfg].append(i)
+    # Count how many resoures are needed
+    res_count = dict()
+    res_names = dict()
+    for cfg in dict_res:
+        cnt = Counter(dict_res[cfg])
+        res_n = reduce(max, map(lambda x: x[1], cnt.most_common()))
+        res_count[cfg] = res_n
+        res_names[cfg] = [utils.generate_resource_name(0) for i in range(res_n)]
+    # Build Schedule mappings
+    schedule_mappings = []
+    st = 0
+    st_ant = 0
+    for i, mappings in enumerate(mappings_list):
+        # Use this to track the different names used in resources
+        res_idx = { res:0 for res in res_names }
+        for tasks, res_cfg in mappings:
+            print("M1")
+            print(res_cfg)
+            res_name =  res_names[ res_cfg ][ res_idx[res_cfg] ]
+            res_idx[res_cfg] += 1
+            st = 0
+            for j,t in enumerate(tasks):
+                res_sched = ResourceSchedule("Core{0}".format(j+1), res_name, res_cfg)
+                d = t.complexity_factor / res_config.speed_factor
+                if i != 0:
+                    st = max(st, d)
+                sm = ScheduleMapping(res_sched, t, st_ant, d)
+                schedule_mappings.append(sm)
+        st_ant = st_ant + st
 
+    # TODO: Find the critical path and use it in a creative way!
+    path = critical_path(workflow)
     # Horizontal flattering
     # The best we can do (now) is to form a set of all resources scheduled
     # and assign a name for each new resource
-
-
-    path = critical_path(workflow)
+    print('Resource Count')
+    print(res_count)
     print('Critical path')
     print(path)
-
-    # return SchedulePlan()
+    print('Schedule mappings')
+    print(schedule_mappings)
+    # return SchedulePlan() -> list of ScheduleMappings (Task, ResourceSchedule)

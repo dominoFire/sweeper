@@ -122,3 +122,6 @@ class ResourceConfig:
         if not isinstance(other, ResourceConfig):
             return False
         return self.config_name == other.config_name and self.provider == other.provider
+
+    def __hash__(self):
+        return str(self.config_name + self.provider).__hash__()

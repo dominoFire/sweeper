@@ -22,6 +22,9 @@ class MyTestCase(unittest.TestCase):
     def test_blind(self):
         w = Workflow.read_workflow('examples/gridsearch/workflow.yaml')
         create_schedule_plan_blind(w)
+        import utils
+        utils.plot_workflow(w, 'hi.png')
+        utils.export_gml(w, 'hi.gml')
 
 
 if __name__ == '__main__':
