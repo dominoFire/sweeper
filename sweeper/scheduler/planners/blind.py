@@ -185,11 +185,15 @@ def create_schedule_plan_blind(workflow):
     # Count how many resoures are needed
     res_count = dict()
     res_names = dict()
+    resource_names = []
+    resource_configs = []
     for cfg in dict_res:
         cnt = Counter(dict_res[cfg])
         res_n = reduce(max, map(lambda x: x[1], cnt.most_common()))
         res_count[cfg] = res_n
         res_names[cfg] = [utils.generate_resource_name(0) for i in range(res_n)]
+        resource_configs.extend([cfg for i in range(res_n)])
+        resource_names.extend(res_names[cfg])
     # Build Schedule mappings
     schedule_mappings = []
     st = 0
@@ -206,8 +210,7 @@ def create_schedule_plan_blind(workflow):
             for j,t in enumerate(tasks):
                 res_sched = ResourceSchedule("Core{0}".format(j+1), res_name, res_cfg)
                 d = t.complexity_factor / res_config.speed_factor
-                if i != 0:
-                    st = max(st, d)
+                st = max(st, d)
                 sm = ScheduleMapping(res_sched, t, st_ant, d)
                 schedule_mappings.append(sm)
         st_ant = st_ant + st
@@ -223,4 +226,9 @@ def create_schedule_plan_blind(workflow):
     print(path)
     print('Schedule mappings')
     print(schedule_mappings)
-    # return SchedulePlan() -> list of ScheduleMappings (Task, ResourceSchedule)
+    print('List: resource configurations')
+    print(resource_configs)
+    print('List: resource names')
+    print(resource_names)
+
+    return SchedulePlan('blind', schedule_mappings, workflow, resource_configs, resource_names)

@@ -1,4 +1,5 @@
 from functools import reduce
+import sys
 import uuid
 import utils
 
@@ -106,6 +107,20 @@ class SchedulePlan:
         end = reduce(max, [x.end_time for x in sched_mapping_list], 0.)
         return end - start
 
+    def lifespans(self):
+        ret = []
+        for res_name in self.resource_names:
+            t_ini = sys.maxsize
+            t_end = 0
+            # TODO: Optimize this
+            for sm in self.schedule_mapping_list
+                if sm.resource_schedule.host_name == res_name:
+                    t_ini = min(t_ini, sm.start_time)
+                    t_end = max(t_end, sm.start_time sm.duration)
+            ret.append((res_name, t_ini, t_end))
+        # First and last tasks
+
+        return ret
 
 def prepare_resrc_config(res_config_list):
     """
