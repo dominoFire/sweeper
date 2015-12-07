@@ -4,7 +4,7 @@ import os
 import sweeper.utils as utils
 
 #Azure subscription ID
-subscription_id = '8ea1a328-9162-4a6e-9cdc-fcc8d6766608'
+subscription_id = '3581f326-7d5d-47c0-a67c-2895eaee6439'
 # path to .pem file that includes the certificate to the Azure Account
 pem_file = 'mycert.pem'
 # path to .cer file

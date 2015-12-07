@@ -153,10 +153,8 @@ def export_gml(workflow, file_name='workflow.gml'):
         g.add_node(t)
     for d in workflow.dependencies:
         g.add_edge(d[0], d[1])
-    print(workflow)
-    print(workflow.tasks)
-    print(workflow.dependencies)
-    nx.write_gml(g, file_name, stringizer=lambda x: x.__repr__())
+    print(g)
+    nx.write_gml(g, file_name)
 
 
 # def plot_gantt_chart(schedule_mapping_list, filename=None, title='Scheduling plan'):

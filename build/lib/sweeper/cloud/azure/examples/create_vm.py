@@ -23,7 +23,7 @@ vm_location = 'West US'
 # TODO: Automate key & fingerprint generation
 vm_key_fingerprint = '976272116B6DE9398D1032C85B69CD6E6638F691' #mycert.pem
 
-print('Creating Service')
+print 'Creating Service'
 service_name = '{0}'.format(vm_name)
 service_label = '{0}'.format(vm_name)
 service_desc = 'Cloud service for VM {0}'.format(vm_name)
@@ -36,13 +36,13 @@ req_service = sms.create_hosted_service(service_name, service_label, service_des
 time.sleep(10)
 
 
-print('Add certificate')
+print 'Add certificate'
 encoded_cer = ''
 with open(cer_fullpath, 'rb') as cer_file:
     encoded_cer = base64.b64encode(cer_file.read())
-print('------------------- Decoded String -------------------')
-print((base64.b64decode(encoded_cer)))
-print('------------------- Decoded String -------------------')
+print '------------------- Decoded String -------------------'
+print(base64.b64decode(encoded_cer))
+print '------------------- Decoded String -------------------'
 # Always put 'pfx' as certificate type
 # No password for '.cer' cetificates
 # See http://stackoverflow.com/questions/18117578/azure-add-certificate-to-cloudservice
@@ -51,13 +51,13 @@ print('------------------- Decoded String -------------------')
 result_cert = sms.add_service_certificate(service_name, encoded_cer, 'pfx', '')
 #wait_for_async
 
-print('Checking certificates')
+print 'Checking certificates'
 cert_result = sms.list_service_certificates(service_name)
 for r in cert_result:
-    print(r.__dict__)
+    print r.__dict__
 
 
-print('Creating LinuxConfigSet')
+print 'Creating LinuxConfigSet'
 # Linux VM configuration, you can use WindowsConfigurationSet
 # for a Windows VM instead
 linux_config = LinuxConfigurationSet(vm_name, 'azureuser', 'Balataraybestos4', True)
@@ -68,7 +68,7 @@ linux_config.ssh.public_keys.public_keys.append(public_key)
 linux_config.ssh.key_pairs.key_pairs.append(key_pair)
 linux_config.disable_ssh_password_authentication = False
 
-print('Creating Virtual Hard Drive')
+print 'Creating Virtual Hard Drive'
 # TODO: Automate configuration of getting VHD image
 # Name of an os image as returned by sms.list_os_images()
 # image_name = 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd'
@@ -93,10 +93,10 @@ def create_network_config(subnet_name=None):
     return network
 
 
-print('Creating Network Configuration (Endpoints)')
+print 'Creating Network Configuration (Endpoints)'
 net_cfg = create_network_config()
 
-print('Creating VM')
+print 'Creating VM'
 req_vm = sms.create_virtual_machine_deployment(service_name=vm_name,
                                                deployment_name=vm_name,
                                                deployment_slot='production',
@@ -109,7 +109,7 @@ req_vm = sms.create_virtual_machine_deployment(service_name=vm_name,
 
 # NOTE: No se pueden hacer waits porque las llamadas a la API TODAVIA NO regresan los callbacks
 # sms.wait_for_operation_status(req_vm.request_id)
-print(req_vm)
+print req_vm
 
 time.sleep(10)
 

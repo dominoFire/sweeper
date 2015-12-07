@@ -1,8 +1,11 @@
 source('scripts/functions.R')
 
-cloud_url = 'https://cloudharmony.com/benchmarks/compute/cpu'
+#cloud_url = 'https://cloudharmony.com/benchmarks/compute/cpu'
+#cloud_url = 'http://cc.bingj.com/cache.aspx?q=https%3a%2f%2fcloudharmony.com%2fbenchmarks%2fcompute%2fcpu&d=4725444764893446&mkt=es-MX&setlang=en-US&w=DhdSx-ksG7dk4ha0h6I-pwkjspmH_SMk'
+cloud_url = 'http://cc.bingj.com/cache.aspx?q=https%3a%2f%2fcloudharmony.com%2fbenchmarks%2fcompute%2fcpu&d=4725444764893446&mkt=es-MX&setlang=en-US&w=DhdSx-ksG7dk4ha0h6I-pwkjspmH_SMk'
 
-cloud_harmony = html(cloud_url)
+
+cloud_harmony = read_html(cloud_url)
 
 benchs = cloud_harmony %>% html_nodes('table')
 

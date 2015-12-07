@@ -1,0 +1,2670 @@
+/*---------------------Header------------------*/
+.logo a{
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 0;
+}
+
+.logo.b_bottom {
+	border-bottom-color: #25BDE8;
+}
+
+.main_navigation{
+	border-bottom: 3px solid #25BDE8;
+}
+
+.subtitle {
+	border-bottom: 1px solid #25BDE8;
+}
+
+.subtitle .button {
+	margin-top: 35px;
+	margin-right: 10px;
+}
+
+.subtitle a {
+	color: #444444;
+	text-decoration: underline;
+}
+/*------------------My navigation---------------------*/
+
+.my-nav {
+    min-width: 230px;
+}	
+
+.my-nav > h1 {
+    margin-left: 115px;
+    width: 115px;
+}
+	
+.my-nav ul ol i{
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 -53px;
+    display: inline-block;
+    height: 10px;
+    margin: 0 5px 0 22px;
+    width: 10px;
+}
+
+.my-nav ul ol a:hover{
+    color: #25BDE8;
+}
+
+.modal {
+	width: auto;
+}
+/*--------------------Content-------------------*/
+
+.scores header {
+	padding: 20px;
+}
+
+.current_name {
+	max-width: 630px;
+	margin-left: 67px;	
+}
+
+.current_name span{
+    cursor: pointer;
+    float: left;
+    line-height: 0;
+    margin-left: 5px;
+    margin-top: 26px;
+    text-decoration: underline;
+	display: none;
+	font-size: 12px;
+	color: #777777;
+}
+
+.current_name:hover span{
+    display: block;
+}
+
+.scores-icon {
+    background-image: url("../img/cloudscores.png");
+    background-position: -168px 0;
+}
+
+.current_name h2 { 
+    float: left;
+    margin-left: 0;
+    overflow-x: hidden;
+    max-width: 580px;
+    text-overflow: ellipsis;
+    white-space: nowrap;       
+}
+
+#new_name {
+	width: 630px;
+	margin-left: 67px;	
+	display: none;	
+}
+
+#new_name input{
+	width: 450px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	color: #444444;
+	font-size: 26px;
+	font-family: 'museo_sans100';
+	height: 39px;
+    padding: 2px;	
+    display: inline-block;
+}
+
+#new_name  button{
+	font-size: 12px;
+	color: #777777;
+	font-weight: 400;
+	cursor: pointer;
+	font-family: 'museo_sans300';
+	text-decoration: underline;	
+	vertical-align: bottom;
+    padding: 0;	
+}
+
+#new_name  input + button{
+	font-family: 'museo_sans700';	
+}
+
+.btn-group > .btn-small.active,
+.btn-small:active ,
+.btn-small.active {
+    color: #25bde8;
+}
+	
+/*------------- CloudScores settings section -------------*/
+
+b{
+    font-family: 'museo_sans700';
+    font-weight: 400;
+}
+
+.setSection h1{
+    color: #24bce8;
+}
+
+.conf-changes {
+	color: #777;
+	font-size: 12px;
+	margin-right: 25px;	
+	text-align: right;	
+	margin-top: 5px;
+	line-height: 14px;
+}
+
+.conf-changes a{
+	color: #777;
+	text-decoration: underline;
+}
+
+.price_rate div{
+	float: left;
+	width: 24%;
+	margin-left: 14%;
+	font-size: 12px;	
+}
+
+.price_rate div:first-child{
+	margin-left: 0;
+}
+
+.settings em {
+	font-style: normal;
+	color: #23bbe8;
+}
+
+.region {
+	position: relative;
+	width: 200px;
+}
+
+.region label {
+    background-image: url("../img/cloudscores.png");
+    background-position: -58px -54px;
+    display: block;
+    height: 11px;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    width: 10px;
+}
+
+.region input {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	height: 20px;
+	width: 200px;
+	color: #777777;
+	font-size: 12px;
+	padding: 0 10px;
+}
+
+.region input:focus {
+	box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.visualization {
+	text-align: center;
+}
+
+.icon-expand {
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 -27px;
+    cursor: pointer;
+    display: block;
+    height: 17px;
+    width: 25px;
+}
+
+.icon-expand:hover {
+    background-position: -34px -27px
+}
+
+.setSection .icon-expand{
+	float: right;
+	margin-top: 5px;
+	margin-right: 25px;
+}
+
+
+/*--------------Dropdown & Help---------------*/
+
+.dropdown_block {
+	left: -7px;
+}
+	
+.dropdown_block  p{
+	float: none;
+    font-size: 12px;
+    line-height: 16px;
+    margin-left: 5px;
+    width: auto;
+	padding-left: 0;	
+}
+
+.dropdown_close {
+	color: #23BBE8;
+}
+
+.cat_name {
+    font-family: 'museo_sans700';
+	margin-left: 5px;
+	line-height: 20px;
+}
+
+.dropdown_block .control-group,
+.tabs_options .control-group{
+	padding: 2px 15px 3px 5px;
+	position: relative;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;		
+}
+	
+.dropdown_block .control-group:hover,
+.tabs_options .control-group:hover{
+	background-color: #F3F3F3;
+}
+
+.dropdown_block label,
+.tabs_options .control-group .label{
+	display: inline-block;
+	cursor: pointer;
+	vertical-align: middle;	
+	line-height: 1.3;
+}
+
+.name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+
+.dropdown_block label small{
+	vertical-align: top;
+}
+
+.dropdown_block .col_2 label .name{
+	width: auto;
+	max-width: 180px;
+	line-height: 16px;
+}
+
+.dropdown_block .col_3  label .name{
+	width: auto;
+	max-width: 80px;
+}
+
+.wide_block .control-group {
+	min-width: 135px;
+}
+
+.dropdown_block .btn-small{
+	float: right;
+	margin-right: 7px;
+}
+
+.dropdown_block .dropdown_close {
+    float: left;
+    margin-top: 7px;
+	margin-left: 7px;
+}
+
+.icon-service {
+    background-image: url("../img/cloudscores.png");
+    background-position: -66px -30px;
+    display: inline-block;
+    height: 14px;
+    vertical-align: text-bottom;
+    width: 15px;
+}
+
+.icon-service:hover {
+    background-position: -85px -30px;
+    cursor: pointer;
+}
+
+.control-group .icon-service {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	display: none;
+}
+
+.control-group:hover .icon-service {
+	display: block;
+}
+
+.dropdown_block > .icon-service  {
+	position: absolute;
+	top: 7px;
+	right: 10px;
+}
+
+.dropdown_block .scroll_block {
+	margin-bottom: 10px;
+}
+
+.max {
+    background-image: url("../img/cloudscores.png");
+    background-position: -141px -34px;
+    display: block;
+    float: left;
+    height: 6px;
+    width: 7px;
+}
+
+.min {
+    background-image: url("../img/cloudscores.png");
+    background-position: -151px -34px;
+    display: block;
+    float: left;
+    height: 6px;
+    width: 7px;
+}
+
+.median {
+    background-image: url("../img/cloudscores.png");
+    background-position: 15px -98px;
+    height: 12px;
+}
+
+.disruption {
+    background-image: url("../img/cloudscores.png");
+    background-position: 15px -79px;
+    height: 12px;
+}
+
+.chart_value_container {
+    display: inline-block;
+	width: 325px;
+	vertical-align: middle;
+    height: 26px;
+    margin: 0 8px 0 2px;	
+	text-align: center;
+}
+
+.chart_value_container .circle {
+    display: inline-block;
+	width: 12px;
+	vertical-align: middle;
+    height: 12px;
+	border-radius: 12px;
+	margin-top: 7px;
+	border: 1px solid transparent;
+	-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+}
+
+.chart_value_container .circle.red{
+	background-color: #790000;
+	border-color: #790000;
+}
+
+.chart_value_container .circle.blue {
+	background-color: #0560C7;
+	border-color: #0560C7;
+}
+
+.chart_value_container .circle.white-b {
+	background-color: #ffffff;
+	border-color: #E6E6E6;	
+}
+
+.chart_value_container .circle.black-b {
+	background-color: #ffffff;
+	border-color: #2D2D2D;	
+}
+
+.chart_value_container .gradient_line {
+    display: inline-block;
+	width: 290px;
+	vertical-align: middle;
+    height: 12px;
+	border-radius: 6px;  
+	margin-top: 7px;
+}
+
+.chart_value_container .gradient_line.red_blue {
+	background: #5d0000;
+	background: -moz-linear-gradient(left,  #5d0000 0%, #cc9b95 44%, #d6d5d5 50%, #96cde2 56%, #0560c7 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#5d0000), color-stop(44%,#cc9b95), color-stop(50%,#d6d5d5), color-stop(56%,#96cde2), color-stop(100%,#0560c7));
+	background: -webkit-linear-gradient(left,  #5d0000 0%,#cc9b95 44%,#d6d5d5 50%,#96cde2 56%,#0560c7 100%);
+	background: -o-linear-gradient(left,  #5d0000 0%,#cc9b95 44%,#d6d5d5 50%,#96cde2 56%,#0560c7 100%);
+	background: -ms-linear-gradient(left,  #5d0000 0%,#cc9b95 44%,#d6d5d5 50%,#96cde2 56%,#0560c7 100%);
+	background: linear-gradient(to right,  #5d0000 0%,#cc9b95 44%,#d6d5d5 50%,#96cde2 56%,#0560c7 100%);
+}
+
+.ie8 .chart_value_container .gradient_line.red_blue,
+.ie9 .chart_value_container .gradient_line.red_blue {
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 -170px;
+}
+	
+.chart_value_container .gradient_line.white_black{
+	background: #e6e6e6;
+	background: -moz-linear-gradient(left,  #e6e6e6 0%, #929292 52%, #2d2d2d 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#e6e6e6), color-stop(52%,#929292), color-stop(100%,#2d2d2d));
+	background: -webkit-linear-gradient(left,  #e6e6e6 0%,#929292 52%,#2d2d2d 100%);
+	background: -o-linear-gradient(left,  #e6e6e6 0%,#929292 52%,#2d2d2d 100%);
+	background: -ms-linear-gradient(left,  #e6e6e6 0%,#929292 52%,#2d2d2d 100%);
+	background: linear-gradient(to right,  #e6e6e6 0%,#929292 52%,#2d2d2d 100%);
+}
+
+.ie8 .chart_value_container .gradient_line.white_black,
+.ie9 .chart_value_container .gradient_line.white_black {
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 -192px;
+}
+
+.chart_value {
+	width: 44px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.ie8 .chart_value {
+	width: 43px;
+}
+
+.performance {
+    background-image: url("../img/cloudscores.png");
+    background-position: 0 -125px;
+}
+
+#MetricValue {
+	display: none;
+}
+
+#MetricValue.active {
+	display: inline-block;
+}
+
+.value_calc {
+	margin-left: 10px;
+	vertical-align: bottom;
+}
+
+.value_calc .custom-radio {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+/*--------------- Tiny Scrollbar -----------------*/
+
+.sb_bench { 
+	height: 72px;
+	width: 475px;
+}
+
+.sb_services { 
+	height: 120px;
+	width: 475px;	
+}
+
+/*------------------Percentile Slider----------------------*/
+
+.slider_holder {
+	margin: 0 15px;
+	float: right;
+}
+
+.slider_holder .max,
+.slider_holder .min {
+	float: left;
+	margin-top: 6px;	
+}
+
+.slider_holder .min {
+	margin-left: 5px;
+}
+
+.percentile {
+	margin: 3px 8px 0;
+}
+
+.percentile .ui-widget-header {
+	background-color: #24BCE8;
+    border-color: #24BCE8 #24BCE8 #1E9CC0;
+}
+
+/*-----------------------Toggle Servises---------------------*/
+.toggle_option {
+    border: 1px solid #CCCCCC;
+    border-radius: 8px 8px 8px 8px;
+    display: inline-block;
+    height: 12px;
+    margin: 3px 15px 6px 0;
+    position: relative;
+    vertical-align: middle;
+    width: 24px;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.toggle_option:after {
+    border: 1px solid #CCCCCC;
+    border-radius: 12px 12px 12px 12px;
+    content: "";
+    display: block;
+    height: 12px;
+    position: absolute;
+    left:-1px;
+    top: -1px;
+    width: 12px;
+	background: #eff0f0; /* Old browsers */
+	background: -moz-linear-gradient(top,  #eff0f0 0%, #d1d1d1 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eff0f0), color-stop(100%,#d1d1d1)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #eff0f0 0%,#d1d1d1 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #eff0f0 0%,#d1d1d1 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #eff0f0 0%,#d1d1d1 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #eff0f0 0%,#d1d1d1 100%); /* W3C */
+}
+
+.ie8 .toggle_option {
+	display: none;
+}
+
+input:checked + .toggle_option:after {
+    right: -1px;
+    left: auto;
+}
+
+.service_name {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.service_name small{
+    font-size: 11px;
+}
+
+#AWSservice,
+#GCEservice,
+#GoGridservice,
+#RCservice {
+	position: absolute;
+	opacity: 0;
+	z-index: 0;
+}
+
+#AWSservice:checked + .toggle_option {
+	background: #1F77B4;
+}
+
+#GCEservice:checked + .toggle_option {
+	background: #FF7E0E;
+}
+
+#GoGridservice:checked + .toggle_option {
+	background: #2C9F2C;
+}
+
+#RCservice:checked + .toggle_option {
+	background: #771B77;
+}
+
+
+/*-------------------Calendar block-------------------------*/
+
+.calendar-block {
+	position: relative;
+	margin-bottom: 7px;
+}
+
+.calendar-block input{
+    color: #777777;
+    float: right;
+    font-size: 12px;
+    height: 20px;
+    margin-left: 5px;
+    padding: 0 15px 0 3px;
+    width: 130px;
+}
+
+.calendar-block label{
+	float: left;
+	margin-left: 5px;	
+}
+
+.icon-calendar {
+	background-image: url("../img/cloudscores.png");
+    background-position: -24px -51px;
+    display: block;
+    height: 14px;
+    width: 14px;
+}
+
+label.icon-calendar  {
+	position: absolute;
+	float: none;
+	right: 1px;
+    top: 3px;
+}
+
+.ui-widget-header {
+	background-image: none;
+	background-color: #ffffff;
+	border: none;
+	border-radius: 6px;
+}
+
+.ui-datepicker .ui-datepicker-prev span, 
+.ui-datepicker .ui-datepicker-next span {
+	border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+	background-image: none;
+    display: block;
+    position: absolute;
+    height: 0;
+    width: 0;	
+	margin-left: -5px;
+}
+
+.ui-widget-header .ui-state-hover, .ui-state-focus {
+	background-image: none;
+	background-color: #ffffff;
+	border-color: #ffffff;	
+}
+
+.ui-datepicker {
+	width: 190px;
+	border: 1px solid #ECECEC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);	
+}
+
+.ui-datepicker-header .ui-datepicker-prev span{
+    border-right: 8px solid #777777;
+}
+
+.ui-datepicker-header .ui-datepicker-next span {
+	border-left: 8px solid #777777;
+}
+
+.ui-datepicker-header .ui-datepicker-prev:hover,
+.ui-datepicker-header .ui-datepicker-next:hover{
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.ui-datepicker-header .ui-datepicker-prev:hover span{
+    border-right: 8px solid #24BCE8;
+}
+
+.ui-datepicker-header .ui-datepicker-next:hover span {
+	border-left: 8px solid #24BCE8;
+}
+
+
+.ui-datepicker .ui-state-default {
+	background-image: none;
+	background-color: #ffffff;
+	border: none;	
+	padding: 4px 0;
+	font-size: 12px;
+    font-family: 'museo_sans300';	
+	text-align: center;
+	color: #777777;	
+}
+
+.ui-datepicker .ui-state-active {
+	background-color: #B1EDEE;
+}
+
+.ui-datepicker .ui-state-hover {
+	background-color: #F3F3F3;
+    font-family: 'museo_sans700';	
+
+}
+
+.ui-datepicker .ui-state-highlight {
+	background-color: #B1EDEE;
+	color: #000;
+}
+
+
+.ui-datepicker .ui-datepicker-title,
+.ui-datepicker-calendar th {
+    font-size: 13px;
+    font-family: 'museo_sans700';
+	font-weight: normal;
+}
+
+/*----------------Autocomplete-------------------*/
+
+.autocomplete-suggestions {
+	border: 1px solid #CFCFCF;
+	border-radius: 0 0 3px 3px;
+	overflow: hidden;	
+	margin-left: 5px;
+}
+
+.autocomplete-suggestion {
+	background-color: #fff;
+	font-size: 12px;
+    font-family: 'museo_sans300';	
+	color: #777777;		
+	padding: 4px 6px;
+}
+
+.autocomplete-suggestion.autocomplete-selected {
+	background-color: #F3F3F3;
+	cursor: pointer;
+}
+
+.autocomplete-suggestion  strong {
+	font-weight: 400;
+	color: #23bbe8;
+}
+
+.ui-autocomplete .ui-menu-item a {
+    display: block;
+    line-height: 20px;
+    color: #777777;
+    font-size: 12px;
+    padding: 0 10px;
+}	
+
+.ui-autocomplete .ui-menu-item a.ui-state-focus,
+.ui-autocomplete .ui-menu-item a.ui-state-active	 {
+    background-image: none;
+	background-color: #F3F3F3;
+	border: none;
+	margin: 0;
+	border-radius: 0;
+}
+
+.ui-autocomplete.ui-menu {
+	padding: 2px 0;
+}
+
+
+/*----------------Select-----------------*/
+
+.dropdown_block .custom-select {
+	background: #ededed;
+	background: -moz-linear-gradient(top,  #ededed 0%, #e9e9e9 40%, #dedede 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(40%,#e9e9e9), color-stop(100%,#dedede));
+	background: -webkit-linear-gradient(top,  #ededed 0%,#e9e9e9 40%,#dedede 100%);
+	background: -o-linear-gradient(top,  #ededed 0%,#e9e9e9 40%,#dedede 100%);
+	background: -ms-linear-gradient(top,  #ededed 0%,#e9e9e9 40%,#dedede 100%);
+	background: linear-gradient(to bottom,  #ededed 0%,#e9e9e9 40%,#dedede 100%);
+	border: 1px solid #C0C0C0;
+	border-radius: 3px;	
+    width: 116px;
+	line-height: 18px;		
+	height: 22px;
+	margin-left: 5px;	
+}
+
+/*------------------Full screen modal-----------------------*/
+
+.full_width_modal {
+	border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px 45px;
+    width: 94%;	
+	position: absolute;
+	top: 100px;
+	right: 50%;
+	margin-right: -47%;
+	background-color: #fff;
+	z-index: 110;
+	display: none;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;			
+}
+
+.full_width_modal h1{
+    color: #24BCE8;
+    font-family: 'museo_sans700';
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+.legend {
+	height: 30px;
+	padding-left: 10px;
+}
+
+.full_width_modal .legend {
+	background-color: #F6F6F6;
+}
+	
+.full_width_modal .legend span{
+    font-family: 'museo_sans300';
+    font-size: 11px;
+    text-transform: uppercase;
+	line-height: 30px;
+	float: left;	
+}
+
+.legend b{
+    font-size: 13px;
+    color: #444444;
+    font-weight: 400;
+	line-height: 30px;	
+	float: left;		
+}
+
+.full_width_modal .help{
+    margin-left: 5px;
+    margin-top: 6px;
+	float: left;
+}
+
+.legend .btn-group {
+	float: left;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.vertical_divider {
+	width: 1px;
+	background-color: #CCCCCC;
+	height: 100%;
+	float: left;	
+	margin: 0 10px;
+}
+
+.full_width_modal .region {
+	float: left;
+	margin-left: 10px;
+    margin-top: 5px;
+}
+
+.full_width_modal img{
+	width: 100%;
+}
+
+/*------------------Save Modal------------------*/
+
+#saveModal {
+	max-width: 350px;
+	margin-left: -175px;
+	display: none;		
+}
+
+#saveModal .help {
+	float: right;
+}
+
+#saveModal .modal-body p {
+    color: #444444;
+    font-size: 13px;	
+}
+
+#saveModal .c_on.custom-radio + label {
+    font-family: 'museo_sans700';
+}
+
+#saveModal label {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: text-bottom;
+	text-align: left;
+    font-size: 14px;	
+	color: #777777;
+}
+
+#saveModal .cat_name {
+    font-size: 14px;
+    margin: 20px 0 5px;
+}
+
+#saveModal .save_name {
+    font-family: 'museo_sans300';
+    float: right;
+    width: 230px;
+	height: 22px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	padding: 2px;
+	color: #777777;
+	font-size: 13px;
+}
+
+#saveModal .custom-select {
+    font-family: 'museo_sans300';
+    width: 230px;
+	height: 22px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	color: #777777;
+	font-size: 13px;
+	line-height: 16px;
+}
+
+#saveModal .custom-radio {
+	margin-top: 3px;
+}
+/*------------------Select Benchmarks/Services modals------------------*/
+
+#SelectBenchmarksModal {
+	max-width: 580px;
+	margin-left: -290px;	
+	display: none;
+}
+
+#SelectServicesModal {
+	max-width: 580px;
+	margin-left: -290px;	
+	display: none;
+}
+
+#SelectBenchmarksModal .modal-body ,
+#SelectServicesModal .modal-body {
+	padding: 15px 15px 15px 20px;		
+}
+
+#scrollBlockSelected1 {
+	height: 360px;
+}
+
+#scrollBlockSelected2 {
+	height: 435px;
+}
+
+#BenchmarkSelection{
+	height: 225px;
+}
+
+#ServicesSelection {
+	height: 260px;
+}
+
+#ServicesNameSorting {
+	height: 275px;
+}
+#ServicesNameSorting .overview {
+	padding-bottom: 65px;
+}
+#rankingPercentile,
+#rankingFixedNumber,
+#rankingTabPercentile,
+#rankingTabFixedNumber {
+	display: none;
+}
+
+#rankingPercentile.active,
+#rankingFixedNumber.active,
+#rankingTabPercentile.active,
+#rankingTabFixedNumber.active {
+	display: block;
+}
+
+#SelectRankingTab,
+#SelectServicesTab {
+	display: none;
+}
+
+#SelectRankingTab.active,
+#SelectServicesTab.active {
+	display: block;
+}
+
+.tabs {
+    color: #777777;
+    font-size: 13px;
+	margin-top: 12px;
+	line-height: 22px;
+	position: relative;
+    z-index: 1;	
+}
+
+.tabs a{
+    background-color: #EEEEEE;
+    border: 1px solid #CFCFCF;
+    border-radius: 5px 5px 0 0;
+    color: #777777;
+    display: inline-block;
+    margin-bottom: -1px;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.tabs a.active{
+	border-bottom-color: #ffffff;
+	font-family: 'museo_sans700';
+	background-color: #ffffff;
+}
+
+.modal-body .tab_container {
+	border: 1px solid #cccccc;
+}
+
+.modal-head .tabs a.active{
+	color: #24bce8;
+}
+
+.modal-head .tabs {
+	margin-bottom: -15px;
+	margin-top: 20px;	
+}
+
+.filter_close,
+.icon_det_close {
+    background-image: url("../img/cloudscores.png");
+    background-position: -41px -51px;
+    background-repeat: no-repeat;
+    width: 15px;
+	height: 15px;
+    position: absolute;
+	cursor: pointer;
+}
+
+.icon-recomended {
+    background-image: url("../img/cloudscores.png");
+    background-position: -83px -53px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 14px;
+    width: 10px;
+	vertical-align: middle;
+}
+
+.icon-glossary {
+    background-image: url("../img/cloudscores.png");
+    background-position: -11px -52px;
+    display: inline-block;
+    height: 12px;
+    width: 10px;
+}
+
+.selected  .custom-select {
+	margin-top: 10px;
+}
+
+.selected .inner{
+	border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    color: #777777;
+    font-family: 'museo_sans300';
+    font-size: 13px;
+    height: 22px;
+    line-height: 16px;
+	background-color: #fff;
+	padding-right: 35px;
+}
+
+.selected .custom-select  .drop-list{
+	color: #777777;
+	font-size: 13px;
+	line-height: 16px;
+}
+
+.selected .custom-select .icon-recomended{
+	position: absolute;
+	right: 20px;
+	top: 4px;
+}
+
+.selected .title,
+.advanced_title {
+	color: #777777;
+	font-size: 14px;
+    font-family: 'museo_sans700';
+	font-weight: 400;
+	line-height: 18px;
+}
+
+.selected .title span{
+    font-family: 'museo_sans300';
+}
+
+.selected .title .help{
+	margin-left: 5px;
+}
+
+.selected p {
+	color: #777777;
+	font-size: 12px;
+	margin-top: 8px;
+	line-height: 16px;
+}
+
+.selected p a{
+	color: #777777;
+	text-decoration: underline;
+}
+
+.selected_list {
+    float: left;
+    margin-left: -20px;
+    width: 180px;
+}
+
+.selected_list > .scroll_block {
+	margin: 10px 0 15px;
+	border-right: 1px solid #CCCCCC;
+}
+
+.selected_list .scroll_block  .viewport {
+    margin-left: 17px;
+    margin-right: 0;
+}
+
+.selected_list .scroll_block.full  .viewport {
+    margin: 0;
+}
+
+.selected_list  .scrollbar {
+	left: 0;
+	right: auto;
+	top: 0;
+}
+
+.av_options .scrollbar  {
+	left: 0px;
+	border-radius: 5px 0 0 5px; 
+	border: none;
+	border-right: 1px solid #CCCCCC;
+}
+
+.av_options .track  {
+	border-radius: 5px 0 0 5px; 
+}
+
+
+.selected_list .title {
+	margin-left: 20px;
+}
+
+.choosed_options,
+.filter{
+	color: #777777;
+	font-size: 13px;
+}
+
+.choosed_options li.current {
+	color: #24bce8;
+    font-family: 'museo_sans700';	
+	background-color: #F5F5F5;	
+}
+
+.choosed_options li {
+	padding: 5px 5px 5px 23px;
+	position: relative;
+	line-height: 15px;
+}
+
+.choosed_options li:hover {
+	background-color: #F5F5F5;
+	cursor: pointer;
+}
+
+.selected small{
+    font-size: 11px;
+    padding-left: 10px;
+    position: relative;
+	display: block;
+	color: #777777;
+}
+
+.choosed_options li .filter_close {
+    left: 5px;		
+}
+
+.selected small:before{
+    background-image: url("../img/cloudscores.png");
+    background-repeat: no-repeat;
+    content: "";
+    left: -1px;
+    padding: 4px;
+    position: absolute;
+    top: 2px;
+}
+
+.choosed_options li small:before{
+    background-position: -71px -55px;
+}
+
+.choosed_options .name {
+	max-width: 100px;
+}
+
+.selected * + .title {
+	margin-top: 20px;
+}
+
+.selected h2 + .title {
+	margin-top: 5px;
+}
+
+.selected_description h2 {
+	color: #444444;
+	font-size: 17px;
+    font-family: 'museo_sans700';
+	font-weight: 400;
+}
+
+.advanced_title {
+	padding-left: 10px;
+	margin-top: 15px;
+	position: relative;
+	cursor: pointer;
+}
+
+.select_options {
+    width: 460px;
+}
+
+.selected_list + .select_options {
+    float: right;
+    margin-left: 13px;
+    width: 370px;	
+}
+
+.advanced_block  .title{
+	margin-left: 10px;
+	margin-top: 0;
+}
+
+.advanced_block + .title {
+	margin-left: 10px;
+}
+
+.advanced_title.active .icon_select_arrow{
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #777777;
+    border-bottom: none;	
+    left: 0;
+    top: 8px;
+}
+
+.advanced_title .icon_select_arrow{
+    border-left: 4px solid #777777;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    left: 2px;
+    top: 5px;	
+}
+
+.filter {
+	padding: 2px 20px 2px 10px;
+	margin-top: 5px;	
+	line-height: 22px;
+	position: relative;
+}
+
+.filter .custom-select {
+	width: 115px;
+	margin-left: 0;
+	margin-top: 0;	
+}
+
+.filter .custom-select + .select + .custom-select {
+	width: 70px;
+	margin-left: 12px;
+}
+
+.filter input {
+	width: 85px;
+	margin-left: 12px;
+	border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    color: #777777;
+    font-family: 'museo_sans300';
+    font-size: 13px;
+    height: 22px;
+    line-height: 16px;	
+}
+
+.filter input + label{
+	margin-left: 5px;
+}
+
+.filter .filter_close {
+    right: 3px;
+    top: 6px;
+}
+
+.select_options .btn-small {
+	margin: 10px;
+}
+
+.select_options .btn-group > .btn-small {
+	margin: 0;
+}
+
+.select_options .percentile{
+    margin: 3px 2px 0;
+    width: 240px;
+}
+
+.select_options .chart_value {
+	float: left;
+	display: block;
+	color: #777777;
+	font-size: 13px;
+	width: 82px;	
+	margin-top: 3px;
+}
+
+.select_options .slider_holder{
+    margin: 0 2px;
+}
+
+.selected_list + .select_options .slider_holder{
+    margin: 0 10px 0 0 ;
+}
+
+.selected_list + .select_options .percentile{
+	margin-left: 5px;
+    margin-right: 15px;
+    margin-top: 15px;
+    width: 280px;
+}
+
+.selected_list + .select_options .chart_value {
+	float: left;
+	display: block;
+	color: #777777;
+	font-size: 13px;
+	width: 28px;	
+	margin-top: 15px;
+}
+
+.selected_list + .select_options .tab_container .chart_value {
+	max-width: 82px;
+	width: auto;
+	margin-left: 10px;
+	margin-top: 0;	
+	margin-top: 3px;
+}
+
+.selected_list + .select_options .tab_container .percentile{
+    margin: 3px 2px 0;
+    width: 240px;
+}
+
+.add_selections  {
+    position: relative;	
+}
+	
+.add_selections .btn-small {
+	display: block;
+	margin: 0 auto;
+}
+
+.add_selections.active .btn-small {
+	background: #e3e3e3;
+	background: -moz-linear-gradient(top,  #e3e3e3 0%, #ebebeb 48%, #f3f3f3 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e3e3e3), color-stop(48%,#ebebeb), color-stop(100%,#f3f3f3));
+	background: -webkit-linear-gradient(top,  #e3e3e3 0%,#ebebeb 48%,#f3f3f3 100%);
+	background: -o-linear-gradient(top,  #e3e3e3 0%,#ebebeb 48%,#f3f3f3 100%);
+	background: -ms-linear-gradient(top,  #e3e3e3 0%,#ebebeb 48%,#f3f3f3 100%);
+	background: linear-gradient(to bottom,  #e3e3e3 0%,#ebebeb 48%,#f3f3f3 100%);
+}
+
+.block-close {
+    background-image: url("../img/cloudscores.png");
+    background-position: -115px -55px;
+    display: block;
+    height: 8px;
+    position: absolute;
+    right: 6px;
+    top: 10px;
+    width: 8px;
+	z-index: 2;
+	cursor: pointer;
+}
+
+.av_options {
+    background-color: #FFFFFF;
+    border: 1px solid #CFCFCF;
+    border-radius: 5px 5px 5px 5px;
+    bottom: 22px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+    position: absolute;
+    right: -20px;
+    width: 165px;
+	z-index: 1;
+	display: none;
+}
+
+.add_selections.active .av_options {
+	display: block;
+}
+
+.av_options h4 {
+	color: #444444;
+	font-size: 12px;
+    font-family: 'museo_sans700';
+	font-weight: 400;
+	padding-left: 18px;
+	margin-top: 10px;
+	cursor: pointer;
+	padding-right: 5px;
+}
+
+.av_options h4:before {
+    border-left: 5px solid #777;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    content: "";
+    display: block;
+    left: 5px;
+    position: absolute;
+}
+
+.av_options h4.active:before {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #777;
+    border-bottom: none;	
+	margin-top: 3px;
+    left: 2px;	
+}
+
+.av_options li {
+	padding: 3px 15px 3px 18px;
+	font-size: 12px;
+	color: #777777;
+	position: relative;
+}
+
+.av_options li:hover {
+	cursor: pointer;
+	background-color: #F6F6F6;
+}
+
+.av_options li .icon-recomended{
+    position: absolute;
+    right: 5px;
+    top: 2px;
+}
+
+.av_options ul {
+	display: none;
+}
+
+.av_options footer {
+	padding: 3px 0 3px 20px;
+}
+
+.av_options footer p{
+	margin: 0;
+	line-height: 1;
+}
+.av_options footer p i{
+	vertical-align: text-top;
+	margin-right: 5px;
+}
+
+.service_details {
+	padding: 7px 30px 7px 5px;
+	position: relative;
+}
+
+.service_details .custom-select{
+	margin-top: 0;
+}
+
+.service_details  .sub_cat {
+    margin-bottom: -6px;
+    padding-left: 17px;
+    padding-top: 5px;
+}
+
+
+.custom-select.sub_cat .drop-list {
+    font-size: 11px;
+}
+	
+.service_details  .sub_cat .inner{
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 11px;
+    height: auto;
+    line-height: 13px;
+    padding-right: 35px;
+}
+
+.sub_cat.custom-select .icon_select_arrow {
+    border-top-color: #ccc;
+}
+
+.service_details .sub_cat:before {
+    background-image: url("../img/cloudscores.png");
+    background-repeat: no-repeat;
+    content: "";
+    left: -1px;
+    padding: 4px;
+    position: absolute;
+    top: 0;
+	background-position: -93px -54px;
+	padding: 8px;
+}
+
+.service_details .filter_close {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+}
+
+.select_options .legend {
+	margin-top: 5px;
+	padding: 0;
+}
+
+.selected_description .legend {
+	margin-top: 5px;
+	padding: 0 10px;
+}
+
+.select_options .legend .help{
+	margin-top: 10px;
+}
+
+.tab_container .advanced_title,
+.tab_container .advanced_block {
+	margin: 10px 10px 0;
+}
+
+.ourclients_slider {
+	margin-left: -72px;
+	margin-right: -72px;
+    margin-top: -20px;	
+}
+
+.int_block {
+	padding: 30px 0;
+    color: #444444;	
+}
+
+.int_block h2 {
+	font-size: 26px;
+	line-height: 28px;
+    font-family: 'museo_sans700';		
+}
+
+.int_block p {
+	font-size: 18px;
+	line-height: 22px;	
+}
+
+.small-green-check {
+    background-image: url("../img/cloudscores.png");
+    background-position: -106px -31px;
+    height: 12px;
+    margin: 0 auto -2px;
+    width: 14px;
+}
+
+.small-red-cross {
+    background-image: url("../img/cloudscores.png");
+    background-position: -124px -31px;
+    height: 12px;
+    margin: 0 auto -2px;
+    width: 12px;
+}
+
+.price_table {
+	margin: 35px 0;
+}
+
+.price_table table{
+    width: 100%;
+	color: #777777;	
+	margin: -30px 0 20px;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;			
+}
+
+.price_table tbody th,
+.price_table td {
+	font-size: 18px;
+	text-align: center;
+	padding: 7px 5px;	
+	vertical-align: middle;
+}
+
+.price_table td:first-child {
+	font-size: 14px;
+	text-align: left;	
+	text-decoration: underline;
+	text-shadow: -1px 0 0 #D6D6D6;
+}
+
+.price_table th:first-child{
+	font-size: 16px;
+	text-align: left;	
+}
+
+.price_table tbody .prices th{
+	font-size: 22px;
+	padding-top: 12px;
+}
+
+.prices small{
+	font-size: 12px;
+}
+
+.price_table thead  div{
+	color: #24bce8;
+	text-transform: uppercase;
+	padding: 7px 5px;		
+}
+
+.price_table tbody td:first-child > div {
+    position: relative;
+}
+
+.optionDescription {
+    background-color: #FFF7DB;
+    border-bottom: 1px solid #D4D4D4;
+    border-left: 1px solid #D4D4D4;
+    border-radius: 8px 0 0 8px;
+    border-top: 1px solid #D4D4D4;
+    height: 36px;
+    left: -325px;
+    line-height: 12px;
+    padding: 5px 10px;
+	display: none;
+    position: absolute;
+    top: -18px;
+    width: 280px;
+}
+
+.optionDescription span{ 
+    border-bottom: 24px solid transparent;
+    border-left: 16px solid #D4D4D4;
+    border-top: 24px solid transparent;
+    display: block;
+    position: absolute;
+    right: -16px;
+    top: -1px;
+    max-width: 100%;
+}
+
+.optionDescription span:after{ 
+    border-bottom: 24px solid transparent;
+    border-left: 16px solid #FFF7DB;
+    border-top: 24px solid transparent;
+    content: "";
+    display: block;
+    position: absolute;
+    right: 1px;
+    top: -24px;
+}
+
+.recommended_area .blue-bg {
+	background-color: #24bce8;
+	color: #fff;	
+	position: relative;
+}
+
+.recommended_area .blue-bg:after {
+	background-color: #24bce8;
+	border-radius: 5px 5px 0 0;
+	position: absolute;	
+	top: -5px;
+	height: 5px;
+	width: 100%;
+	content: '';
+	left: -1px;
+	border: 1px solid #24bce8;
+}
+
+.recommended_area {
+	border-left: 1px solid #24bce8;
+	border-right: 1px solid #24bce8;
+}
+
+.bottom td {
+	text-transform: uppercase;
+	font-size: 12px;	
+}
+
+.bottom td.recommended_area  {
+	border-left: 1px solid #24bce8;
+	border-right: 1px solid #24bce8;
+	border-bottom: 1px solid #24bce8;	
+}
+
+.price_table .button {
+	font-size: 16px;	
+}
+
+/*----------Launchpad Left&Right Area----------*/
+
+.custom_tabs {
+	margin-top: 30px;
+	margin-right: 5px;
+}
+
+.custom_tabs .tabs{
+	font-size: 15px;
+	margin-top: 0;
+}
+
+.custom_tabs .tabs a:hover{
+	background-color: #dddddd;
+	-webkit-transition: all 0.3s ease;
+     -moz-transition: all 0.3s ease;
+       -o-transition: all 0.3s ease;
+          transition: all 0.3s ease;	
+}
+
+.custom_tabs .tabs a{
+	padding: 5px;
+}
+
+.custom_tabs .tabs span{
+	cursor: pointer;
+}
+
+.custom_tabs .tabs a.active{
+    font-family: 'museo_sans300';	
+    color: #24BCE8;
+}
+
+.custom_tabs .tabs a.active:hover{
+    background-color: #fff;
+    cursor: default;
+}
+
+.items-av h1 {
+    margin-bottom: 15px;
+    margin-top: 50px;
+}
+
+.i_cur footer {
+	font-size: 18px;
+	padding-top: 15px;
+	color: #444444;
+}
+
+.i_cur footer .button{
+	margin-left: 10px;
+}
+
+.perf_icon,
+.av_icon,
+.net_icon,
+.manag_icon {
+    background-image: url("../img/cloudscores.png");	
+	display: inline-block;
+	height: 18px;
+	vertical-align: middle;
+	margin-top: -3px;
+	margin-right: 5px;	
+}
+
+.perf_icon {
+    background-position: -228px 0;
+	width: 21px;    
+}
+
+.active > .perf_icon {
+    background-position: -228px -19px;   
+}
+
+.av_icon{
+    background-position: -276px 0;
+	width: 17px;      
+}
+
+.active > .av_icon{
+    background-position: -276px -18px;    
+}
+
+.net_icon{
+    background-position: -254px 0;
+	width: 18px;      
+}
+
+.active > .net_icon{
+    background-position: -254px -19px;   
+}
+
+.manag_icon{
+    background-position: -296px 1px;
+	width: 18px;      
+}
+
+.active > .manag_icon{
+    background-position: -296px -18px;    
+}
+
+.choosen_icons {
+	min-height: 300px;
+	margin-bottom: 50px;
+}
+
+.choosen_icons > div{
+	width: 25%;
+	float: left;
+	position: relative;
+	margin: 15px 0;
+	height: 120px;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;			
+}
+
+.icon_wrap {
+    padding: 10px 5px 0;
+    text-align: center;
+    width: 154px;
+    border: 1px solid transparent;    
+	position: relative; 
+	z-index: 3;  	   
+}
+
+.icon_wrap .filter_close{
+	display: none;
+}
+
+.icon_wrap.active {
+    position: absolute;
+    background-color: #FFFFFF;
+    border: 1px solid #ECECEC;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+    position: absolute;
+	z-index: 5;    
+}
+
+.icon_wrap.open {
+    border-radius: 5px 0 0 5px;
+}
+
+.icon_wrap > i{
+	cursor: pointer;
+	position: relative;
+}	
+
+.icon_wrap.active i{
+	cursor: default;
+}	
+
+.icon_wrap.locked i:after{
+    background-image: url("../img/cloudscoresIcons.png");
+    background-position: 0 -1671px;
+    content: "";
+    height: 63px;
+    left: 2px;
+    position: absolute;
+    top: -3px;
+    width: 63px;
+    z-index: -1;
+}
+
+.icon_wrap.locked i:before {
+    background-image: url("../img/cloudscores.png");
+    background-position: -149px -49px;
+    content: "";
+    display: block;
+    height: 19px;
+    position: absolute;
+    right: 19px;
+    top: -9px;
+    width: 19px;
+}
+
+.icon_det_close{
+	display: block;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}	
+
+.ch_icon {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	font-size: 10px;
+}
+
+.ch_icon:after {
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3px solid #777777;
+    content: "";
+    display: inline-block;
+    margin-bottom: 1px;
+    margin-left: 3px;
+}	
+
+.icon_wrap .icon_det_close,
+.open.active.icon_wrap > .icon_det_close{
+	display: none;
+}
+
+.active.icon_wrap > .icon_det_close,
+.open .test_icon_set > .icon_det_close{
+	display: block;
+}
+
+.icon_wrap p {
+    color: #777777;
+    font-size: 12px;
+    margin-bottom: 10px;	
+    line-height: 1.4;
+}
+
+.icon_wrap.active > p {
+    font-family: 'museo_sans700';		
+}
+
+.icon_wrap textarea {
+    width: 100%;
+    border: 1px solid #ccc;	
+    color: #777777;
+    font-size: 12px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding: 0 2px;
+    line-height: 1.3;
+}
+
+.icon_wrap textarea.small {
+	height: 34px;
+}
+
+.icon_wrap textarea.large {
+	height: 64px;
+}
+
+.active > .test_icon_det {
+    display: block;
+}
+
+.open > .test_icon_det {
+    display: table-cell;
+    height: 150px;
+    vertical-align: bottom;
+    width: 154px;
+}
+
+.det_bottom {
+	background-color: #e1f3f8;
+	margin: 0 -5px;
+	padding: 10px;
+    border-radius: 0 0 5px 5px;	
+}
+
+.open .det_bottom {
+    border-radius: 0 0 0 5px;
+}
+
+.det_bottom a{
+	display: block;
+	margin-top: 10px;
+}
+
+.test_icon_set {
+    background-color: #FFFFFF;
+    border-radius: 0 5px 5px 0;
+    color: #777777;
+    font-size: 12px;
+    left: 165px;
+    position: absolute;
+    top: -1px; 
+    text-align: left;  
+    bottom: -1px;  
+    padding-bottom: 52px;   
+    border: 1px solid #ECECEC;
+    border-left: none;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);   
+}
+
+.test_icon_set footer {
+    background-color: transparent;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;	    
+}
+
+.test_icon_set h2{
+	font-size: 15px;
+	padding: 12px 20px;
+    min-width: 360px;	
+}
+
+.test_icon_set b{
+	display: block;	
+}
+
+.test_icon_set table {
+    width: 100%;
+    min-width: 400px;
+}
+
+.test_icon_set td {
+    padding: 5px 0 5px 20px;
+    vertical-align: top;    
+}
+
+.test_icon_set  td:last-child {
+    padding: 5px 10px 5px 0;
+    width: 17px;
+}
+
+.test_icon_set footer {
+	padding: 16px 10px 16px 20px;   
+	margin-top: 0;
+}
+
+.test_icon_set footer .row { 
+	margin-top: 0;
+}
+
+.test_icon_set footer .btn-small{
+	margin-left: 5px;
+}
+
+.test_icon_set .custom-select{
+	display: inline-block;
+}
+
+.test_icon_set .inner{
+	padding: 0 20px 0 0;	
+}
+
+.test_icon_set .icon_select_arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #777777;
+    margin-top: -1px;
+}
+
+/*-----------Customized Tabs Modal--------------*/
+
+#CustomizeTabs {
+    max-width: 580px;
+    width: 100%;
+    margin-left: -265px;
+    left: 50%;
+    display: none;
+}
+
+.custom_tabs_list {
+	float: left;
+	width: 30%;
+	padding: 15px 0;	
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;			
+}
+
+.custom_tabs_list i{
+	position: absolute;
+	left: 15px;
+}
+
+.custom_tabs_list li {
+	padding: 9px 15px 9px 40px;
+	color: #777777;
+	font-size: 14px;
+	font-family: 'museo_sans700';	
+	font-weight: normal;
+}
+
+.custom_tabs_list li.active {
+	color: #24BCE8;
+}
+.custom_tabs_list li:hover {
+	background-color: #f5f5f5;
+	cursor: pointer;
+}
+
+.custom_tabs_list .title {
+    padding: 0 15px; 
+    margin-bottom: 5px;
+}
+
+.custom_tabs_list .btn-small{
+    display: block;
+    margin: 15px auto 0;
+}
+
+.tabs_options {
+	float: right;
+	width: 70%;
+	border-left: 1px solid #cccccc;
+	padding: 10px 15px;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+			box-sizing: border-box;			
+}
+
+.tabs_options input,
+.tabs_options textarea {
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    color: #777777;
+    font-family: 'museo_sans300';
+    font-size: 13px;
+    height: 28px;
+    line-height: 16px;
+   	width: 100%;
+   	margin-top: 5px;
+}
+
+.tabs_options textarea {
+    height: 60px;
+	overflow: hidden;    
+}
+
+.tab_icons_list li{
+	float: left;
+	margin-right: 10px;
+	margin-top: 5px;
+}
+
+.tab_icons_list label{
+	display: block;
+	margin-bottom: 5px;
+}
+
+.tabs_options .scroll_block {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    height: 125px;
+    margin-top: 5px;
+}
+
+.tabs_options .scroll_block .scrollbar,
+.tabs_options .scroll_block .track {
+    border-radius: 0 5px 5px 0;	
+}
+
+.tabs_options label {
+    font-size: 13px;
+    color: #777777;
+    vertical-align: text-bottom;
+    cursor: pointer;
+    line-height: 1.1;
+}
+
+.tabs_options .label {
+    margin-bottom: 20px;	
+}
+
+.tabs_options .label + .title {
+    margin-top: 5px;	
+}
+
+.tabs_options .scroll_block  label:hover {
+    color: #24BCE8;
+}
+
+/*-----------Choose Icon Modal--------------*/
+
+#CloudscoresIcons {
+    max-width: 670px;
+    width: 100%;
+    margin-left: -335px;
+    left: 50%;
+    display: none;
+}
+
+#CloudscoresIcons .scroll_block {
+    height: 360px;
+    width: 100%;
+}
+
+.scores_icons  {
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.test_icon_block {
+    border-radius: 5px 5px 5px 5px;
+    display: block;
+    padding: 10px 5px;
+    position: relative;
+    text-align: center;
+    width: 116px;
+    color: #777777;
+    font-size: 10px;
+    margin: 15px auto;   
+    line-height: 1.2; 
+    min-height: 91px;
+}
+
+.test_icon_block:hover {
+    background-color: #f6f6f6;
+    cursor: pointer;
+}
+
+.test_icon_block.active {
+    background-color: #EDEDED;
+}
+
+.test_icon_block.active:before {
+    background-image: url("../img/cloudscores.png");
+    background-position: -127px -48px;
+    content: "";
+    display: block;
+    height: 21px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 21px;
+}
+
+/*-----------Cloudscores Test Icons-------------*/
+
+.comp_fast_cpu,
+.comp_fast_disc_io,
+.comp_fast_memory,
+.comp_cons_cpu,
+.comp_cons_disc_io,
+.comp_cons_memory,
+.comp_ease_ins,
+.comp_cons_ins,
+.comp_cpu_arch,
+.comp_fast_appl_serve,
+.comp_fast_datab,
+.comp_fast_scient,
+.comp_high_av,
+.comp_low_lat,
+.comp_low_oc,
+.comp_low_eu,
+.comp_low_usa,
+.comp_low_apac,
+.ease_io_small,
+.ease_io_large,
+.high_av_oc,
+.high_av_eu,
+.high_av_usa,
+.high_av_apac,
+.fast_oc,
+.fast_eu,
+.fast_usa,
+.fast_apac,
+.fast_push_prime,
+.fast_push_sec {
+    background-image: url("../img/cloudscoresIcons.png");
+    height: 55px;
+    width: 63px; 
+	margin: 0 auto 10px;
+	display: block;    	
+}
+
+/*Compute*/
+
+.comp_fast_cpu {
+    background-position: 0 0;    
+}
+
+.comp_fast_disc_io {
+    background-position: 0 -55px;  	
+}
+
+.comp_fast_memory {
+    background-position: 0 -111px;  	
+}
+
+.comp_cons_cpu {
+    background-position: 0 -166px;  
+}
+
+.comp_cons_disc_io {
+    background-position: 0 -222px;  	
+}
+
+.comp_cons_memory {
+    background-position: 0 -277px;  	
+}
+
+.comp_ease_ins {
+    background-position: 0 -333px;  	
+}
+
+.comp_cons_ins {
+    background-position: 0 -389px;  	
+}
+
+.comp_cpu_arch {
+    background-position: 0 -444px;  	
+}
+
+.comp_fast_appl_serve {
+    background-position: 0 -500px;  	
+}
+
+.comp_fast_datab{
+	background-position: 0 -556px;  
+}
+
+.comp_fast_scient{
+	background-position: 0 -613px; 	
+}
+
+.comp_high_av{
+	background-position: 0 -669px; 	
+}
+
+.comp_low_lat{
+	background-position: 0 -726px; 
+}
+
+.comp_low_oc{
+	background-position: 0 -782px; 	
+}
+
+.comp_low_eu{
+	background-position: 0 -839px; 		
+}
+
+.comp_low_usa{
+	background-position: 0 -895px; 		
+}
+
+.comp_low_apac{
+	background-position: 0 -952px; 		
+}
+
+/*Object Storage*/
+
+.ease_io_small {
+	background-position: 0 -1007px; 		
+}
+
+.ease_io_large {
+	background-position: 0 -1063px; 		
+}
+
+/*CDN*/
+
+.high_av_oc{
+	background-position: 0 -1118px; 		
+}
+
+.high_av_eu{
+	background-position: 0 -1173px; 		
+}
+
+.high_av_usa{
+	background-position: 0 -1228px; 		
+}
+
+.high_av_apac{
+	background-position: 0 -1283px; 		
+}
+
+.fast_oc{
+	background-position: 0 -1338px; 	
+}
+
+.fast_eu{
+	background-position: 0 -1393px; 	
+}
+
+.fast_usa{
+	background-position: 0 -1448px; 	
+}
+
+.fast_apac{
+	background-position: 0 -1503px; 	
+}
+
+/*DNS*/
+
+.fast_push_prime{
+	background-position: 0 -1559px; 	
+}
+
+.fast_push_sec{
+	background-position: 0 -1615px; 	
+}
+
+
+
+/*================== MEDIA ======================*/
+
+@media (max-width: 1550px) {
+
+.optionDescription {
+    border-right: 1px solid #D4D4D4;
+    border-radius: 8px;
+    border-top: 1px solid #D4D4D4;
+    left: 0;
+    top: -65px;
+}
+
+.optionDescription span{ 
+    border-right: 24px solid transparent;
+    border-top: 16px solid #D4D4D4;
+    border-left: 24px solid transparent;
+    border-bottom: none;   
+    right: auto;
+    top: 46px;
+}
+
+.optionDescription span:after{ 
+    border-right: 24px solid transparent;
+    border-top: 16px solid #FFF7DB;
+    border-left: 24px solid transparent;
+    top: -17px;
+    right: -24px;
+}
+}
+
+
+@media (max-width: 989px) {
+
+.subtitle {
+    padding-right: 10px;
+    padding-left: 10px; 
+}
+
+.current_name,
+#new_name {
+    width: 470px;
+}
+
+#new_name input{
+    width: 370px;
+}
+
+.scoresSetSection p,
+.settings {
+    float: none;
+    width: 100%;
+}
+
+.visualization img{
+    width: 100%;
+}
+
+.price_table .button {
+    font-size: 12px;
+    min-width: 66px;
+}
+
+.ourclients_slider {
+    margin: 35px 0;
+}
+
+}
+
+
+@media (max-width: 639px) {
+	
+.price_table {
+    overflow: scroll;
+}
+
+.price_table table{
+    margin-top: 0;
+}
+
+}
+
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and ( min-resolution: 192dpi),
+only screen and ( min-resolution: 2dppx) {
+
+
+
+.logo a,
+.my-nav ul ol i,
+.scores-icon,
+.region label ,
+.icon-expand ,
+.icon-service ,
+.max,
+.min,
+.median ,
+.disruption ,
+.performance,
+.icon-calendar,
+.ui-datepicker .ui-state-default ,
+.ui-autocomplete .ui-menu-item a.ui-state-focus,
+.ui-autocomplete .ui-menu-item a.ui-state-active,
+.full_width_modal .close,
+.filter_close,
+.icon_det_close,
+.icon-recomended,
+.icon-glossary,
+.block-close,
+.optionDescription span,
+.selected small:before,
+.service_details .sub_cat:before,
+.small-green-check,
+.small-red-cross,
+.perf_icon,
+.av_icon,
+.net_icon,
+.manag_icon,
+#CloudscoresIcons .test_icon_block.active:before,
+.icon_wrap.locked i:before {
+    background-image: url("../img/cloudscores@2x.png");
+	background-size: 450px 250px;	
+
+}
+
+.comp_fast_cpu,
+.comp_fast_disc_io,
+.comp_fast_memory,
+.comp_cons_cpu,
+.comp_cons_disc_io,
+.comp_cons_memory,
+.comp_ease_ins,
+.comp_cons_ins,
+.comp_cpu_arch,
+.comp_fast_appl_serve,
+.comp_fast_datab,
+.comp_fast_scient,
+.comp_high_av,
+.comp_low_lat,
+.comp_low_oc,
+.comp_low_eu,
+.comp_low_usa,
+.comp_low_apac,
+.ease_io_small,
+.ease_io_large,
+.high_av_oc,
+.high_av_eu,
+.high_av_usa,
+.high_av_apac,
+.fast_oc,
+.fast_eu,
+.fast_usa,
+.fast_apac,
+.fast_push_prime,
+.fast_push_sec,
+.icon_wrap.locked i:after {
+    background-image: url("../img/cloudscoresIcons@2x.png");
+	background-size: 63px 1750px;	
+
+}
+
+}
+
+
+
+/* from UK map tutorial. should be removed shortly */
+#price_performance_graph{
+  width:960px;
+  height:600px;
+  position: relative;
+  margin: 20px auto 0;
+}
+.country {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
+.hidden { 
+  display: none; 
+}
+
+div.tooltip {
+  color: #222; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+}
+
+/* fill color by the continent */
+.continent.europe {fill: #c6c6c6;} 
+.continent.asia {fill: #d7d7d7;}
+.continent.africa {fill: #d4d4d4;}
+.continent.northa {fill: #c7c7c7;}
+.continent.southa {fill: #d7d7d7;}
+.continent.oceania {fill: #d3d3d3;}
+.continent.antarctica {fill: #ffffff;}
+
+rect {
+/*  fill: none;*/
+  pointer-events: all;
+}
+
+.states{
+	fill: #ccc;
+	stroke: #fff;
+}
+
+/* Zoom Control css */
+.zoom_control{
+	position: absolute;
+	left: 20px;
+	top: 15px;
+}
+
+a.zoom_in, a.zoom_out{
+	width: 23px; height: 23px; overflow: hidden; position: relative; cursor: pointer; top: -4px; z-index: 3;
+	display: block;
+}
+
+.zoom_level{
+	background: url("../img/mapcontrols.png") -17px -87px;
+	width: 25px;
+	height: 125px;
+	margin-top: -20px;
+}
+
+.zoom_level_indicator{
+	width: 21px; height: 14px; overflow: hidden; position: absolute; -webkit-transition: top 0.25s ease; transition: top 0.25s ease; z-index: 2; cursor: url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur) 8 8, default; left: 2px; top: 113px;
+}

@@ -38,8 +38,8 @@ if __name__ == '__main__':
     for hs in result.hosted_services:
         subr = sms.list_service_certificates(hs.service_name)
         process_sms_list(subr.certificates, './data/azure_service_certificates-{0}.csv'.format(hs.service_name))
-        print(('Azure Service certificates for {0} saved in azure_service_certificates-{0}.csv'.format(hs.service_name)))
+        print ('Azure Service certificates for {0} saved in azure_service_certificates-{0}.csv'.format(hs.service_name))
 
         if hs.deployments:
             process_sms_list(hs.deployments, 'data/azure_service_deployments-{0}.csv'.format(hs.service_name))
-            print(('Azure Service deployments for {0} saved in azure_service_deployments-{0}.csv'.format(hs.service_name)))
+            print ('Azure Service deployments for {0} saved in azure_service_deployments-{0}.csv'.format(hs.service_name))

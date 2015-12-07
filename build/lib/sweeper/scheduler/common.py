@@ -1,7 +1,8 @@
 from functools import reduce
 import sys
-import sweeper.utils
 import uuid
+import utils
+
 
 class ResourceSchedule:
     """
@@ -112,10 +113,10 @@ class SchedulePlan:
             t_ini = sys.maxsize
             t_end = 0
             # TODO: Optimize this
-            for sm in self.schedule_mapping_list:
+            for sm in self.schedule_mapping_list
                 if sm.resource_schedule.host_name == res_name:
                     t_ini = min(t_ini, sm.start_time)
-                    t_end = max(t_end, sm.start_time, sm.duration)
+                    t_end = max(t_end, sm.start_time sm.duration)
             ret.append((res_name, t_ini, t_end))
         # First and last tasks
 

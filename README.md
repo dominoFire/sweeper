@@ -60,3 +60,74 @@ sweeper run
  - B. C. Dean, M. X. Goemans, and J. Vondrak. Approximating the stochastic knapsack problem: The benefit of adaptivity. In Proceedings of FOCS’04, pages 208–217, 2004.
  - C. Derman, G. J. Lieberman, and S. M. Ross. A renewal decision problem. Management Science, 24(5):pp. 554–561, 1978
  - N. Karmarkar and R. M. Karp. An efficient approximation scheme for the one-dimensional bin-packing problem. In Proceedings of SFCS’82, pages 312–320, 1982.
+
+
+## Libraries needed
+
+ - virtualenv (optional, but highly recommended)
+ - python3-develop 
+ - libyaml-dev
+ - gfortran
+ - libffi
+ - libopenblas-dev
+ - libatlas-base-dev 
+ - libatlas-dev 
+ - libatlas-base-dev 
+ - libatlas3gf-base
+
+python3-numpy
+python-scipy 
+python-matplotlib 
+ipython 
+ipython-notebook 
+python-pandas 
+python-sympy 
+python-nose
+python-html5lib (o html5lib desde tu pkg-mgr de python)
+
+Paquetes python
+
+- bs4 (BeautifulSoup)
+- networkx
+- pandas
+- selenium
+
+libcurl4-openssl-dev
+libxml2-dev
+
+
+Luego, hay que ejecutar los scripts para generar los certificados
+
+```
+cd sweeper/cloud/azure
+./generate_azure_certificates.sh
+```
+
+Luego, hay que generar la tabla de precios
+
+```
+cd sweeper/cloud/azure
+python examples/list_services.py
+cp data/azure_role_sizes.csv .
+python pricing_vm_parser.py
+python pricing_merge.py
+```
+
+# Benchmarks
+
+Baja el CloudPerfBenchmarker desde Github (proyecto de Google Cloud)
+
+en el caso especiico de azure, bajar Node.js e instalar la línea de comandos
+de azure.
+
+Agregar tu cuenta de Azure a la cli de Azure
+
+Instalar pkb
+
+También necesitas tener instalado R para correr los benchmarks
+
+Los resultados de los benchmarks están en 
+
+# NOTAS
+
+Usar instalacion de Node.js del sistema (compila un buen de cosas)

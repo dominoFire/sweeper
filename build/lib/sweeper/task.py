@@ -36,6 +36,9 @@ class Task:
     def add_successor(self, task):
         self.successors.append(task)
 
+    def __str__(self):
+        return 'Task:{0}'.format(self.name)
+
     def __eq__(self, other):
         if not isinstance(other, Task):
             return False
@@ -49,7 +52,7 @@ class Task:
         return self.name.__hash__()
 
     def __repr__(self):
-        return 'Task:{0}'.format(self.name)
+        return 'Task:{}'.format(self.name)
 
     def __str__(self):
         return self.__repr__()

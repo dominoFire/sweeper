@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from selenium.webdriver import Firefox
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
@@ -23,7 +21,7 @@ if __name__ == '__main__':
         current_region = opt.get_attribute('value')
         ddlRegion.select_by_value(current_region)
         html_doc = driver.page_source
-        soup = BeautifulSoup(html_doc, 'html.parser')
+        soup = BeautifulSoup(html_doc)
         #All info is in the same page, we can exract it in a single pass
         div = soup.find('div', attrs={'class': 'wa-tabs-container'})
         div_active = div.find('div', attrs={'class': 'active'}, recursive=False)
@@ -38,9 +36,7 @@ if __name__ == '__main__':
                     prices_all.append(tag.get('data-amount'))
             price_hour = prices_all[0::2]
             price_month = prices_all[1::2]
-            #df = pd.io.html.read_html(str(table), parse_dates=False, flavor='html5lib', infer_types=False)
-            df = pd.io.html.read_html(str(table), parse_dates=False, flavor='html5lib')
-            
+            df = pd.io.html.read_html(str(table), parse_dates=False, flavor='html5lib', infer_types=False)
             df = pd.DataFrame(df[0])
 
             title = table.find_previous_sibling('h3')
