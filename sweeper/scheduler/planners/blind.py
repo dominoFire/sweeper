@@ -206,7 +206,7 @@ def create_schedule_plan_blind(workflow):
             print(res_cfg)
             res_name =  res_names[ res_cfg ][ res_idx[res_cfg] ]
             res_idx[res_cfg] += 1
-            st = 0
+            # st = 0
             for j,t in enumerate(tasks):
                 res_sched = ResourceSchedule("Core{0}".format(j+1), res_name, res_cfg)
                 d = t.complexity_factor / res_config.speed_factor
