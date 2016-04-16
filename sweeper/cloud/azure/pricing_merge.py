@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     prices['tier_name'] = prices.loc[:, 'description'].apply(tier_name_from_description)
 
-    #Only we need a subset, using us-west region
+    # Only we need a subset, using us-west region
     prices = prices[prices.region == 'us-west']
 
     print (roles.sort(columns='role_name').head(3))

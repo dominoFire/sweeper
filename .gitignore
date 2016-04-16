@@ -33,3 +33,7 @@
 apidoc/build
 
 dist/
+
+
+# Spyder project files
+.spyderproject
