@@ -4,6 +4,7 @@
 *.iml
 *.csv
 *.log
+build/
 
 # R stuff
 .Rproj.user
