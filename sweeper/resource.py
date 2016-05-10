@@ -1,5 +1,3 @@
-__author__ = '@dominofire'
-
 from paramiko import SSHClient
 from scp import SCPClient
 import logging
@@ -20,11 +18,11 @@ class Resource:
         self.hostname = hostname
         """ Hostname used to connect to thw VM """
         self.defaultUser = user
-        """ Username to connect to the provider Virtual Machine """
+        """ Username to connect to the base Virtual Machine """
         self.defaultPassword = passwd
         """  TODO: Find a better way to store passwords """
         self.speed_factor = res_config.speed_factor
-        """ A score that ranks how fast is this provider Virtual Machine resource """
+        """ A score that ranks how fast is this base Virtual Machine resource """
 
     def create_ssh_client(self):
         """
@@ -105,12 +103,12 @@ class ResourceConfig:
         self.ram_memory = ram_memory
         """ Amount of RAM memory in MegaBytes in the VM configuration """
         self.provider = provider
-        """ Name of the cloud provider (Azure, AWS, Rackspace, ...) that supports this configuration """
+        """ Name of the cloud base (Azure, AWS, Rackspace, ...) that supports this configuration """
         self.speed_factor = speed_factor
         """ The SPECfp score of this configuration """
         self.cost_hour_usd = cost_hour_usd
         """ The cost of running this virtual machine during an hour, in US Dollars.
-            Note that hour fractions shouldn't be charged by the cloud provider """
+            Note that hour fractions shouldn't be charged by the cloud base """
 
     def __str__(self):
         return '{0}({1},{2})'.format(self.config_name, self.cores, self.ram_memory)

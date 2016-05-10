@@ -1,6 +1,0 @@
-SPECint Metrics
-SPECfp Metrics
-Geekbench Metrics
-Geekbench Multicore Metrics
-Unixbench Metrics
-Unixbench Multicore Metrics

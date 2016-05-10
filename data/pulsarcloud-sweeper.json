@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ml-pulsarcloud",
+  "private_key_id": "9771f98f18f81981d64861711ee8a40d7e216afb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCLGL3vaRZKkpZO\nNsYD4C0Y33MRjqt5IkwMPa+bSAWZWefWReurMi5GMAuiWAZsAZdRbDIRrWmBOtpG\ni4KBIOruDnEoI6tkftSjLDH5cex6bSkw7arKaliQExgdfLaI4+uASrxUuYtsmuuE\nBpmwUAvuKS1opqPyLqYCvhlAKtL/M0QAHx6Yc23neyRo0w6mUw7fbRL/jgBq8FXd\nu1+YuFIrk4dym38/cq45dUCcfSWi5IdZg6F0q4r+lTfankU2INXFVxa7isNQMiJ0\ntrDwv4LEy5epFctm0IsPGmH3NeIH7VwtJHn/XrqmflwzPRdI8/GPVNQLSSYEEWEb\ncMV1pkbnAgMBAAECggEAc+rynoodIZh32kabTq+L5aaR5pfXHuQOLEVcCzRCNkJO\niqtKcykmlyeDCpABChFpYVmhgEncGu5I6XFqGOKt5iXy91iChQWNf05dd1wRjxVZ\ntoTaSEXH+IlxF2HPXNVUdV3TBWh7YM7aZvR5MA4FYzy9svDsv+9QOgjiUi9eF34O\nst58v3N+vjzUfATUtc/xWCqIt5MuSHjnnCBPbCQsH5iU+SVp7SckKKTHFibI9s42\nR0SH9oksZ/tojxLhgpDuG5lCRPGeYkcJRewPev7SWJTuwxERuSVTla14FxgLWWBP\n+udDnNjhNg4qZ+0eHLccG868exKeSbGWAxS18TRYgQKBgQDHiKTHWRYl9hp/ti/h\nlotmZ8VzHL8SLv1VePgNcqqCiAu2GnHCdXtRXb6j6eBde5nMlN1e1Kh7CH4IdiQQ\nK/Q+nAcCnrVquCpxbfAeC28bRYf6crWsJLEBndJVISaY+V6e3zZeTL++i6sXKJ78\n1ZDwCAzjSX85Yd83qm9HzAB9DwKBgQCydbDwn+vIVBfr8Lpr5Ww0OPonZPvTcYAb\nVMoENOLpdRXzr0KVl2BQX1PX2yht3oMHKes5Fg0F6AeVVp/aRMW61qHfP6alLzJ/\nbj7hTxEerbCzCU2wJA3aYxCQNVeIbA+Tqpd09ivzEp24W3dDsKv5OkiwZtKK5KSu\nw1bLXmDIqQKBgH9kXF/yHtPpxo1XUkajCSk+g6+04MDJQ3D4pNZhKT/hgCipxYuz\n2iHeykJ4pYjJyy30tUlAWLkEeQMJ+ohgp7X5g/hGP+l834w/9pgYEL3GrMRXzGm1\nm1U+3/T+D1iHjcO9G0cllR4gqgFFLAychcbaPPA4EoQeWpd9t0KNmpo9AoGAHxbD\nqVeiwrZrqG26fDtuezaF1cEQ4cf/EkPWIZ94/ESqe1ZH2jmRzM6ek5cZVvKRjvjt\ngndl82Z1k72QgXzDmYX0kyjKhjJPsMVq7ONSTy7g/n+bahkN1MK3SvgP9LMmj4oD\ncpvEEkdm9Ivynfc0LmnJ6fkvqoSkb9GV2D3rzGkCgYAnjXZYGP4QEfCo6Bd244M+\nH2ooSTei0/KpxcMbm9Nxp+GvX5G0tAVlHuLIuO69MlLJiKnSbVLaKaltAfisyLqB\nGdR1Lm7/IYjHn/JORSFmxCt+yjqZdltDOrzxkVUtR8yxT8Ygnt0aMvs4jLcMNd5L\nbYjweN9ji7pWVtdb4DMglg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "pulsarcloud-sweeper@ml-pulsarcloud.iam.gserviceaccount.com",
+  "client_id": "105078666115424052065",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pulsarcloud-sweeper%40ml-pulsarcloud.iam.gserviceaccount.com"
+}

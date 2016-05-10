@@ -1,9 +1,10 @@
-__author__ = '@dominofire'
-
 import os
 import re
 
 from sweeper.resource import ResourceConfig
+
+
+__author__ = '@dominofire'
 
 
 def get_config(config_name):

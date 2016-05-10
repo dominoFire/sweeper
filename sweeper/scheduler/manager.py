@@ -23,9 +23,9 @@ def create_schedule_plan(workflow):
     logging.debug('Resources optimally required: {}'.format(resrc_num))
 
     # Creamos planificacion
-    logging.debug('Asking to cloud provider')
+    logging.debug('Asking to cloud base')
     configs = mgr_azure.possible_configs(resrc_num)
-    logging.debug('Cloud provider offer: {} configurations'.format(len(configs)))
+    logging.debug('Cloud base offer: {} configurations'.format(len(configs)))
 
     logging.info('Makepan, Cost')
     min_cost = sys.float_info.max

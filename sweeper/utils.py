@@ -213,3 +213,13 @@ def generate_resource_name(id_num):
     :return: a str with a sweeper prefixed name
     """
     return 'sweeper{0}i{1}'.format(id_num, str(uuid.uuid4())[0:8])
+
+
+def raise_if_none(var, var_name):
+    if var is None:
+        raise ValueError('{} cannot be None'.format(var_name))
+
+
+def raise_if_path_not_exists(path):
+    if not os.path.exists(path):
+        raise ValueError('{} doesn\'t exists'.format(path))

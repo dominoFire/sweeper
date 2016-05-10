@@ -1,4 +1,3 @@
-from azure import *
 from azure.servicemanagement import *
 import os
 import sweeper.utils as utils

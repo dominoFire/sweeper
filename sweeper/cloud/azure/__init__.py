@@ -1,1 +1,1 @@
-__author__ = '@dominofire'
+from sweeper.cloud.azure.azure_cloud_provider import AzureCloudProvider

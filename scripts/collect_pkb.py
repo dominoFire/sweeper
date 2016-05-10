@@ -6,7 +6,7 @@ import json
 
 results = []
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     for root, dirs, files in os.walk("../perfkitbenchmarker", topdown=False):
         for name in files:
             if '.json' in name:
