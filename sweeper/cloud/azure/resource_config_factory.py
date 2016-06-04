@@ -1,4 +1,5 @@
-import pandas as pd
+import requests
+import json
 
 from sweeper.resource import ResourceConfig
 
@@ -9,21 +10,26 @@ def get_config(config_name):
     :param config_name:
     :return:
     """
-    # TODO: remove hardcoded paths
-    configs = pd.read_csv('/home/fer/ITAM/mcc/sweeper/data/azure_role_pricing_bench.csv')
+    url = 'https://storage.googleapis.com/sweeper/configs/azure/configs.json'
+    configs = requests.get(url).json()
 
-    row = configs[configs.name == config_name]
+    row = None
+    for r in configs:
+        if r['name'] == config_name:
+            row = r
+            break
 
-    if row.shape[0] == 1:
-        rc = ResourceConfig(str(row['name'].iat[0]),
-                            int(row['cores'].iat[0]),
-                            int(row['memory_in_mb'].iat[0]),
-                            'Azure',
-                            float(row['specfp_estimate'].iat[0]),
-                            float(row['price_hour_usd'].iat[0]))
-        return rc
+    if row is None:
+        raise ValueError('config {} not found'.format(config_name))
 
-    raise ValueError('Sweeper: Role not found: {0}'.format(config_name))
+    rc = ResourceConfig(str(row['name']),
+                        int(row['cores']),
+                        int(row['memory_in_mb']),
+                        row['provider'],
+                        float(row['spec_estimate']),
+                        float(row['cost_hour_usd']))
+
+    return rc
 
 
 def list_configs():
@@ -31,12 +37,13 @@ def list_configs():
     Get al available configurations
     :return:
     """
-    configs = pd.read_csv('/home/fer/ITAM/mcc/sweeper/data/azure_role_pricing_bench.csv')
-    rc_list = [ResourceConfig(str(row[1]['name']),
-                              int(row[1]['cores']),
-                              int(row[1]['memory_in_mb']),
-                              'Azure',
-                              float(row[1]['specfp_estimate']),
-                              float(row[1]['price_hour_usd'])) for row in configs.iterrows()]
+    url = 'https://storage.googleapis.com/sweeper/configs/azure/configs.json'
+    configs = requests.get(url).json()
+    rc_list = [ResourceConfig(str(row['name']),
+                              int(row['cores']),
+                              int(row['memory_in_mb']),
+                              row['provider'],
+                              float(row['spec_estimate']),
+                              float(row['cost_hour_usd'])) for row in configs]
 
     return rc_list

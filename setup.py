@@ -16,10 +16,10 @@ setup(
         'scp >= 0.8.0',
         'paramiko >= 1.15.2',
         'PyYAML >= 3.11',
-        'selenium',
         'click',
         'networkx',
-        'matplotlib'
+        'matplotlib',
+        'requests'
     ],
     entry_points='''
     [console_scripts]
@@ -29,3 +29,4 @@ setup(
         'https://github.com/dominoFire/azure-sdk-for-python/tarball/master#egg=azure-0.10.0.1'
     ]
 )
+

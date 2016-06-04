@@ -1,6 +1,7 @@
 from sweeper.cloud.base import CloudProvider
 from azure.servicemanagement import ServiceManagementService
 from sweeper.utils import raise_if_none, raise_if_path_not_exists
+from sweeper.cloud.azure import list_configs, get_config 
 
 
 class AzureCloudProvider(CloudProvider):
@@ -21,6 +22,7 @@ class AzureCloudProvider(CloudProvider):
         self.sms = ServiceManagementService(subscription_id=self.azure_subscription_id, cert_file=pem_filepath)
         """ServiceManagementService object used to manage al services"""
 
+
     def delete_vm(self, name):
         pass
 
@@ -28,7 +30,7 @@ class AzureCloudProvider(CloudProvider):
         pass
 
     def list_configs(self):
-        pass
+        return list_configs()
 
     def get_config(self, config_name):
-        pass
+        return get_config(config_name)
