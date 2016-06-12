@@ -4,13 +4,12 @@ import json
 from sweeper.resource import ResourceConfig
 
 
-def get_config(config_name):
+def get_config(config_name, url):
     """
     Retrieves a specific cloud resource combination
     :param config_name:
     :return:
     """
-    url = 'https://storage.googleapis.com/sweeper/configs/azure/configs.json'
     configs = requests.get(url).json()
 
     row = None
@@ -32,12 +31,11 @@ def get_config(config_name):
     return rc
 
 
-def list_configs():
+def list_configs(url):
     """
     Get al available configurations
     :return:
     """
-    url = 'https://storage.googleapis.com/sweeper/configs/azure/configs.json'
     configs = requests.get(url).json()
     rc_list = [ResourceConfig(str(row['name']),
                               int(row['cores']),

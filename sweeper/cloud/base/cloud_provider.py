@@ -45,3 +45,5 @@ class CloudProvider:
         :return: A list of ResourceConfig Objects
         """
         raise NotImplementedError("You must implement list_configs")
+
+    # NOTE: We assume Method create_instance is implemented in each Cloud Provider Class

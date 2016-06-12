@@ -21,7 +21,8 @@ class AzureCloudProvider(CloudProvider):
         """Path to PEM file associated with the Azure subscription"""
         self.sms = ServiceManagementService(subscription_id=self.azure_subscription_id, cert_file=pem_filepath)
         """ServiceManagementService object used to manage al services"""
-
+        self.url = 'https://storage.googleapis.com/sweeper/configs/azure/configs.json'
+        """URL to get config data"""
 
     def delete_vm(self, name):
         pass
@@ -30,7 +31,12 @@ class AzureCloudProvider(CloudProvider):
         pass
 
     def list_configs(self):
-        return list_configs()
+        return list_configs(self.url)
 
     def get_config(self, config_name):
-        return get_config(config_name)
+        return get_config(config_name, self.url)
+
+    @staticmethod
+    def create_instance(**kwargs):
+        return AzureCloudProvider(kwargs['subscriptionId'], kwargs['pem'])
+    
