@@ -1,3 +1,6 @@
+provider:
+    localhost:
+        cores: auto
 workflow:
   - name: check_files
     command: ls -alp
