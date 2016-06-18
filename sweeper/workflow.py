@@ -184,6 +184,32 @@ class Workflow:
         dependencies_list = []
 
         # Parsing
+        if not 'workflow' in wf_spec:
+            raise ValueError('workflow.yaml file must have "workflow" entry')
+
+        if not 'provider' in wf_spec:
+            raise ValueError('workflow.yaml file must have "provider" entry')
+
+        if type(wf_spec['workflow'])!=list:
+            raise ValueError('"workflow" entry must be a YAML list')
+
+        if type(wf_spec['provider'])!=dict:
+            raise ValueError('"provider" entry must be a YAML dict')
+
+
+        # A plugin system would be better?
+        valid_key = False
+        providers = ['localhost', 'azure']
+        for k in wf_spec['provider'].keys():
+            for v in providers:
+                if v == k:
+                    valid_key = True
+                    break
+
+        if not valid_key:
+            raise ValueError('"provider" only support {}'.format(providers))
+
+
         for task_desc in wf_spec['workflow']:
             task_name = task_desc['name']
 

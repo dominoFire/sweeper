@@ -18,7 +18,6 @@ setup(
         'PyYAML >= 3.11',
         'click',
         'networkx',
-        'matplotlib',
         'requests'
     ],
     entry_points='''

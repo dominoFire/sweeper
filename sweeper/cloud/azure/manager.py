@@ -1,22 +1,16 @@
-__author__ = '@dominofire'
-
 import base64
 import logging
 import random
 import sweeper.utils as utils
-import sweeper.cloud.azure.resource_config_factory as config_factory
 import uuid
 
 from azure.storage import BlobService
 from azure.servicemanagement import *
 from azure.storage.fileshareservice import FileShareService
-from sweeper.cloud import resource_config_combinations
-from sweeper.cloud.azure.subscription import sms
-from sweeper.cloud.azure.subscription import pfx_fullpath, cer_fullpath
 from sweeper.resource import Resource, ResourceConfig
 
 
-def filter_any_hosted_service(svc_name):
+def filter_any_hosted_service(sms, svc_name):
     return utils.filter_any(lambda x: x.service_name == svc_name, sms.list_hosted_services().hosted_services)
 
 
@@ -24,7 +18,7 @@ def wait_for_hosted_service(service_name):
     utils.wait_for(filter_any_hosted_service, svc_name=service_name)
 
 
-def wait_for_deployment(service_name, deploy_name):
+def wait_for_deployment(sms, service_name, deploy_name):
     wait = True
     while wait:
         svc = sms.get_hosted_service_properties(service_name)
@@ -39,7 +33,7 @@ def wait_for_deployment(service_name, deploy_name):
             raise ValueError('No deployments in service {0}'.format(service_name))
 
 
-def wait_for_service_certificate(service_name, cert_fingerprint):
+def wait_for_service_certificate(sms, service_name, cert_fingerprint):
     wait = True
     while wait:
         sc = sms.list_service_certificates(service_name)
@@ -49,7 +43,7 @@ def wait_for_service_certificate(service_name, cert_fingerprint):
                 break
 
 
-def wait_for_request_succeeded(request_id):
+def wait_for_request_succeeded(sms, request_id):
     def status_succeeded():
         st = sms.get_operation_status(request_id=request_id)
         if st.status == 'Succeeded':
@@ -62,7 +56,7 @@ def wait_for_request_succeeded(request_id):
     utils.wait_for(status_succeeded)
 
 
-def wait_for_deployment_running(service_name, deploy_name):
+def wait_for_deployment_running(sms, service_name, deploy_name):
     wait = True
     while wait:
         st = sms.get_deployment_by_name(service_name, deploy_name)
@@ -71,7 +65,7 @@ def wait_for_deployment_running(service_name, deploy_name):
             break
 
 
-def filter_any_storage_account(stor_account):
+def filter_any_storage_account(sms, stor_account):
     return utils.filter_any(lambda x: x.service_name == stor_account, sms.list_storage_accounts().storage_services)
 
 
@@ -83,7 +77,7 @@ def get_media_link(storage_account_name, container_name, file_name):
     return 'https://{0}.blob.core.windows.net/{1}/{2}'.format(storage_account_name, container_name, file_name)
 
 
-def create_resource(name, config_object):
+def create_resource(sms, name, config_object):
     """
     Creates a virtual machine
     :param name:
@@ -177,14 +171,7 @@ def create_network_config(subnet_name=None):
     return network
 
 
-def possible_configs(num):
-    configs = config_factory.list_configs()
-    combs = resource_config_combinations(num, configs)
-
-    return combs
-
-
-def delete_resource(res_name):
+def delete_resource(sms, res_name):
     # Check if servie exists
     svc = sms.get_hosted_service_properties(res_name)
     if not svc:
@@ -252,7 +239,7 @@ def create_distributed_file_system(storage_account, fileshare):
     return storage_keys
 
 
-def create_storage_account(name):
+def create_storage_account(sms, name):
     """
     Creates a storage account in Microsoft Azure subscription and return its access keys
     :param name:

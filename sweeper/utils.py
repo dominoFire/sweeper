@@ -4,8 +4,9 @@ import itertools
 import os
 import pandas as pd
 import networkx as nx
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import uuid
+import logging
 
 
 def split_path(file_location):
@@ -132,19 +133,23 @@ def expand_grid(param_dict):
     return list(itertools.product(*param_dict.values()))
 
 
-def plot_workflow(workflow, file_name='workflow.png'):
-    g = nx.DiGraph()
-    g.add_nodes_from(workflow.tasks)
-    g.add_edges_from(workflow.dependencies)
-    graph_layout = nx.spring_layout(g)
-    edges = [e for e in g.edges()]
-    nx.draw(g, pos=graph_layout)
-    # Be careful with AttributeError: 'FontManager' object has no attribute 'ttf_lookup_cache'
-    # See http://askubuntu.com/questions/578129/plotting-with-matplotlib-in-python-3-pylab-tkinter-and-qt-fontmanager-errors
-    nx.draw_networkx_edges(g, pos=graph_layout, edgelist=edges, edge_color='r', arrows=True)
-    nx.draw_networkx_labels(g, pos=graph_layout)
+def plot_workflow(workflow, filename='workflow.png'):
+    logging.warning('Plotting disabled')
 
-    plt.savefig(file_name)
+
+#def plot_workflow_base(workflow, file_name='workflow.png'):
+#    g = nx.DiGraph()
+#    g.add_nodes_from(workflow.tasks)
+#    g.add_edges_from(workflow.dependencies)
+#    graph_layout = nx.spring_layout(g)
+#    edges = [e for e in g.edges()]
+#    nx.draw(g, pos=graph_layout)
+#    # Be careful with AttributeError: 'FontManager' object has no attribute 'ttf_lookup_cache'
+#    # See http://askubuntu.com/questions/578129/plotting-with-matplotlib-in-python-3-pylab-tkinter-and-qt-fontmanager-errors
+#    nx.draw_networkx_edges(g, pos=graph_layout, edgelist=edges, edge_color='r', arrows=True)
+#    nx.draw_networkx_labels(g, pos=graph_layout)
+#
+#    plt.savefig(file_name)
 
 
 def export_gml(workflow, file_name='workflow.gml'):

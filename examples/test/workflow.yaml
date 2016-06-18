@@ -1,3 +1,8 @@
+provider:
+    azure:
+        publishSettings: ./path/to/myfile.publishsettings
+        subcription: 3393902902asda39093
+
 workflow:
   - name: check_files
     command: ls -alp

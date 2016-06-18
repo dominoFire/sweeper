@@ -3,7 +3,9 @@ import logging
 from sweeper.scheduler.common import estimate_resources
 from sweeper import Workflow
 import sweeper.cloud.azure.manager as az_mgr
+from sweeper.cloud.azure import AzureCloudProvider
 from pprint import PrettyPrinter
+import os
 import time
 import uuid
 
@@ -43,25 +45,37 @@ class ResourceEstimatorTest(unittest.TestCase):
         print('Resources', r)
 
 
+def check_azure_env_vars():
+    subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID')
+    pem_file = os.environ.get('AZURE_PEM_FILE')
+
+    if subscription_id is None or pem_file is None:
+        raise ValueError('To run this test, set env-vars: AZURE_SUBSCRIPTION_ID, AZURE_PEM_FILE')
+
+    return subscription_id, pem_file
+
 class PlannerTest(unittest.TestCase):
     def test(self):
-        configs = az_mgr.possible_configs(4)
-        print('Possible Configs 4: {0}'.format(len(configs)))
-        #pp.pprint(configs)
-        configs = az_mgr.possible_configs(20)
-        print('Possible Configs 20: {0}'.format(len(configs)))
-        #pp.pprint(configs)
+        subscription_id, pem_file = check_azure_env_vars()
+    
+        az = AzureCloudProvider(subscription_id, pem_file)
+        for i in range(20):
+            configs = az.possible_configs(i)
+            logging.debug("Possible configs of {}: {} => {}".format(i, len(configs), configs))
+        
 
-
-class CreteVMTest(unittest.TestCase):
+class CreateVMTest(unittest.TestCase):
     def test(self):
+        subscription_id, pem_file = check_azure_env_vars()
+    
+        az = AzureCloudProvider(subscription_id, pem_file)
+
         res_name = 'sweepertest{}'.format(str(uuid.uuid4())[:8])
         #import azure
         #azure.http.httpclient.DEBUG_REQUESTS = True
         #azure.http.httpclient.DEBUG_RESPONSES = True
         try:
-            import sweeper.cloud.azure.resource_config_factory as cfg_factory
-            res = az_mgr.create_resource(res_name, cfg_factory.get_config('Standard_D1'))
+            res = az.create_vm(res_name, az.get_config('Standard_D4'))
             ssh = res.create_ssh_client()
             logging.info(res.__dict__)
             _, stdout, _ = ssh.exec_command('ps aux')
@@ -70,7 +84,7 @@ class CreteVMTest(unittest.TestCase):
             logging.info('Waiting some time for shutting down')
             time.sleep(40)
             ssh.close()
-            az_mgr.delete_resource(res_name)
+            az.delete_vm(res_name)
         except Exception as ex:
             logging.error('TEST exeption:, {0}'.format(ex))
             raise ex

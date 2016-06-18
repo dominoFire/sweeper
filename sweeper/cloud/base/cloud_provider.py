@@ -1,3 +1,4 @@
+from sweeper.cloud import resource_config_combinations
 
 
 class CloudProvider:
@@ -45,3 +46,18 @@ class CloudProvider:
         :return: A list of ResourceConfig Objects
         """
         raise NotImplementedError("You must implement list_configs")
+
+    # NOTE: We assume Method create_instance is implemented in each Cloud Provider Class
+    # but, I can't find a way to create an interface for such static method
+
+
+    def possible_configs(self, num):
+        """
+        Returns all possible combinations of VM resources
+        that has the number of :num: resources required.
+        You should call this method from the implementation classes
+        """
+        configs = self.list_configs()
+        combs = resource_config_combinations(num, configs)
+
+        return combs
