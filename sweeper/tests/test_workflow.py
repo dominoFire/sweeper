@@ -74,8 +74,11 @@ class CreateVMTest(unittest.TestCase):
         #import azure
         #azure.http.httpclient.DEBUG_REQUESTS = True
         #azure.http.httpclient.DEBUG_RESPONSES = True
+
+        res_config = az.get_config('Standard_D4')
+        res_config.service_certificate_path = './certs/service_certificate.cer'
         try:
-            res = az.create_vm(res_name, az.get_config('Standard_D4'))
+            res = az.create_vm(res_name, res_config)
             ssh = res.create_ssh_client()
             logging.info(res.__dict__)
             _, stdout, _ = ssh.exec_command('ps aux')

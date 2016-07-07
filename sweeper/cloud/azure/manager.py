@@ -14,8 +14,8 @@ def filter_any_hosted_service(sms, svc_name):
     return utils.filter_any(lambda x: x.service_name == svc_name, sms.list_hosted_services().hosted_services)
 
 
-def wait_for_hosted_service(service_name):
-    utils.wait_for(filter_any_hosted_service, svc_name=service_name)
+def wait_for_hosted_service(sms, service_name):
+    utils.wait_for(filter_any_hosted_service, sms=sms, svc_name=service_name)
 
 
 def wait_for_deployment(sms, service_name, deploy_name):
@@ -69,8 +69,8 @@ def filter_any_storage_account(sms, stor_account):
     return utils.filter_any(lambda x: x.service_name == stor_account, sms.list_storage_accounts().storage_services)
 
 
-def wait_for_storage_account(storage_name):
-    utils.wait_for(filter_any_storage_account, stor_account=storage_name)
+def wait_for_storage_account(sms, storage_name):
+    utils.wait_for(filter_any_storage_account, sms=sms, stor_account=storage_name)
 
 
 def get_media_link(storage_account_name, container_name, file_name):
@@ -88,7 +88,7 @@ def create_resource(sms, name, config_object):
 
     # Service Certificate
     # TODO: parametrize .cer management
-    cert_encoded = encode_certificate(cer_fullpath)
+    cert_encoded = encode_certificate(config_object.service_certificate_path)
 
     # Key to password-less login
     vm_key_fingerprint = '97C186F85ED3A86959AECD0845C5A2BFBFB9B6E5'  # mycert.pem
@@ -104,7 +104,7 @@ def create_resource(sms, name, config_object):
     image_name = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
 
     # Storage account
-    storage_keys = create_storage_account(res.name)
+    storage_keys = create_storage_account(sms, res.name)
 
     # Container for VHD image for VM
     container_name = 'vhd'
@@ -123,14 +123,14 @@ def create_resource(sms, name, config_object):
                               label=res.name,
                               description='Cloud service for VM {0}'.format(res.name),
                               location='West US')  # TODO: remove location hardcoded
-    wait_for_hosted_service(res.name)
+    wait_for_hosted_service(sms, res.name)
     logging.info('Creating Hosted service {0} completed'.format(res.name))
 
     # Add certificate to service
     logging.info('Adding service certificate for {0}'.format(res.name))
     sms.add_service_certificate(service_name=res.name,
                                 data=cert_encoded.decode('utf-8'),
-                                certificate_format='pfx',
+                                certificate_format='cer',
                                 password='')
     wait_for_service_certificate(res.name, vm_key_fingerprint)
     logging.info('Adding service certificate for {0} complete'.format(res.name))
@@ -234,7 +234,7 @@ def create_distributed_file_system(storage_account, fileshare):
     :param fileshare:
     :return: Storage keys for further access
     """
-    storage_keys = create_storage_account(storage_account)
+    storage_keys = create_storage_account(sms, storage_account)
     create_fileshare(storage_account, fileshare, storage_keys)
     return storage_keys
 
@@ -252,8 +252,8 @@ def create_storage_account(sms, name):
                                                         geo_replication_enabled=None,
                                                         account_type='Standard_LRS',
                                                         location='West US')   # TODO: remove location hardcoded
-    wait_for_request_succeeded(storage_account_result.request_id)
-    wait_for_storage_account(name)
+    wait_for_request_succeeded(sms, storage_account_result.request_id)
+    wait_for_storage_account(sms, name)
     logging.info('Creating Storage account {0} complete'.format(name))
 
     storage_keys = sms.get_storage_account_keys(service_name=name)

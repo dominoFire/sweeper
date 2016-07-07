@@ -7,7 +7,8 @@ import paramiko
 class Resource:
     """
     Represents a Virtual Machine object that can execute commands. This class
-    is used to encapsulate all the complexities used
+    is used to encapsulate all the complexities when we're dealing
+    with Virtual Machines over all possible providers 
     """
 
     def __init__(self, res_config, name, hostname, user, passwd):
