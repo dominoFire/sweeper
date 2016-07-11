@@ -127,10 +127,13 @@ def create_resource(sms, name, config_object):
     logging.info('Creating Hosted service {0} completed'.format(res.name))
 
     # Add certificate to service
+    # Acepta cualquier formato (.cer y .pfx), pero los pull request dicen que siempre 
+    # le pongas .pfx.
+    # TODO: Al parecer, necesita cert_fingerprint
     logging.info('Adding service certificate for {0}'.format(res.name))
     sms.add_service_certificate(service_name=res.name,
                                 data=cert_encoded.decode('utf-8'),
-                                certificate_format='cer',
+                                certificate_format='pfx',
                                 password='')
     wait_for_service_certificate(res.name, vm_key_fingerprint)
     logging.info('Adding service certificate for {0} complete'.format(res.name))

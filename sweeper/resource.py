@@ -89,6 +89,10 @@ class Resource:
         ssh.close()
         return None
 
+    def generate_ssh_keys(self):
+        
+        pass
+
 
 class ResourceConfig:
     """
