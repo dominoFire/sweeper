@@ -1,8 +1,12 @@
 from paramiko import SSHClient
 from scp import SCPClient
-import logging
-import paramiko
+from subprocess import CalledProcessError
 
+import logging
+import os
+import paramiko
+import subprocess
+import sys
 
 class Resource:
     """
@@ -24,6 +28,12 @@ class Resource:
         """  TODO: Find a better way to store passwords """
         self.speed_factor = res_config.speed_factor
         """ A score that ranks how fast is this base Virtual Machine resource """
+        self.ssh_public_key_path = None
+        """ Filepath to local service where the public key resides """
+        self.ssh_private_key_path = None
+        """ Filepath in local service where the private key resides """
+        self.ssh_fingerprint = None
+        """ Fingerprint of the OpenSSH-formated public key """
 
     def create_ssh_client(self):
         """
@@ -89,9 +99,75 @@ class Resource:
         ssh.close()
         return None
 
+
     def generate_ssh_keys(self):
+        """
+        Generates an OpenSSH file
+        Saves the expected variables
+        """
+        base_path = os.path.join('.', 'cluster_data', self.name)
+        self.ssh_private_key_path = os.path.join(base_path, 'login_key')
+        self.ssh_public_key_path = os.path.join(base_path, 'login_key.pub')
+
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
         
-        pass
+        cmd_private = ["ssh-keygen", "-q", "-N", "", "-f", self.ssh_private_key_path]
+        try:
+            subprocess.run(cmd_private, check=True)
+        except CalledProcessError as e:
+            logging.error("Error al generar llave privdada SSH: {}", str(e))
+            raise e
+
+        cmd_finger = ["ssh-keygen", "-lf", self.ssh_private_key_path, "-E", "md5"]
+        try:
+            out_b = subprocess.check_output(cmd_finger)
+            # TODO: esto es system-dependent ?
+            out = out_b.decode('UTF-8')
+            # Esperemos no cambie
+            out_list = out.split(" ")
+            # La primera parte dice "MD5"
+            finger_list = out_list[1].split(":")[1:]
+            self.ssh_fingerprint = ''.join(finger_list).upper()
+        except CalledProcessError as e:
+            logging.error("Error al obtener SSH fingerprint: {}", str(e))
+            raise e
+
+        # Esto no funciona por un bug en pycrypto
+        # key = RSA.generate(2048)
+        # pubkey = key.publickey()
+        # self.ssh_fingerprint = MD5.new(key.exportKey('DER')).hexdigest().upper()
+        # logging.info("Fingerprint: {}".format(self.ssh_fingerprint))
+
+        # with os.fdopen(os.open(self.ssh_private_key_path, os.O_WRONLY | os.O_CREAT, 0o600), 'wb') as fh:
+        #     fh.write(key.exportKey('PEM'))
+
+        # with os.fdopen(os.open(self.ssh_public_key_path, os.O_WRONLY | os.O_CREAT, 0o600), 'wb') as fh:
+        #     #fh.write(pubkey.exportKey('OpenSSH'))
+        #     tt = pubkey.exportKey('OpenSSH')
+        #     print(tt)
+        #     print(type(tt))
+        
+
+    def generate_certificates(self):
+        base_path = os.path.join('.', 'cluster_data', self.name)
+        self.csr_path = os.path.join(base_path, 'certifcate.csr')
+        self.cer_path = os.path.join(base_path, 'certifcate.cer')
+        
+        subj = "/C=MX/ST=Mexico City/L=Mexico City/O=pulsarcloud/CN={}".format(self.name)
+        cmd_csr = ["openssl", "req", "-x509", "-days", "365", "-new", "-key", self.ssh_private_key_path, "-out", self.csr_path, "-subj", subj]
+        try:
+            subprocess.run(cmd_csr, check=True)
+        except CalledProcessError as e:
+            logging.error("Error al generar OpenSSL CSR: {}", str(e))
+            raise e
+        
+        cmd_cer = ["openssl", "x509", "-inform", "pem", "-in", self.csr_path, "-outform", "der", "-out", self.cer_path]
+        try:
+            subprocess.run(cmd_cer, check=True)
+        except CalledProcessError as e:
+            logging.error("Error al generar OpenSSL CER: {}", str(e))
+            raise e
 
 
 class ResourceConfig:

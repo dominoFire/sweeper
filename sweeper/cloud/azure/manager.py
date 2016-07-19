@@ -3,6 +3,7 @@ import logging
 import random
 import sweeper.utils as utils
 import uuid
+import time
 
 from azure.storage import BlobService
 from azure.servicemanagement import *
@@ -38,6 +39,7 @@ def wait_for_service_certificate(sms, service_name, cert_fingerprint):
     while wait:
         sc = sms.list_service_certificates(service_name)
         for s in sc.certificates:
+            logging.info("Actual: {}, Required: {}".format(s.thumbprint, cert_fingerprint))
             if s.thumbprint == cert_fingerprint:
                 wait = False
                 break
@@ -85,13 +87,17 @@ def create_resource(sms, name, config_object):
     :return: a Resource object that represents the virtual machine
     """
     res = Resource(config_object, name, '{0}.cloudapp.net'.format(name), 'azureuser', generate_valid_ramdom_password())
+    res.generate_ssh_keys()
+    res.generate_certificates()
+    logging.info('SSH fingerprint: ' + res.ssh_fingerprint)
+
 
     # Service Certificate
     # TODO: parametrize .cer management
-    cert_encoded = encode_certificate(config_object.service_certificate_path)
+    cert_encoded = encode_certificate(res.cer_path)
 
     # Key to password-less login
-    vm_key_fingerprint = '97C186F85ED3A86959AECD0845C5A2BFBFB9B6E5'  # mycert.pem
+    vm_key_fingerprint = res.ssh_fingerprint  
     linux_config = LinuxConfigurationSet(res.name, res.defaultUser, res.defaultPassword, True)
     key_pair = KeyPair(vm_key_fingerprint, '/home/{0}/id_rsa'.format(res.defaultUser))
     public_key = PublicKey(vm_key_fingerprint, '/home/{0}/.ssh/authorized_keys'.format(res.defaultUser))
@@ -103,10 +109,10 @@ def create_resource(sms, name, config_object):
     # TODO: Automate configuration of image
     image_name = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
 
-    # Storage account
+    # Azure Storage Account
     storage_keys = create_storage_account(sms, res.name)
 
-    # Container for VHD image for VM
+    # Azure Storage Container for VHD image for VM
     container_name = 'vhd'
     create_container(res.name, 'vhd', storage_keys)
 
@@ -135,7 +141,10 @@ def create_resource(sms, name, config_object):
                                 data=cert_encoded.decode('utf-8'),
                                 certificate_format='pfx',
                                 password='')
-    wait_for_service_certificate(res.name, vm_key_fingerprint)
+    cloud_service_cert_fingerprint = res.ssh_fingerprint
+    time.sleep(30)
+    #wait_for_service_certificate(sms, res.name, cloud_service_cert_fingerprint)
+    
     logging.info('Adding service certificate for {0} complete'.format(res.name))
 
     # Virtual machine creation
@@ -149,8 +158,8 @@ def create_resource(sms, name, config_object):
                                                       os_virtual_hard_disk=os_hd,
                                                       role_size=config_object.config_name,
                                                       network_config=net_cfg)
-    wait_for_request_succeeded(vm_result.request_id)
-    wait_for_deployment_running(res.name, res.name)
+    wait_for_request_succeeded(sms, vm_result.request_id)
+    wait_for_deployment_running(sms, res.name, res.name)
     logging.info('Creating VM deployment {0} complete'.format(res.name))
 
     return res

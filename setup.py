@@ -18,7 +18,8 @@ setup(
         'PyYAML >= 3.11',
         'click',
         'networkx',
-        'requests'
+        'requests',
+        'pycrypto'
     ],
     entry_points='''
     [console_scripts]
